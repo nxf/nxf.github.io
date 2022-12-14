@@ -1,0 +1,2695 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Spring cloud</title>
+        <meta name="robots" content="noindex" />
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="01_介绍.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="02_Eureka.html"><strong aria-hidden="true">2.</strong> Eureka</a></li><li class="chapter-item expanded "><a href="03_Ribbon_Hystrix.html"><strong aria-hidden="true">3.</strong> Ribbon&Hystrix</a></li><li class="chapter-item expanded "><a href="04_Feign.html"><strong aria-hidden="true">4.</strong> Feign</a></li><li class="chapter-item expanded "><a href="05_Gateway.html"><strong aria-hidden="true">5.</strong> Gateway</a></li><li class="chapter-item expanded "><a href="06_Config.html"><strong aria-hidden="true">6.</strong> Config</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="06_Config_Rabbit_install.html"><strong aria-hidden="true">6.1.</strong> Rabbit安装</a></li></ol></li><li class="chapter-item expanded "><a href="07_Sleuth.html"><strong aria-hidden="true">7.</strong> Sleuth</a></li><li class="chapter-item expanded "><a href="08_Admin.html"><strong aria-hidden="true">8.</strong> Admin</a></li><li class="chapter-item expanded "><a href="09_合同录入-上.html"><strong aria-hidden="true">9.</strong> 合同录入-上</a></li><li class="chapter-item expanded "><a href="10_合同录入-下.html"><strong aria-hidden="true">10.</strong> 合同录入-下</a></li><li class="chapter-item expanded "><a href="11_支付中心-上.html"><strong aria-hidden="true">11.</strong> 支付中心-上</a></li><li class="chapter-item expanded "><a href="12_支付中心-下.html"><strong aria-hidden="true">12.</strong> 支付中心-下</a></li><li class="chapter-item expanded "><a href="13_预约看房.html"><strong aria-hidden="true">13.</strong> 预约看房</a></li><li class="chapter-item expanded "><a href="14_RocketMQ-上.html"><strong aria-hidden="true">14.</strong> RocketMQ入门</a></li><li class="chapter-item expanded "><a href="15_RocketMQ-下.html"><strong aria-hidden="true">15.</strong> RocketMQ集群</a></li><li class="chapter-item expanded "><a href="16_预约看房消息推送.html"><strong aria-hidden="true">16.</strong> 预约看房消息推送</a></li><li class="chapter-item expanded "><a href="17_外卖抢单-上.html"><strong aria-hidden="true">17.</strong> 外卖抢单-上</a></li><li class="chapter-item expanded "><a href="18_外卖抢单-下.html"><strong aria-hidden="true">18.</strong> 外卖抢单-下</a></li><li class="chapter-item expanded "><a href="19_企业级测试与解决方案.html"><strong aria-hidden="true">19.</strong> 企业级测试与解决方案</a></li><li class="chapter-item expanded "><a href="20_结项.html"><strong aria-hidden="true">20.</strong> 结项</a></li><li class="chapter-item expanded "><a href="project/index.html"><strong aria-hidden="true">21.</strong> 项目</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="project/aijia/aijia.html"><strong aria-hidden="true">21.1.</strong> 爱家家具</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="project/aijia/analyze.html"><strong aria-hidden="true">21.1.1.</strong> 分析</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="resources.html">基础资源</a></li><li class="chapter-item expanded affix "><a href="mysql.html">mysql</a></li><li class="chapter-item expanded affix "><a href="redis.html">redis</a></li><li class="chapter-item expanded affix "><a href="security.html">security</a></li><li class="chapter-item expanded affix "><a href="front.html">前端</a></li><li class="chapter-item expanded affix "><a href="other.html">其他零碎</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Spring cloud</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="课程简介"><a class="header" href="#课程简介">课程简介</a></h1>
+<h2 id="总体内容"><a class="header" href="#总体内容">总体内容</a></h2>
+<pre class="mermaid">graph LR
+专高四 --&gt; C[Spring Cloud微服务架构*]
+专高四 --&gt; T[其它技术]
+专高四 --&gt; W[维数公寓]
+专高四 --&gt; M[外卖抢单]
+专高四 --&gt; Q[企业级测试与解决方案]
+</pre>
+<h2 id="spring-cloud"><a class="header" href="#spring-cloud">Spring Cloud</a></h2>
+<pre class="mermaid">graph LR
+C[spring_cloud微服务架构] --注册中心--&gt; Eureka
+
+C --负载均衡--&gt; Ribbon
+C --服务容错--&gt; Hystrix
+C --声明式远程服务调用--&gt; OpenFeign
+C --网关--&gt; Gateway
+C --配置服务--&gt; Config
+C --消息总线--&gt; Bus
+C --请求链接追踪--&gt; Sleuth
+C --状态监控--&gt; Admin
+C --网关安全--&gt; Security
+</pre>
+<h2 id="版本"><a class="header" href="#版本">版本：</a></h2>
+<p>Spring Cloud有很多版本，本课程选取Hoxton.RELEASE版本，它依赖的Spring boot版本为2.2.5.RELEASE。</p>
+<pre><code class="language-xml">&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;2.2.5.RELEASE&lt;/version&gt;
+    &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
+&lt;/parent&gt;
+
+&lt;properties&gt;
+    &lt;java.version&gt;1.8&lt;/java.version&gt;
+    &lt;maven.compiler.source&gt;8&lt;/maven.compiler.source&gt;
+    &lt;maven.compiler.target&gt;8&lt;/maven.compiler.target&gt;
+    &lt;springcloud.version&gt;Hoxton.RELEASE&lt;/springcloud.version&gt;
+    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+&lt;/properties&gt;
+
+&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-cloud-starter&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;!--lombok--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+        &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+
+&lt;!--控制spring cloud系列的版本--&gt;
+&lt;dependencyManagement&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;
+            &lt;version&gt;${springcloud.version}&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;
+&lt;!--springboot 插件--&gt;
+&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+            &lt;version&gt;2.5.6&lt;/version&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
+<h2 id="其它技术"><a class="header" href="#其它技术">其它技术</a></h2>
+<pre class="mermaid">graph LR
+T[其它技术]
+T --消息队列--&gt; RocketMQ
+T --消息队列--&gt; RabbitMQ
+T --缓存--&gt; Redis
+T --分布式任务平台--&gt; XXL-Job
+T --接口测试与调试工具--&gt; PostMan
+T --压力&amp;&amp;性能--&gt; JMeter
+</pre>
+<h2 id="维数公寓"><a class="header" href="#维数公寓">维数公寓</a></h2>
+<pre class="mermaid">graph LR
+
+维数公寓 --&gt; 合同录入
+维数公寓 --&gt; 预约看房
+维数公寓 --&gt; 支付中心
+
+外卖服务 --&gt; 外卖抢单
+</pre>
+<h1 id="作业"><a class="header" href="#作业">作业：</a></h1>
+<p>上传作业内容和效果视频（1分钟以上，3分钟以内）；</p>
+<p>作业检查表：</p>
+<pre class="mermaid">graph LR
+组长 --&gt; 组员
+讲师 -- 抽检 --&gt; 学院
+</pre>
+<h1 id="时间"><a class="header" href="#时间">时间</a></h1>
+<p><img src="./imgs/month.jpg" alt="本月" />
+<img src="./imgs/day.jpg" alt="每天" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="eureka"><a class="header" href="#eureka">Eureka</a></h1>
+<p>注册服务中心</p>
+<pre class="mermaid">flowchart TD
+C[服务消费者] --发现--&gt;  E[Eureka]
+P[服务提供者] --注册 --&gt; E[Eureka]
+</pre>
+<p>服务消费者 和 服务提供者 都属于 Eureka客户端。<br />
+Eureka 属于Eureka服务端。</p>
+<h1 id="作用"><a class="header" href="#作用">作用</a></h1>
+<ul>
+<li>类似于114查号台</li>
+</ul>
+<h2 id="server端eureka"><a class="header" href="#server端eureka">Server端(eureka)</a></h2>
+<p>搭建步骤：</p>
+<h3 id="1-添加依赖"><a class="header" href="#1-添加依赖">1. 添加依赖</a></h3>
+<p>在pom中添加依赖</p>
+<pre><code class="language-xml">&lt;!--eureka服务依赖--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h3 id="2-按开关"><a class="header" href="#2-按开关">2. 按开关</a></h3>
+<pre><code class="language-java">//放在启动类上方
+@EnableEurekaServer
+</code></pre>
+<h3 id="3-加配置"><a class="header" href="#3-加配置">3. 加配置</a></h3>
+<pre><code class="language-yaml">#顶格放
+eureka:
+  instance:
+    hostname: localhost #指定主机地址
+  server:
+    enable-self-preservation: false #是否开启自我保护，防止网络分区故障时删掉微服务
+  client:
+    fetch-registry: false #是否从注册中心获取注册表
+    register-with-eureka: false #是否要注册到注册中心
+</code></pre>
+<h2 id="client端order"><a class="header" href="#client端order">Client端(order)</a></h2>
+<p>搭建步骤：</p>
+<h3 id="1添加依赖"><a class="header" href="#1添加依赖">1.添加依赖</a></h3>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;!--注册中心（eureka）客户端依赖--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h3 id="2按开关"><a class="header" href="#2按开关">2.按开关</a></h3>
+<pre><code class="language-java">//放在启动类上方
+@EnableEurekaClient
+</code></pre>
+<h3 id="3加配置"><a class="header" href="#3加配置">3.加配置</a></h3>
+<pre><code class="language-yaml">#顶格放
+eureka:
+  client:
+    register-with-eureka: true # 注册到eureka
+    fetch_registry: true #从服务器获取注册信息
+    service-url:
+      defaultZone: http://localhost:8761/eureka/ # 注册中心地址
+</code></pre>
+<h1 id="eureka集群"><a class="header" href="#eureka集群">eureka集群</a></h1>
+<h2 id="1-添加配置文件"><a class="header" href="#1-添加配置文件">1. 添加配置文件</a></h2>
+<ul>
+<li>application-01.yml </li>
+<li>application-02.yml</li>
+</ul>
+<pre><code class="language-yaml">eureka:
+  instance:
+    hostname: localhost #指定主机地址
+  server:
+    enable-self-preservation: false #是否开启自我保护，防止网络分区故障时删掉微服务
+  client:
+    fetch-registry: true #是否从注册中心获取注册表; 这里需要获取，所以改为true
+    register-with-eureka: true #是否要注册到注册中心； 需要注册到注册中心，所以改为true
+    service-url:
+      defaultZone: http://localhost:8762/eureka/,http://localhost:8761/eureka/ #两个服务互相指向对方
+
+</code></pre>
+<h2 id="修改idea的运行配置文件"><a class="header" href="#修改idea的运行配置文件">修改idea的运行配置文件</a></h2>
+<pre><code>--spring.profiles.active=01
+</code></pre>
+<p><img src="./imgs/jiqun.png" alt="idea-edit-configuration" /></p>
+<h1 id="安全-eureka"><a class="header" href="#安全-eureka">安全 eureka</a></h1>
+<h2 id="加依赖"><a class="header" href="#加依赖">加依赖</a></h2>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h2 id="添加安全配置"><a class="header" href="#添加安全配置">添加安全配置</a></h2>
+<pre><code class="language-java">@EnableWebSecurity
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        //csrf -&gt; Cross-Site Request Forgery  跨站请求伪造
+        http.csrf().ignoringAntMatchers(&quot;/eureka/**&quot;);
+        super.configure(http);
+    }
+
+}
+</code></pre>
+<h2 id="客户端添加认证信息order"><a class="header" href="#客户端添加认证信息order">客户端添加认证信息(order)</a></h2>
+<p>格式： 用户名:密码@url</p>
+<pre><code class="language-yaml">defaultZone: http://macro:123456@localhost:8761/eureka # 注册中心地址
+</code></pre>
+<h1 id="eureka常用配置"><a class="header" href="#eureka常用配置">eureka常用配置</a></h1>
+<pre><code class="language-yaml">
+eureka:
+  client:
+    register-with-eureka: true #是否将自己注册到eureka服务
+    fetch-registry: true  #是否从eureka服务获取注册信息
+    service-url:
+      defaultZone: http://localhost:8761/eureka/  #服务地址，逗号分隔
+    registry-fetch-interval-seconds: 30  #多久去服务端取一次注册信息
+  instance:
+    lease-renewal-interval-in-seconds: 30 #续约间隔，秒
+    lease-expiration-duration-in-seconds: 90 #过期间隔 ，秒
+    hostname: localhost #服务主机名字
+    prefer-ip-address: false  #优先使用ip地址而非主机名称
+  server:
+    enable-self-preservaation: false  #开启自我保护
+### 打开services面板
+</code></pre>
+<p>#其它：
+<img src="./imgs/unit_1-idea-service.jpg" alt="查看运行的服务" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ribbon"><a class="header" href="#ribbon">Ribbon</a></h1>
+<p>user提供获取用户信息和订单的接口 <a href="http://localhost:8083/user/1">用户信息</a>
+order 提供订单信息，供user使用。</p>
+<h2 id="resttemplate"><a class="header" href="#resttemplate">RestTemplate</a></h2>
+<p><a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html">api参考</a></p>
+<pre><code class="language-java">@Bean
+public RestTemplate restTemplate(RestTemplateBuilder builder){
+    return builder
+            .setReadTimeout(Duration.ofMillis(1200)) //读取时间
+            .setConnectTimeout(Duration.ofMillis(800)) //链接时间
+            .build();
+}
+</code></pre>
+<p><a href="http://localhost:8086/api/order/2">测试url</a></p>
+<pre><code>&lt;T&gt; T	getForObject(String url, Class&lt;T&gt; responseType, Map&lt;String,?&gt; uriVariables)
+&lt;T&gt; T	getForObject(URI url, Class&lt;T&gt; responseType)
+</code></pre>
+<p>其他的post，put，delete都类似。</p>
+<h2 id="添加ribbon依赖"><a class="header" href="#添加ribbon依赖">添加ribbon依赖</a></h2>
+<pre><code class="language-xml">&lt;!-- 负载均衡 --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-netflix-ribbon&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h2 id="ribbon-负载均衡策略"><a class="header" href="#ribbon-负载均衡策略">Ribbon 负载均衡策略</a></h2>
+<ul>
+<li>com.netflix.loadbalancer.RandomRule //随机</li>
+<li>com.netflix.loadbalancer.RoundRobinRule //轮询</li>
+<li>com.netflix.loadbalancer.RetryRule //轮询的基础上加上重试</li>
+<li>com.netflix.loadbalancer.WeightedResponseTimeRule //轮询的基础上加上响应时间权重</li>
+<li>com.netflix.loadbalancer.BestAvailableRule //并发最小</li>
+<li>com.netflix.loadbalancer.AvailabilityFilteringRule //过滤掉故障实例，并发最小</li>
+<li>com.netflix.loadbalancer.ZoneAwareLoadBalancer //考虑到区域相同</li>
+</ul>
+<h2 id="增加order服务实例"><a class="header" href="#增加order服务实例">增加order服务实例</a></h2>
+<p>上节课学过。</p>
+<ul>
+<li>增加profile</li>
+<li>右上角 Edit Configuration</li>
+<li>--spring.profiles.active=xxx</li>
+</ul>
+<h2 id="使用负载均衡"><a class="header" href="#使用负载均衡">使用负载均衡</a></h2>
+<pre><code class="language-java">@Bean
+@LoadBalanced
+public RestTemplate restTemplate() {
+    return new RestTemplate();
+}
+
+</code></pre>
+<h2 id="修改ribon负载均衡算法"><a class="header" href="#修改ribon负载均衡算法">修改ribon负载均衡算法</a></h2>
+<pre><code class="language-java">    @Bean
+    IRule myRule() {
+        return new RandomRule();
+    }
+</code></pre>
+<p>在 @Configuration修饰的类中，也可以防止启动类内。</p>
+<h1 id="hystrix"><a class="header" href="#hystrix">Hystrix</a></h1>
+<p>负责服务的熔断与降级</p>
+<h2 id="引入依赖"><a class="header" href="#引入依赖">引入依赖</a></h2>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-netflix-hystrix&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h2 id="按开关"><a class="header" href="#按开关">按开关</a></h2>
+<pre><code class="language-java">//二选一
+//@EnableCircuitBreaker
+@EnableHystrix
+</code></pre>
+<h2 id="服务降级实现"><a class="header" href="#服务降级实现">服务降级实现</a></h2>
+<h3 id="情景描述"><a class="header" href="#情景描述">情景描述</a></h3>
+<p>在需要实现服务降级的方法上添加注解 @HysrixCommand . 
+然后配置 fallbackMethod 属性，其参数为发生异常时要降级到的方法的名称，此方法需要与
+@HystrixCommand修饰的方法返回类型及参数保持一致。</p>
+<h3 id="hystrixcommand详解"><a class="header" href="#hystrixcommand详解">HystrixCommand详解</a></h3>
+<ul>
+<li>fallbackMethod：指定服务降级处理方法；</li>
+<li>ignoreExceptions：忽略某些异常，不发生服务降级； </li>
+<li>commandKey：命令名称，用于区分不同的命令；</li>
+<li>groupKey：分组名称，Hystrix 会根据不同的分组来统计命令的告警及仪表盘信息；</li>
+<li>threadPoolKey：线程池名称，用于划分线程池。</li>
+</ul>
+<h4 id="ignoreexceptions"><a class="header" href="#ignoreexceptions">ignoreExceptions</a></h4>
+<pre><code class="language-java">ignoreExceptions = {NullPointerException.class}
+</code></pre>
+<h3 id="熔断状态"><a class="header" href="#熔断状态">熔断状态</a></h3>
+<pre class="mermaid">graph LR;
+N[关闭状态]--有异常--&gt;V{验证}
+V--10S_and_50%--&gt;S[启动状态]
+S--所有请求直接进入--&gt;F((fallback))
+R{重试}--重试失败--&gt;F
+S --5秒后--&gt; R
+R---一旦请求成功则关闭熔断---&gt;N
+</pre>
+<h3 id="全局配置"><a class="header" href="#全局配置">全局配置</a></h3>
+<h1 id="hystrix-dashboard"><a class="header" href="#hystrix-dashboard">Hystrix Dashboard</a></h1>
+<h2 id="添加依赖"><a class="header" href="#添加依赖">添加依赖</a></h2>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-netflix-hystrix-dashboard&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h2 id="按开关-1"><a class="header" href="#按开关-1">按开关</a></h2>
+<pre><code class="language-java">@EnableHystrixDashboard
+</code></pre>
+<h2 id="两个地址"><a class="header" href="#两个地址">两个地址</a></h2>
+<p>http://localhost:8083/actuator/hystrix.stream
+http://localhost:8083/hystrix</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="feign简介"><a class="header" href="#feign简介">feign简介</a></h1>
+<p>netflix feign -&gt; Spring Cloud OpenFeign</p>
+<h1 id="基本使用"><a class="header" href="#基本使用">基本使用</a></h1>
+<h2 id="加依赖-1"><a class="header" href="#加依赖-1">加依赖</a></h2>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h2 id="按开关-2"><a class="header" href="#按开关-2">按开关</a></h2>
+<pre><code class="language-java">@EnableFeignClients
+</code></pre>
+<h2 id="写配置"><a class="header" href="#写配置">写配置</a></h2>
+<pre><code class="language-yaml">eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+</code></pre>
+<h2 id="写代码"><a class="header" href="#写代码">写代码</a></h2>
+<pre><code class="language-java">@FeignClient(name=&quot;order&quot;, path=&quot;/api&quot;)
+public interface OrderServiceFeign {
+
+    @GetMapping(&quot;/user/{id}/orders&quot;)
+    public List&lt;Order&gt; getOrdersByOwnerId(@PathVariable(&quot;id&quot;) Long id);
+}
+</code></pre>
+<h1 id="负载均衡"><a class="header" href="#负载均衡">负载均衡</a></h1>
+<pre><code class="language-java">@Bean
+public IRule myRule() {
+    return new RandomRule();
+}
+</code></pre>
+<h1 id="服务降级"><a class="header" href="#服务降级">服务降级</a></h1>
+<h2 id="新建降级fallback类"><a class="header" href="#新建降级fallback类">新建降级fallback类</a></h2>
+<pre><code class="language-java">@Service
+public class OrderServiceCallback implements OrderServiceFeign{
+    @Override
+    public Integer getOrderNumberOfUser(Long id) {
+        return 22;
+    }
+
+    @Override
+    public Map postOrderNumberOfUser(Long id) {
+        Map result = new HashMap();
+        result.put(&quot;number&quot;,23);
+
+        return result;
+    }
+}
+
+</code></pre>
+<h2 id="改配置"><a class="header" href="#改配置">改配置</a></h2>
+<pre><code class="language-yaml">feign:
+  hystrix:
+    enabled: true
+</code></pre>
+<h2 id="实现降级方法"><a class="header" href="#实现降级方法">实现降级方法</a></h2>
+<pre><code class="language-java">      public Map postOrderNumberOfUser(Long id) {
+        Map result = new HashMap();
+        result.put(&quot;number&quot;,23);
+
+        return result;
+    }
+</code></pre>
+<h2 id="降级并记录降级原因"><a class="header" href="#降级并记录降级原因">降级并记录降级原因</a></h2>
+<pre><code class="language-java">@FeignClient(name=&quot;order&quot;,path=&quot;/api&quot;,fallbackFactory=FeignClientFallbackFactory.class)
+</code></pre>
+<pre><code class="language-java">public class FeignClientFallbackFactory implements FallbackFactory&lt;OrderServiceFeign&gt;
+</code></pre>
+<h1 id="日志"><a class="header" href="#日志">日志</a></h1>
+<h2 id=""><a class="header" href="#"></a></h2>
+<pre><code class="language-java">import org.springframework.context.annotation.Bean;
+
+@Bean
+Logger.Level feignLogLevel() {
+    return Logger.Level.FULL;
+}
+</code></pre>
+<pre><code class="language-yaml">logging:
+  level:
+    com.eight.lession.service: debug
+</code></pre>
+<h1 id="常用配置"><a class="header" href="#常用配置">常用配置</a></h1>
+<h2 id="压缩"><a class="header" href="#压缩">压缩</a></h2>
+<p>客户端</p>
+<pre><code class="language-yaml">feign:
+  hystrix:
+    enabled: true
+  compression:
+    response:
+      enabled: true
+    request:
+      enabled: true
+
+</code></pre>
+<p>服务端</p>
+<pre><code class="language-yaml">server:
+  port: 8086
+  compression:
+    enabled: true
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="gateway-简介"><a class="header" href="#gateway-简介">gateway 简介</a></h1>
+<h1 id="核心概念"><a class="header" href="#核心概念">核心概念</a></h1>
+<h2 id="如果没有gateway网页需要分别访问-house-contract服务"><a class="header" href="#如果没有gateway网页需要分别访问-house-contract服务">如果没有gateway，网页需要分别访问 house contract服务。</a></h2>
+<p>user和order还需要分别实现安全，流量控制。</p>
+<h1 id="基础使用"><a class="header" href="#基础使用">基础使用</a></h1>
+<h2 id="1添加依赖-1"><a class="header" href="#1添加依赖-1">1.添加依赖</a></h2>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-gateway&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h2 id="2路由配置"><a class="header" href="#2路由配置">2.路由配置</a></h2>
+<h3 id="21测试配置文件"><a class="header" href="#21测试配置文件">2.1测试配置文件</a></h3>
+<pre><code class="language-yaml">spring:
+  application:
+    name: gateway-server
+  cloud:
+    gateway:
+      routes:
+        - id: user
+#          uri: http://localhost:8083  #直接指定服务器地址，不推荐
+          uri: lb://user # 指定服务器注册实例名
+          filters:
+            - StripPrefix=1 # 去掉前缀过滤器
+          predicates:
+            - Path=/services/**  # 如果访问路径以services开头，则执行本路由规则
+
+eureka: # 定格：另外记得入口类添加@EnableEurekaClient
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+</code></pre>
+<h3 id="22代码配置"><a class="header" href="#22代码配置">2.2代码配置</a></h3>
+<pre><code class="language-java">@Configuration
+public class GatewayConfig {
+
+    @Bean
+    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+        StripPrefixGatewayFilterFactory factory = new StripPrefixGatewayFilterFactory();
+        StripPrefixGatewayFilterFactory.Config config = new StripPrefixGatewayFilterFactory.Config();
+        config.setParts(1);
+        GatewayFilter stripFilter = factory.apply(config);
+        return builder.routes()
+                .route(&quot;user&quot;, r-&gt; r.path(&quot;/services/**&quot;)
+                        .filters(gatewayFilterSpec -&gt; gatewayFilterSpec.filter(stripFilter))
+                        .uri(&quot;lb://user&quot;))
+                .build();
+    }
+}
+</code></pre>
+<h2 id="3测试接口"><a class="header" href="#3测试接口">3.测试接口</a></h2>
+<p><a href="http://localhost:8080/services/another/5">访问路径</a></p>
+<pre><code class="language-java">@RestController
+public class RouteTestController {
+
+    @GetMapping(&quot;/another/{id}&quot;)
+    public ResponseEntity test(@PathVariable long id) {
+        return ResponseEntity.ok(&quot;true &quot; + id);
+    }
+}
+</code></pre>
+<h1 id="route-predicate"><a class="header" href="#route-predicate">Route Predicate</a></h1>
+<ul>
+<li>Path Route Predicate
+<pre><code class="language-yaml"> - Path=/user/{id} # curl http://localhost:8080/services/another/1
+</code></pre>
+</li>
+<li>Method Route Predicate
+访问方法断言
+<pre><code class="language-yaml">- Method=GET # curl http://localhost:8080/services/another/1
+</code></pre>
+</li>
+<li>Header Route Predicate 
+请求头路由
+<pre><code class="language-yaml">  - Header=X-Request-Id,\d+ # curl http://localhost:8080/services/another/1 -H X-Request-Id:88
+</code></pre>
+</li>
+<li>Cookie Route Predicate
+Cookie路由断言
+<pre><code class="language-yaml">  - Cookie=sessionId,test # curl http://localhost:8080/services/another/1 --cookie sessionId=test
+</code></pre>
+</li>
+<li>Query Route Predicate
+请求参数路由
+<pre><code class="language-yaml">  - Query=name,pu. # http://localhost:8080/services/another/5?name=pu1 参数以name命名，值以pu开始共三位 
+</code></pre>
+</li>
+<li>RemoteAddr Route Predicate
+远端地址路由断言</li>
+</ul>
+<pre><code class="language-yaml">- RemoteAddr=192.168.1.1/24
+
+</code></pre>
+<ul>
+<li>Host Route Predicate
+主机地址路由</li>
+</ul>
+<pre><code class="language-yaml">- Host=**.baidu.com #
+</code></pre>
+<ul>
+<li>Before Route Predicate</li>
+</ul>
+<pre><code class="language-yaml">- Before=2022-10-24T16:30:00+08:00[Asia/Shanghai]
+</code></pre>
+<ul>
+<li>After Route Predicate</li>
+</ul>
+<pre><code class="language-yaml">- After=2019-09-24T16:30:00+08:00[Asia/Shanghai]
+</code></pre>
+<ul>
+<li>Between Route Predicate</li>
+</ul>
+<pre><code class="language-yaml">- Between=2019-09-24T16:30:00+08:00[Asia/Shanghai],2023-09-24T16:30:00+08:00[Asia/Shanghai] 
+</code></pre>
+<h1 id="filter"><a class="header" href="#filter">Filter</a></h1>
+<h2 id="route-filter"><a class="header" href="#route-filter">Route Filter</a></h2>
+<ul>
+<li>AddRequestParameter</li>
+</ul>
+<pre><code class="language-yaml">  cloud:
+    gateway:
+      routes:
+        - id: user
+          uri: lb://user
+          filters:
+            - StripPrefix=1
+            - AddRequestParameter=username,bw00 
+</code></pre>
+<ul>
+<li>StripPrefix</li>
+</ul>
+<pre><code class="language-yaml">  cloud:
+    gateway:
+      routes:
+        - id: user
+          uri: lb://user
+          filters:
+            - StripPrefix=1
+</code></pre>
+<ul>
+<li>PrefixPath</li>
+</ul>
+<pre><code class="language-yaml">cloud:
+  gateway:
+    routes:
+      - id: user
+        uri: lb://user
+        filters:
+          - StripPrefix=1
+          - PrefixPath=/another
+        predicates:
+          - Path=/services/**
+</code></pre>
+<ul>
+<li>Hystrix
+先添加依赖</li>
+</ul>
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-cloud-starter-netflix-hystrix&lt;/artifactId&gt;
+&lt;/dependency&gt; 
+</code></pre>
+<pre><code class="language-java">@RestController
+@RequestMapping
+public class IndexController {
+
+    @GetMapping(&quot;/badthinghappend&quot;)
+    public ResponseEntity fallback4Another() {
+        return ResponseEntity.ok(&quot;badthinghappend &quot;);
+    }
+}
+</code></pre>
+<p>然后配置：</p>
+<pre><code class="language-yaml">          filters:
+            - StripPrefix=1
+            - name: Hystrix
+              args:
+                name: fallbackcmd
+                fallbackUri: forward:/badthinghappend
+</code></pre>
+<p>还可以把它设置为缺省的filters：</p>
+<pre><code class="language-yaml">  cloud:
+    gateway:
+      default-filters:
+        - name: Hystrix
+          args:
+            name: badthing
+            fallbackUri: forward:/downgrade
+</code></pre>
+<ul>
+<li>RequestRateLimiter
+添加依赖:</li>
+</ul>
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-data-redis-reactive&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>添加KeyResolver：</p>
+<pre><code class="language-java">@Configuration
+        public class RedisRateLimiterConfig {
+
+        @Bean
+        KeyResolver userKeyResolver() {
+        return new KeyResolver(){
+
+        @Override
+        public Mono&lt;String&gt; resolve(ServerWebExchange exchange) {
+  return Mono.just(exchange.getRequest().getQueryParams().getFirst(&quot;userName&quot;));
+  }
+  };
+  //  return exchange -&gt; Mono.just(exchange.getRequest().getQueryParams().getFirst(&quot;userName&quot;));
+  }
+  }
+</code></pre>
+<p>添加过滤器配置</p>
+<pre><code class="language-yaml">    filters:
+      - name: RequestRateLimiter
+        args:
+          redis-rate-limiter.replenishRate: 1 # 放令牌的速率
+          redis-rate-limiter.burstCapacity: 2 # 令牌桶最大放多少个
+          key-resolver: &quot;#{@userKeyResolver}&quot; # 根据userName来限流
+</code></pre>
+<p>添加redis配置：</p>
+<pre><code class="language-yaml">spring:
+  redis:
+    host: localhost
+    port: 6379
+</code></pre>
+<ul>
+<li>Retry</li>
+</ul>
+<pre><code class="language-yaml">  default-filters:
+  - AddRequestHeader=myName,Hello world?
+</code></pre>
+<h2 id="global-filters"><a class="header" href="#global-filters">Global Filters</a></h2>
+<p>添加global Filter定义</p>
+<pre><code class="language-java">@Slf4j
+@Component
+public class LogGlobalFilter implements GlobalFilter, Ordered {
+    @Override
+    public int getOrder() {
+        return 10;
+    }
+
+    @Override
+    public Mono&lt;Void&gt; filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        String path = exchange.getRequest().getPath().value();
+        log.info(&quot;有人访问了: &quot; + path);
+        return chain.filter(exchange);
+    }
+}
+</code></pre>
+<h1 id="cors-配置"><a class="header" href="#cors-配置">CORS 配置</a></h1>
+<pre><code class="language-yaml">spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: &quot;*&quot;
+            allowedHeaders: &quot;*&quot;
+            allowedMethods: &quot;*&quot;
+            allowCredentials: true
+            maxAge: 360000
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="创建config的配置项目"><a class="header" href="#创建config的配置项目">创建config的配置项目</a></h1>
+<h1 id="图"><a class="header" href="#图">图</a></h1>
+<p><img src="imgs/config.png" alt="cnfig架构图" /></p>
+<h1 id="git"><a class="header" href="#git">git</a></h1>
+<p><a href="https://gitee.com/nixf/config-repo.git">config-repo</a></p>
+<h1 id="加依赖-2"><a class="header" href="#加依赖-2">加依赖</a></h1>
+<pre><code class="language-xml">&lt;dependency&gt;
+	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+	&lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+	&lt;artifactId&gt;spring-cloud-config-server&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h1 id="加注解"><a class="header" href="#加注解">加注解</a></h1>
+<pre><code class="language-java">@EnableConfigServer
+</code></pre>
+<h1 id="服务端配置"><a class="header" href="#服务端配置">服务端配置</a></h1>
+<pre><code class="language-yaml">spring:
+  cloud:
+    config:
+      server:
+        git: #配置存储信息的Git仓库
+          #username: xxx
+          #password: 123456
+          uri: https://gitee.com/nixf/config-repo.git
+          clone-on-start: true # 启动时直接从gitee获取数据
+          search-paths: unit_5 # 搜索目录
+          default-label: master # 默认的分支
+      label: master #分支信息
+</code></pre>
+<h1 id="使用"><a class="header" href="#使用">使用</a></h1>
+<p><a href="http://localhost:8888/user/dev/master">http://localhost:8888/application_name/profile/branch_name</a></p>
+<h1 id="客户端配置user"><a class="header" href="#客户端配置user">客户端配置（user)</a></h1>
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-cloud-starter-bootstrap&lt;/artifactId&gt;
+  &lt;version&gt;3.1.1&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-cloud-config-client&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>新建bootstrap.yml</p>
+<pre><code class="language-yaml">server:
+  port: 9092 #修改为你安排的端口
+
+spring:
+  application:
+    name: message # 修改为你应用的注册名
+  cloud:
+    config:
+      profile: dev
+      label: master
+      uri: http://localhost:8888
+      name: user
+</code></pre>
+<p>演示</p>
+<pre><code class="language-java">@RestController
+public class ConfigController {
+
+    @Value(&quot;${my-name}&quot;)
+    private String myName;
+
+    @GetMapping(&quot;/my-name&quot;)
+    public String getConfigName() {
+        return myName;
+    }
+
+}
+</code></pre>
+<h2 id="刷新"><a class="header" href="#刷新">刷新</a></h2>
+<h3 id="添加actuator依赖"><a class="header" href="#添加actuator依赖">添加actuator依赖</a></h3>
+<pre><code class="language-xml">		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+		&lt;/dependency&gt;
+</code></pre>
+<pre><code class="language-yaml">management:
+  endpoints:
+    web:
+      exposure:
+        include: 'refresh'
+</code></pre>
+<h1 id="config-高可用"><a class="header" href="#config-高可用">config 高可用</a></h1>
+<pre><code class="language-yaml">  cloud:
+    config:
+      profile: dev
+      lable: master
+#      uri: http://localhost:8888
+      name: user
+      discovery:
+        enabled: true
+        service-id: config
+</code></pre>
+<h1 id="spring-cloud-bus"><a class="header" href="#spring-cloud-bus">Spring Cloud Bus</a></h1>
+<p>erlang安装： http://erlang.org/download/otp_win32_21.3.exe<br />
+rabbitMQ下载： https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.7.14</p>
+<p>过程参考：https://www.macrozheng.com/cloud/bus.html#rabbitmq%E7%9A%84%E5%AE%89%E8%A3%85</p>
+<p>rabbitMQ安装注意问题：</p>
+<pre><code>1，文件路径不要有中文、空格；
+2，计算机名不要有中文
+</code></pre>
+<pre class="mermaid">graph LR
+Publisher -- 查询 --&gt; NameServer
+Receiver -- 查询 --&gt; NameServer
+Publisher --发送消息--&gt; Broker
+Broker --接收消息--&gt; Receiver
+</pre>
+<p>RabbitMQ的相关概念</p>
+<ul>
+<li>Broker  消息队列服务</li>
+<li>Vitual host  虚拟分组</li>
+<li>Connection   publisher 和 consumer 与broker的tcp连接</li>
+<li>Channel 逻辑连接</li>
+<li>Exchange 分发消息 p2p topic multicast/fanout</li>
+<li>Queue 真正的消息队列</li>
+<li>Binding exchange和queue之间的虚拟连接</li>
+</ul>
+<h2 id="config-server配置"><a class="header" href="#config-server配置">config server配置</a></h2>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-bus-amqp&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+</code></pre>
+<pre><code class="language-yaml">spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'bus-refresh'
+</code></pre>
+<h2 id="config-client配置"><a class="header" href="#config-client配置">config client配置</a></h2>
+<p>添加依赖：</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-bus-amqp&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>添加配置文件：</p>
+<pre><code class="language-yaml">spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+</code></pre>
+<h2 id="测试"><a class="header" href="#测试">测试</a></h2>
+<p>更改git的配置后，调用
+http://localhost:8888/actuator/bus-refresh 即可更新所有通过bus链接到config的服务的配置。</p>
+<h2 id="安全"><a class="header" href="#安全">安全</a></h2>
+<p>引进安全jar包：</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>添加用户名和密码：</p>
+<pre><code class="language-yaml">spring:
+  application:
+    name: config
+  security:
+    user:
+      name: admin
+      password: 123456
+</code></pre>
+<p>放开刷新接口的访问：</p>
+<pre><code class="language-java">@Configuration
+public class SecurityConfig  extends WebSecurityConfigurerAdapter {
+
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().anyRequest()
+                .authenticated()
+                .and().httpBasic().and().csrf().disable();
+    }
+
+}
+</code></pre>
+<p>使用Postman刷新：
+<img src="./imgs/config-security-refresh.png" alt="Postman刷新配置" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rabbit-安装"><a class="header" href="#rabbit-安装">Rabbit 安装</a></h1>
+<p>rabbitMQ 是基于Erlang语言开发的，因此在安装rabbit之前需要先安装erlang。
+安装时需要注意几点：</p>
+<pre><code>1，文件路径不要有中文、空格；
+2，计算机名不要有中文
+</code></pre>
+<h2 id="erlang-安装"><a class="header" href="#erlang-安装">Erlang 安装</a></h2>
+<p>官网：https://www.erlang.org/downloads<br />
+<img src="./imgs/rabbit/erlang.png" alt="erlang官网" /></p>
+<p>下载地址： http://erlang.org/download/otp_win32_21.3.exe</p>
+<h3 id="配置erlang环境变量"><a class="header" href="#配置erlang环境变量">配置Erlang环境变量</a></h3>
+<p>新建系统变量：</p>
+<pre><code class="language-shell">ERLANG_HOME
+C:\Program Files\erl-24.2
+</code></pre>
+<p>将bin追加到Path变量中</p>
+<pre><code class="language-shell">%ERLANG_HOME%\bin
+</code></pre>
+<h3 id="测试erlang环境"><a class="header" href="#测试erlang环境">测试Erlang环境</a></h3>
+<pre><code class="language-shell">erl
+</code></pre>
+<p><img src="./imgs/rabbit/erl_run.png" alt="erlang运行测试" /></p>
+<h2 id="下载rabbitmq"><a class="header" href="#下载rabbitmq">下载RabbitMQ</a></h2>
+<p><img src="./imgs/rabbit/rabbit.png" alt="rabbit官网" />
+rabbitMQ下载： https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.7.14</p>
+<p>安装管理插件：</p>
+<p>在rabbit的bin目录下执行：</p>
+<pre><code class="language-shelll">rabbitmq-plugins enable rabbitmq_management
+</code></pre>
+<p>安装完成后访问： http://localhost:15672/
+<img src="./imgs/rabbit/rabbit_login.png" alt="rabbit console" />
+用户名和密码： guest/guest</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sleuth"><a class="header" href="#sleuth">Sleuth</a></h1>
+<h2 id="sleuth-简介"><a class="header" href="#sleuth-简介">Sleuth 简介</a></h2>
+<p>请求追踪，问题（性能，异常）定位</p>
+<h2 id="给服务添加链路追踪"><a class="header" href="#给服务添加链路追踪">给服务添加链路追踪</a></h2>
+<h3 id="加依赖-3"><a class="header" href="#加依赖-3">加依赖</a></h3>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-zipkin&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h3 id="-1"><a class="header" href="#-1"></a></h3>
+<pre><code class="language-yaml">spring:
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    samplerr:
+      probability: 0.1 # 设置Sleuth抽样收集的概率
+
+</code></pre>
+<h3 id="zipkin"><a class="header" href="#zipkin">zipkin</a></h3>
+<p>主页地址： https://zipkin.io/<br />
+<img src="./imgs/zipkin_download.png" alt="zipkin下载" /></p>
+<h4 id="zipkin简介"><a class="header" href="#zipkin简介">zipkin简介</a></h4>
+<ul>
+<li>span-跨度-范围</li>
+<li>trace-追踪-痕迹</li>
+<li>annotation-注释-标记</li>
+</ul>
+<h2 id="使用es存储跟踪信息"><a class="header" href="#使用es存储跟踪信息">使用ES存储跟踪信息</a></h2>
+<ul>
+<li>安装ES</li>
+<li>ES Header
+chrome 安装 /Volumes/workspace/es-head/es-head</li>
+<li>zipkin启动时传入使用ES的参数</li>
+</ul>
+<pre><code class="language-shell"># STORAGE_TYPE：表示存储类型 ES_HOSTS：表示ES的访问地址
+java -jar zipkin-server-2.12.9-exec.jar --STORAGE_TYPE=elasticsearch --ES_HOSTS=localhost:9200
+
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="spring-boot-admin"><a class="header" href="#spring-boot-admin">Spring Boot Admin</a></h1>
+<p>Spring Boot Admin  通过  Actuator 获得应用运行过程中的各项指标。以图形化界面展示出来。监控以下内容：</p>
+<ul>
+<li>应用概览信息</li>
+<li>度量指标信息</li>
+<li>环境变量信息</li>
+<li>所有创建的Bean信息</li>
+<li>查看应用中所有配置信息</li>
+<li>应用运行日志信息</li>
+<li>查看JVM信息</li>
+<li>查看可以访问的Web端点</li>
+<li>查看HTTP跟踪信息</li>
+<li></li>
+</ul>
+<h1 id="一-admin-server"><a class="header" href="#一-admin-server">一 admin-server</a></h1>
+<h2 id="1添加依赖-2"><a class="header" href="#1添加依赖-2">1.添加依赖</a></h2>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;de.codecentric&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-admin-starter-server&lt;/artifactId&gt;
+    &lt;version&gt;2.2.4&lt;/version&gt; 
+&lt;/dependency&gt;
+</code></pre>
+<h2 id="2打开开关"><a class="header" href="#2打开开关">2.打开开关</a></h2>
+<pre><code class="language-java">@EnableAdminServer
+</code></pre>
+<h2 id="3配置"><a class="header" href="#3配置">3.配置</a></h2>
+<pre><code class="language-yaml">server:
+  port: 9301
+spring:
+  application:
+    name: admin-server
+</code></pre>
+<h1 id="二-admin-client"><a class="header" href="#二-admin-client">二 admin-client</a></h1>
+<h2 id="引依赖"><a class="header" href="#引依赖">引依赖</a></h2>
+<pre><code class="language-xml">&lt;!--admin客户端--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;de.codecentric&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-admin-starter-client&lt;/artifactId&gt;
+    &lt;version&gt;2.2.4&lt;/version&gt; &lt;!--2.6.2不兼容 --&gt;
+&lt;/dependency&gt;
+&lt;!-- 开启监控接口--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h2 id="配置"><a class="header" href="#配置">配置</a></h2>
+<p>spring.boot.admin.client.url 告诉admin server地址
+management 开启查询端口</p>
+<pre><code class="language-yaml">spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:9301 #配置admin-server地址
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+logging:
+  file: # 开启admin的日志监控
+    name: admin-client.log
+
+</code></pre>
+<h1 id="三-演示"><a class="header" href="#三-演示">三 演示</a></h1>
+<h2 id="1-访问监控地址"><a class="header" href="#1-访问监控地址">1 访问监控地址</a></h2>
+<p>http://localhost:9301</p>
+<h2 id="2-点击wallboard按钮选择要监控的实例查看详情"><a class="header" href="#2-点击wallboard按钮选择要监控的实例查看详情">2 点击wallboard按钮，选择要监控的实例查看详情</a></h2>
+<h2 id="3-度量指标信息-jvmtomcat及进程信息"><a class="header" href="#3-度量指标信息-jvmtomcat及进程信息">3 度量指标信息 JVM，Tomcat及进程信息</a></h2>
+<h2 id="4-环境变量信息"><a class="header" href="#4-环境变量信息">4 环境变量信息</a></h2>
+<h2 id="5-所有的bean信息"><a class="header" href="#5-所有的bean信息">5 所有的Bean信息</a></h2>
+<h2 id="6-查看应用中的所有配置信息"><a class="header" href="#6-查看应用中的所有配置信息">6 查看应用中的所有配置信息</a></h2>
+<h2 id="7-查看日志信息"><a class="header" href="#7-查看日志信息">7 查看日志信息</a></h2>
+<h1 id="四-结合注册中心"><a class="header" href="#四-结合注册中心">四 结合注册中心</a></h1>
+<h2 id="admin-server的修改"><a class="header" href="#admin-server的修改">Admin Server的修改</a></h2>
+<p>admin需要引入eureka client依赖和添加相应配置。</p>
+<h3 id="添加eureka-client"><a class="header" href="#添加eureka-client">添加eureka-client</a></h3>
+<pre><code class="language-xml">&lt;dependency&gt;
+ &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+ &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h3 id="打开eurekaclient"><a class="header" href="#打开eurekaclient">打开EurekaClient</a></h3>
+<pre><code class="language-java">@EnableEurekaClient
+</code></pre>
+<h3 id="添加注册中心配置"><a class="header" href="#添加注册中心配置">添加注册中心配置</a></h3>
+<pre><code class="language-yaml">
+eureka:
+  client:
+    fetch-registry: true #指定是否要从注册中心获取服务（注册中心不需要开启）
+    register-with-eureka: true #指定是否要注册到注册中心（注册中心不需要开启）
+    # 需要注意，如果eureka服务开始了security保护，这里需要有用户名和密码
+    # http://username:password@localhost:8761/eureka/
+    #集群的配置
+    #defaultZone: http://node1:8761/eureka,http://node2:8762/eureka,http://node3:8763/eureka
+    #单机的配置
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+</code></pre>
+<h2 id="admin-client"><a class="header" href="#admin-client">Admin Client</a></h2>
+<pre><code class="language-yaml">management: # Admin 通过 actuator提供的端口进行监控系统，因此需要打开各端口
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+logging:
+  file: # 开启admin的日志监控
+    name: admin-client.log
+
+</code></pre>
+<h1 id="五-添加登陆认证"><a class="header" href="#五-添加登陆认证">五 添加登陆认证</a></h1>
+<p>引入安全依赖</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>配置用户名和密码</p>
+<pre><code class="language-yaml">spring:
+  security:
+    user:
+      name: xxx
+      password: 123456
+    boot:
+      admin:
+        discovery:
+          ignored-services: ${spring.application.name} # 忽略自己的信息
+
+</code></pre>
+<p>增加security后，对于没有使用eureka注册中心，直接去通知admin的就
+会受到影响，需要对security进行配置，以允许admin-client对admin的请求。</p>
+<p>Spring Security</p>
+<pre><code class="language-java">@Configuration
+public class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
+  private final String adminContextPath;
+  public SecuritySecureConfig(AdminServerProperties adminServerProperties) {
+    this.adminContextPath = adminServerProperties.getContextPath();
+  }
+ @Override
+ protected void configure(HttpSecurity http) throws Exception {
+  SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+  successHandler.setTargetUrlParameter(&quot;redirectTo&quot;);
+  successHandler.setDefaultTargetUrl(adminContextPath + &quot;/&quot;);
+  http.authorizeRequests()
+   //1.配置所有静态资源和登录页可以公开访问
+  .antMatchers(adminContextPath + &quot;/assets/**&quot;).permitAll()
+  .antMatchers(adminContextPath + &quot;/login&quot;).permitAll()
+  .antMatchers(adminContextPath+&quot;/instances&quot;).permitAll()
+  .antMatchers(adminContextPath+&quot;/actuator/**&quot;).permitAll()
+  .anyRequest().authenticated()
+  .and()
+   //2.配置登录和登出路径
+  .formLogin().loginPage(adminContextPath + &quot;/login&quot;).successHandler(successHandler).and()
+  .logout().logoutUrl(adminContextPath + &quot;/logout&quot;).and()
+  //3.开启 http basic 支持，admin-client 注册时需要使用
+  .httpBasic().and()
+  .csrf()
+  //4.开启基于 cookie 的 csrf 保护
+  .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+  //5.忽略这些路径的 csrf 保护以便 admin-client 注册
+  .ignoringAntMatchers(adminContextPath + &quot;/instances&quot;,adminContextPath + &quot;/actuator/**&quot;);
+ }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="合同录入"><a class="header" href="#合同录入">合同录入</a></h1>
+<p>环境复杂度</p>
+<ul>
+<li><a href="09_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8A.html#snowflake">合同编号重复</a></li>
+<li><a href="09_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8A.html#idcard">身份证号码格式不正确</a></li>
+<li>租客身份证和租客姓名不真实</li>
+<li><a href="09_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8A.html#precision">计算合同金额精度缺失</a></li>
+<li><a href="09_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8A.html#lock">签合同期间房屋被租出去</a></li>
+</ul>
+<h2 id="收房合同录入功能"><a class="header" href="#收房合同录入功能">收房合同录入功能</a></h2>
+<ul>
+<li>合同信息录入</li>
+<li>合同录入选择房产</li>
+<li>附件处理</li>
+<li>付款单生成</li>
+</ul>
+<h2 id="表设计"><a class="header" href="#表设计">表设计</a></h2>
+<h2 id="合同信息录入"><a class="header" href="#合同信息录入">合同信息录入</a></h2>
+<h2 id="参考"><a class="header" href="#参考">参考</a></h2>
+<span id="snowflake">
+Snowflake snowflake = IdUtil.getSnowflake();
+String id = "HT"+snowlake.nextId();
+</span>
+<p id="idcard">
+/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|[xX])$/
+</p>
+<p id="precision">
+    BigDecimal
+</p>
+<span id="lock">
+    乐观锁
+</span>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="合同录入下"><a class="header" href="#合同录入下">合同录入下：</a></h1>
+<p><a href="10_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8B.html#integrity">房间租赁合同和客户身份证上传失败</a>
+<a href="10_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8B.html#net-security">网络请求被篡改</a>
+<a href="10_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8B.html#precision">应收房款分期计算有误</a>
+<a href="10_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8B.html#ingrity">租房合同保存失败，数据不完整</a></p>
+<h2 id="参考-1"><a class="header" href="#参考-1">参考</a></h2>
+<p id="net-security">
+    服务端验证请求、计算金额
+ </p>
+ <p id="precision">
+    BigDecimal
+ </p>
+ <p id="integrity">
+    使用事务
+ </p>
+ <p id="security">
+   文件上传的目录设置为不可执行<br/> 
+   文件类型设置白名单  <br/>
+   图片使用压缩或resize处理函数 <br/> 
+   使用随机数重命名文件 <br/> 
+   单独设置文件服务器域名 <br/> 
+</p>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="调试中心"><a class="header" href="#调试中心">调试中心</a></h2>
+<p><a href="https://open.alipay.com/dev/workspace/apidebug" title="支付宝调试">https://open.alipay.com/dev/workspace/apidebug</a></p>
+<h2 id="依赖"><a class="header" href="#依赖">依赖</a></h2>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;com.alipay.sdk&lt;/groupId&gt;
+    &lt;artifactId&gt;alipay-sdk-java&lt;/artifactId&gt;
+    &lt;version&gt;4.33.50.ALL&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h2 id="配置-1"><a class="header" href="#配置-1">配置</a></h2>
+<p>在yml中配置ali支付参数
+<a href="https://openhome.alipay.com/develop/pm/sub/setting?appId=2021003158617034">应用详情</a></p>
+<pre><code class="language-yml">alipay:
+  config:
+    privateKey: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCLq2XQiqUVyxyO+vT3VIXOhIGWvL1SIs9p28kurzgXzV8JR0X2h+TrSjfyjwYRQH9aV5FFy9NIciA1ce0ZPfxniDt4Bs0pHqLJfkRaUhkotVWn8F6kqqoypy1NfLseDx8GsGXnWVST0wV7xpeOlQM6cflVwYTxx5topyZc5u6NbLssdb/DX1ABjsMsinJQpbgutJFYwy+iWIM7MTSOds4FwZpWdowZ824zfqCMyWibiP1JmguXVcl14eWyOv6LDvDe0niXiF2qMDrTUReVVb+XwEsGb1/cdJT9wU0JDreRH1SSwE6Z+sQdQClfqB/WQJZniveugGf4bXnnZRQfo44fAgMBAAECggEAH7dCHYL+Td6bk5RFQEy/PdA1JSeizh39f4pbOvCrCiymohK/PmZJg2yNG9WCiTReNwOfh3vrdI4F5l0CfDLpOBFlf7H7sJS2Xo7/sormD6pt0v7wXvAqSepQjUH/s6m3X+t6mHhejlri6eKE0+nem8z505FoQQcUsUUTnxEJpq9s1f8SxVF0+6v2va2UqyCbPwKIR0bQLLF7K8a2jl2YBaHRntRi7BCqt4z+IQmHkI6M1zDOysSVbeVX3XlAc54nseorSHAY3ywmjkFSPmBc5MDzNSFgSG2IdHzlTU7R2F4wvExbFGPh64UODzlwcyZFYaTVwUdxhS8JxyXsnHTsQQKBgQDjJs/CMee4AWTN9GNj3XfVW29xjta7XGFJh5BaQRuABpI10nfNyadfwHC7PxjauGqHX2TTpc6991m+kaHOdX5nUyjMOAkhIrmJT1xgPHEjr15Enzp5f8L9NgpMdOJlUne3Uf9cA8pww/lQlEHHcdvoofEYSHoAxMT7wwSut8VdcQKBgQCdaFrfmHtN4AOovtauy3AbdfhhkoyCzN6g/sTDyI4CbLIbMIfqlXTG/RaJYCLVevnmSGCryflDQT69JicSNOVseRZEHli3Qr3G1sS2zU495ZlQGFe6DZomCkw3RxJcX5z25rvvcW3ECDRGpEG17SvMxXWwpD2+0WQL87wEnuwcjwKBgGyak96/SZC6ad3mqNaIftDtxJzAtH4kLwee3y+nzWQqwCEnncwwS+wF8GA2TMXWQmiy/VwL/IrrBmeM7ZXuqx7vraPmbsb++UJjRUFl5JoxMJsSnjyVDz9NZSMlB1F2WnK1q6fs0A+WQ095cvHOyFuzgbggfuR7L8tHdKesiZqhAoGAR4OU3cc6JhxjrTPe95Un/uHvEe1x9y866mw1WznwAvv9Q0seRR7X6lwr9AgAa3sutEgn24SswbiP14HQ+H2dylWNHy+mYMRq0j7bKq5GIOsCZ5hXqwjpAuVk0SxyFBPAjZAwzE19cDXGAl44GH6DisofeTx1bQ9W4/M9dd/6J9MCgYBzW54BbochobX23cFy6QTOQ1zEUGVaabC4rx8/2M9qbORjVWKIcNOLNErm/BmIXkwU/7dPGdkL98poIvYP172obCHdR/vWNEfA9SzTFO2Dkgr7zsJcMM0H/DrUWVx0PFJoQX6uPMnkF71jupqbg0uYtzkVfKVBQ2GA294fWHlvew==
+    publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtovPlNX2W2/vY7e9FCyb7WTeR61VbgScDzDMpRo866u8ucubHgj9HTt4ebsvwsi5d20l1tqT77mEbEwjCqA8CtfeDyATYuHB+P7SWnotjIIXfFfIAgeAqyIl+7TlsBKt13XAVwQh2LqP2xpzqUCHlhJrvQrrWckzliL/SaqfkHbXRPHqN3O4vNORfOyu5FqXxO5oZ8ADebVkouzi6Rv/wMTazERXIwg2YXYjqkOOQzrojKuHUdHDL9vlC3b0ht1z7cUPLdQE86UoOZCj55dLUvjoZsyxKM/tsGjwvmKJGxvUnDDX88KbGexxFpUS8aN2t0OkE2yzGZgbDtAO3pDTuQIDAQAB
+    serverUrl: https://openapi.alipaydev.com/gateway.do
+    appId: 2016092100560986
+    format: json
+    charset: UTF-8
+    signType: RSA2
+</code></pre>
+<p>增加配置类</p>
+<pre><code class="language-java">@ConfigurationProperties(prefix = &quot;alipay.config&quot;)
+@Data
+@Component
+public class AliProperties {
+    private String privateKey;
+    private String publicKey;
+    private String serverUrl;
+    private String appId;
+    private String format;
+    private String charrset;
+    private String signType;
+}
+</code></pre>
+<p>配置AliClient</p>
+<pre><code class="language-java">@Configuration
+public class AlipayConfiguration {
+
+    @Bean
+    public AlipayConfig alipayConfig(AliProperties aliProperties) {
+        AlipayConfig config = new AlipayConfig();
+        //支付宝测试环境服务器
+        config.setServerUrl(aliProperties.getServerUrl());
+        //支付宝应用id，在沙箱环境内获取
+        config.setAppId(aliProperties.getAppId());
+        //引用私钥，建议使用《支付宝开放平台开发助手》生成，RSA2
+        config.setPrivateKey(aliProperties.getPrivateKey());
+        //json
+        config.setFormat(aliProperties.getFormat());
+        //支付宝的公钥，不是咱自己的。沙箱应用处获取
+        config.setAlipayPublicKey(aliProperties.getPublicKey());
+        //UTF-8
+        config.setCharset(aliProperties.getCharrset());
+        //RSA2
+        config.setSignType(aliProperties.getSignType());
+        System.out.println(aliProperties.toString());
+        return config;
+    }
+
+    @Bean
+    public AlipayClient alipayClient(AlipayConfig config) {
+        try {
+            return new DefaultAlipayClient(config);
+        } catch (AlipayApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+</code></pre>
+<p>支付：</p>
+<pre><code class="language-java">    public AlipayTradePagePayResponse pay(PaymentRequest request) throws AlipayApiException {
+        AlipayTradePagePayRequest aliReq = new AlipayTradePagePayRequest();
+        AlipayTradePagePayModel model = new AlipayTradePagePayModel();
+        model.setOutTradeNo(&quot;&quot;+request.getOutTradeNo());
+        model.setSubject(request.getSubject());
+        model.setTotalAmount(request.getTotalAmout());
+        model.setProductCode(request.getProductCode());
+        aliReq.setBizModel(model);
+        aliReq.setReturnUrl(&quot;http://localhost:8081/order&quot;);
+        aliReq.setNotifyUrl(&quot;https://6217to9865.goho.co/pay/pay/ali_callback&quot;);
+
+        AlipayTradePagePayResponse response = alipayClient.pageExecute(aliReq);
+        return response;
+    }
+</code></pre>
+<p>支付回调：</p>
+<pre><code class="language-java">@RequestMapping(&quot;/ali_callback&quot;)
+public Object aliCallback(HttpServletRequest request) {
+    Map&lt;String,String&gt; params = combineRequestParams(request);
+    try {
+        boolean verified = AlipaySignature.rsaCheckV2(params, aliProperties.getPublicKey(), &quot;utf-8&quot;, aliProperties.getSignType());
+        if(!verified) {
+            return ServerResponse.badRequest().body(&quot;非法请求，验证不通过&quot;);
+        }
+        String status = params.get(&quot;trade_status&quot;);
+        if(&quot;TRADE_SUCCESS&quot;.equals(status)) {
+            String out_trade_no = params.get(&quot;out_trade_no&quot;);
+            Pay pay = payService.getByUUID(out_trade_no);
+            pay.setPayDate(new Date());
+            pay.setStatus(PayStatus.PAID.name());
+            payService.saveOrUpdate(pay);
+            return &quot;success&quot;;
+        }
+        //确认支付状态是支付成功
+        //确认价格一致
+        //需要添加更新订单处理。
+        return &quot;fail&quot;;
+    } catch (AlipayApiException e) {
+        log.info(&quot;支付宝回调异常&quot;, e);
+        return &quot;fail&quot;;
+    }
+}
+
+private static Map&lt;String, String&gt; combineRequestParams(HttpServletRequest request) {
+    Map&lt;String,String&gt; params = new HashMap&lt;&gt;();
+    Map requestParams = request.getParameterMap();
+    for(Iterator it = requestParams.keySet().iterator(); it.hasNext();) {
+        String name = (String) it.next();
+        String[] values = (String[]) requestParams.get(name);
+        String valueStr = &quot;&quot;;
+        for(int i=0; i&lt;values.length; i++) {
+            valueStr = i==(values.length-1) ? valueStr+values[i] : valueStr+values[i]+&quot;,&quot;;
+        }
+        params.put(name, valueStr);
+    }
+    params.remove(&quot;sign_type&quot;);
+    return params;
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-2"><a class="header" href="#-2"></a></h2>
+<p>掉单：</p>
+<pre><code class="language-java">
+</code></pre>
+<p>退款：</p>
+<pre><code class="language-java">    public boolean refund(int orderId, BigDecimal amount) throws AlipayApiException {
+        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+        AlipayTradeRefundModel model = new AlipayTradeRefundModel();
+        model.setOutTradeNo(String.valueOf(orderId));
+        model.setRefundAmount(amount.toPlainString());
+        request.setBizModel(model);
+        AlipayTradeRefundResponse response = alipayClient.execute(request);
+        return response.isSuccess();
+    }
+</code></pre>
+<p>下载支付单：</p>
+<pre><code class="language-java">    public String billDownload(String date) throws AlipayApiException {
+        AlipayDataDataserviceBillDownloadurlQueryRequest request = new AlipayDataDataserviceBillDownloadurlQueryRequest();
+        AlipayDataDataserviceBillDownloadurlQueryModel model = new AlipayDataDataserviceBillDownloadurlQueryModel();
+        model.setBillType(&quot;trade&quot;);
+        model.setBillDate(date);
+        request.setBizModel(model);
+        //String content = &quot;{\&quot;bill_type\&quot;:\&quot;trade\&quot; , \&quot;bill_date\&quot;:\&quot;&quot;+date+&quot;\&quot;}&quot;;
+        //System.out.println(content);
+        //request.setBizContent(content);
+        AlipayDataDataserviceBillDownloadurlQueryResponse response = alipayClient.execute(request);
+        System.out.println(response.getBody());
+        String url = response.getBillDownloadUrl();
+        return url;
+    }
+</code></pre>
+<p>检查支付单</p>
+<pre><code class="language-java">
+    public AlipayTradeQueryResponse check(String outTradeId) throws AlipayApiException {
+        AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+        AlipayTradeQueryModel checkModel = new AlipayTradeQueryModel();
+        checkModel.setOutTradeNo(outTradeId);
+        request.setBizModel(checkModel);
+        return alipayClient.execute(request);
+    }
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="预约看房业务流程"><a class="header" href="#预约看房业务流程">预约看房业务流程</a></h1>
+<h1 id="预约看房表结构设计"><a class="header" href="#预约看房表结构设计">预约看房表结构设计</a></h1>
+<h1 id="预约看房前后端交互实现"><a class="header" href="#预约看房前后端交互实现">预约看房前后端交互实现</a></h1>
+<h1 id="短信发送"><a class="header" href="#短信发送">短信发送</a></h1>
+<h1 id="环境复杂度"><a class="header" href="#环境复杂度">环境复杂度</a></h1>
+<h2 id="短信通知实现"><a class="header" href="#短信通知实现">短信通知实现</a></h2>
+<pre><code>接入第三方短信平台，业界有阿里云，腾讯云，青牛云等，我们采用的是榛子云
+</code></pre>
+<h2 id="短信发送失败如何处理"><a class="header" href="#短信发送失败如何处理">短信发送失败如何处理</a></h2>
+<p>发生错误的原因：
+格式出错
+违禁词汇
+区域受限
+技术层面出错</p>
+<p>出现错误怎么解决：<br />
+寻找客服人员的帮助
+多使用短信模板或固定模板</p>
+<h2 id="短信接口异常如何处理"><a class="header" href="#短信接口异常如何处理">短信接口异常如何处理</a></h2>
+<p>可以针对特定异常或异常吗进行重试
+记录日志，后期和运营商沟通</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="springboot-集成"><a class="header" href="#springboot-集成">springboot 集成</a></h1>
+<h2 id="作用-1"><a class="header" href="#作用-1">作用</a></h2>
+<p>解耦
+异步
+削峰</p>
+<h2 id="问题"><a class="header" href="#问题">问题</a></h2>
+<h3 id="系统可用性降低"><a class="header" href="#系统可用性降低">系统可用性降低</a></h3>
+<p>如何保证MQ的高可用</p>
+<h3 id="系统复杂度提高"><a class="header" href="#系统复杂度提高">系统复杂度提高</a></h3>
+<p>怎么保证消息没有被重复消费？
+消费者保证。
+防止消息丢失？</p>
+<pre><code>生产者 -- 使用事务消息
+消费者 -- 使用消息确认
+broker -- 早写盘，多备份
+</code></pre>
+<p>保证消息传递的顺序性？</p>
+<p>保证消息处理一致性？</p>
+<h2 id="安装"><a class="header" href="#安装">安装</a></h2>
+<h3 id="下载地址"><a class="header" href="#下载地址">下载地址：</a></h3>
+<pre><code>https://rocketmq.apache.org/download  
+版本选择 4.9.3
+</code></pre>
+<h3 id="修改启动脚本"><a class="header" href="#修改启动脚本">修改启动脚本</a></h3>
+<p>将namesrv和broker的内存占用修改为： -server -Xms256m -Xmx256m -Xmn128m</p>
+<ul>
+<li>
+<p>修改nameServer的启动脚本
+找到choose_gc_options后，在下面一行做如下修改
+vi ./bin/runserver.sh
+<img src="./imgs/runserver_sh.png" alt="修改Nameserver脚本" /></p>
+</li>
+<li>
+<p>修改broker的启动脚本
+找到如下图
+<img src="./imgs/runbroker_sh.png" alt="修改brroker的脚本" />
+修改为前面所述的内存大小：<br />
+vi ./bin/runbroker.sh
+<img src="./imgs/runbroker2_sh.png" alt="修改后的脚本" /></p>
+</li>
+</ul>
+<h3 id="启动"><a class="header" href="#启动">启动</a></h3>
+<p>启动名称服务器</p>
+<pre><code class="language-shell">nohup sh bin/mqnamesrv &amp;
+</code></pre>
+<p>启动broker服务</p>
+<pre><code class="language-shell">nohup sh bin/mqbroker -n localhost:9876 &amp;
+</code></pre>
+<h3 id="测试-1"><a class="header" href="#测试-1">测试</a></h3>
+<pre><code class="language-shell">export NAMESRV_ADDR=‘localhost:9876'  
+
+./bin/tools.sh org.apache.rocketmq.example.quickstart.Producer  
+./bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer s
+</code></pre>
+<h2 id="添加依赖和配置"><a class="header" href="#添加依赖和配置">添加依赖和配置</a></h2>
+<pre><code class="language-xml">  &lt;dependency&gt;
+    &lt;groupId&gt;org.apache.rocketmq&lt;/groupId&gt;
+    &lt;artifactId&gt;rocketmq-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;2.1.0&lt;/version&gt;
+  &lt;/dependency&gt;
+</code></pre>
+<pre><code class="language-yaml">rocketmq:
+  name-server: 127.0.0.1:9876 # rocketMQ 名称服务器
+  producer:
+    group: test # 发送组
+    topic: test-topic  # topic 相当于一个地址
+    retry-times-when-send-failed: 5  # 错了以后重试几次
+  consumer:
+    group: test-consumer  #消费者组
+    topic: test-topic   # 消费topic
+
+</code></pre>
+<h2 id="消息的发送"><a class="header" href="#消息的发送">消息的发送</a></h2>
+<h3 id="同步发送"><a class="header" href="#同步发送">同步发送</a></h3>
+<pre><code class="language-java">    @PostMapping(&quot;/send&quot;)
+    public Map&lt;String,String&gt; send(@RequestParam String msg) {
+        Message&lt;String&gt; message = MessageBuilder.withPayload(msg).build();
+        SendResult result = rocketMQTemplate.syncSend(topic,message);
+        if(SendStatus.SEND_OK.equals(result.getSendStatus())) {
+           return this.of(&quot;status&quot;, &quot;ok&quot;);
+        }else {
+           return this.of(&quot;status&quot;, &quot;error&quot;);
+        }
+    }
+</code></pre>
+<h3 id="异步发送"><a class="header" href="#异步发送">异步发送</a></h3>
+<pre><code class="language-java">public void asyncSend(String msg) {
+    Message&lt;String&gt; message = MessageBuilder.withPayload(msg).build();
+    rocketMQTemplate.asyncSend(topic, message, new SendCallback() {
+        @Override
+        public void onSuccess(SendResult sendResult) {
+            SendStatus sendStatus = sendResult.getSendStatus();
+            if(SendStatus.SEND_OK.equals(sendStatus)) {
+                System.out.println(&quot;异步发送消息成功&quot;);
+            }else {
+                System.out.println(&quot;异步发送没有成功。&quot;+sendStatus.name());
+            }
+        }
+
+        @Override
+        public void onException(Throwable throwable) {
+            System.out.println(&quot;异步发送消息时发生了错误&quot;);
+        }
+    });
+}
+</code></pre>
+<h3 id="消息的接收"><a class="header" href="#消息的接收">消息的接收</a></h3>
+<pre><code class="language-java">@Service
+@RocketMQMessageListener(nameServer = &quot;${rocketmq.name-server}&quot;, topic=&quot;${rocketmq.producer.topic}&quot;, consumerGroup = &quot;${rocketmq.consumer.group}&quot;)
+public class MQListener implements RocketMQListener&lt;String&gt; {
+    @Override
+    public void onMessage(String rocketMqMessage) {
+        System.out.println(&quot;=====I have got a message. = &quot; + rocketMqMessage);
+    }
+}
+</code></pre>
+<h2 id="确保消息不丢失"><a class="header" href="#确保消息不丢失">确保消息不丢失</a></h2>
+<h3 id="1发送事务消息"><a class="header" href="#1发送事务消息">1.发送事务消息</a></h3>
+<pre><code class="language-java">    public void sendTransactional(String msg) {
+        Message message = MessageBuilder.withPayload(msg).build();
+        TransactionSendResult sendResult = rocketMQTemplate.sendMessageInTransaction(topic, message, transactionalListener);
+
+    }
+</code></pre>
+<pre><code class="language-java">
+@Component
+@RocketMQTransactionListener
+public class TransactionalListener implements RocketMQLocalTransactionListener {
+
+    int times = 0;
+
+    @Autowired
+    UserService userService;
+
+    @Override
+    public RocketMQLocalTransactionState executeLocalTransaction(Message message, Object o) {
+        MessageHeaders headers = message.getHeaders();
+        String transactionalId = (String)headers.get(RocketMQHeaders.TRANSACTION_ID);
+        System.out.println(&quot;==========&quot; + transactionalId);
+        try{
+            userService.deleteUser(6);
+            return RocketMQLocalTransactionState.COMMIT;
+        }catch (Exception e) {
+            return RocketMQLocalTransactionState.ROLLBACK;
+        }
+
+       // return RocketMQLocalTransactionState.UNKNOWN;
+    }
+
+    @Override
+    public RocketMQLocalTransactionState checkLocalTransaction(Message message) {
+        times ++;
+        System.out.println(&quot;=====第&quot;+times+&quot;次重试。&quot;);
+        if(times &gt; 5) {
+            System.out.println(&quot;重试5次后终于成功&quot;);
+            return RocketMQLocalTransactionState.COMMIT;
+        }
+        return RocketMQLocalTransactionState.UNKNOWN;
+    }
+}
+</code></pre>
+<h3 id="2-确认接收"><a class="header" href="#2-确认接收">2. 确认接收</a></h3>
+<pre><code class="language-java">@Component
+public class AcknowledgeListener implements MessageListenerOrderly {
+
+    @Value(&quot;${rocketmq.name-server}&quot;)
+    private String nameServer;
+
+    @Value(&quot;${rocketmq.producer.topic}&quot;)
+    private String topic;
+
+    @Value(&quot;${rocketmq.consumer.group}&quot;)
+    private String group;
+
+    private DefaultMQPushConsumer consumer;
+
+    @PostConstruct
+    public void init() throws MQClientException {
+        consumer =new DefaultMQPushConsumer();
+        consumer.setNamesrvAddr(this.nameServer);
+        consumer.subscribe(topic,&quot;*&quot;);
+        consumer.setConsumerGroup(group);
+        consumer.setInstanceName(&quot;another&quot;);
+        consumer.registerMessageListener(this);
+        consumer.start();
+    }
+
+    @Override
+    public ConsumeOrderlyStatus consumeMessage(List&lt;MessageExt&gt; list, ConsumeOrderlyContext consumeOrderlyContext) {
+        if(CollectionUtils.isEmpty(list)){
+            return ConsumeOrderlyStatus.SUCCESS;
+        }
+        for(MessageExt ext : list) {
+            String msg = new String(ext.getBody());
+            processMessage(msg);
+        }
+        return ConsumeOrderlyStatus.SUCCESS;
+    }
+
+    private void processMessage(String msg) {
+        System.out.println(&quot;receive &quot;+msg);
+    }
+
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="springboot-集成-1"><a class="header" href="#springboot-集成-1">springboot 集成</a></h1>
+<h2 id="作用-2"><a class="header" href="#作用-2">作用</a></h2>
+<p>解耦
+异步
+削峰</p>
+<h2 id="问题-1"><a class="header" href="#问题-1">问题</a></h2>
+<h3 id="系统可用性降低-1"><a class="header" href="#系统可用性降低-1">系统可用性降低</a></h3>
+<p>如何保证MQ的高可用</p>
+<h3 id="系统复杂度提高-1"><a class="header" href="#系统复杂度提高-1">系统复杂度提高</a></h3>
+<p>怎么保证消息没有被重复消费？
+防止消息丢失？
+保证消息传递的顺序性？
+保证消息处理一致性？</p>
+<h2 id="添加依赖-1"><a class="header" href="#添加依赖-1">添加依赖</a></h2>
+<dependency>
+    <groupId>org.apache.rocketmq</groupId>
+    <artifactId>rocketmq-spring-boot-starter</artifactId>
+    <version>2.1.0</verrsion>
+  </dependency>
+<h2 id="集群部署"><a class="header" href="#集群部署">集群部署：</a></h2>
+<p>1，创建数据存储路径</p>
+<ul>
+<li>linux版本：
+创建store根路径</li>
+</ul>
+<pre><code>/home/nixinfeng/workspace/rocketmq-4.9.3/data/am
+/home/nixinfeng/workspace/rocketmq-4.9.3/data/as
+/home/nixinfeng/workspace/rocketmq-4.9.3/data/bm
+/home/nixinfeng/workspace/rocketmq-4.9.3/data/bs
+</code></pre>
+<p>创建配置文件：</p>
+<pre><code class="language-properties">brokerClusterName=DefaultCluster
+brokerName=broker-a
+brokerId=0
+deleteWhen=04
+fileReservedTime=48
+brokerRole=SYNC_MASTER
+flushDiskType=ASYNC_FLUSH
+listenPort=10911
+storePathRootDir=/home/nixinfeng/workspace/rocketmq-4.9.3/data/am
+namesrvAddr=127.0.0.1:9876
+
+</code></pre>
+<p>启动集群：(需要补上namesrv的启动)</p>
+<pre><code class="language-shell">nohup bin/mqbroker -c /home/nixinfeng/workspace/rocketmq-4.9.3/conf/2m-2s-sync/broker-a.properties &amp;
+nohup bin/mqbroker -c /home/nixinfeng/workspace/rocketmq-4.9.3/conf/2m-2s-sync/broker-a-s.properties &amp;
+nohup bin/mqbroker -c /home/nixinfeng/workspace/rocketmq-4.9.3/conf/2m-2s-sync/broker-b.properties &amp;
+nohup bin/mqbroker -c /home/nixinfeng/workspace/rocketmq-4.9.3/conf/2m-2s-sync/broker-b-s.properties &amp;
+</code></pre>
+<ul>
+<li>windows版本
+创建store根路径</li>
+</ul>
+<pre><code>D:\workspaces\rocketmq-4.9.3\data\a
+D:\workspaces\rocketmq-4.9.3\data\as
+D:\workspaces\rocketmq-4.9.3\data\b
+D:\workspaces\rocketmq-4.9.3\data\bs
+</code></pre>
+<p>创建配置文件</p>
+<pre><code class="language-properties"># 集群名称
+brokerClusterName=DefaultCluster
+# broker名称，Master和Slaver要保持统一
+brokerName=broker-a
+# 0 表示主； 1表示从
+brokerId=0
+deleteWhen=04
+fileReservedTime=48
+brokerRole=SYNC_MASTER
+flushDiskType=ASYNC_FLUSH
+# 创建topic时缺省创建队列数
+defaultTopicQueueNums=4
+# 自动创建话题，线上关闭
+autoCreateTopicEnable=true
+autoCreateSubscriptionGroup=true
+# IP1 为主用
+brokerIP1=127.0.0.1
+# IP2 是从找主用
+brokerIP2=127.0.0.1
+# 端口号，各实例间端口号差距多些更好
+listenPort=10931
+# 存储主地址
+storePathRootDir=D:/workspaces/rocketmq-4.9.3/data/a
+# 名称服务器地址
+namesrvAddr=127.0.0.1:9876;127.0.0.1:9870
+
+</code></pre>
+<p>启动集群：</p>
+<pre><code class="language-shell">start bin\mqnamesrv.cmd -c conf\2m-2s-sync\namesrv-1.properties
+start bin\mqnamesrv.cmd -c conf\2m-2s-sync\namesrv-2.properties
+start bin\mqbroker.cmd -c conf\2m-2s-sync\broker-a.properties
+start bin\mqbroker.cmd -c conf\2m-2s-sync\broker-a-s.properties
+start bin\mqbroker.cmd -c conf\2m-2s-sync\broker-b.properties
+start bin\mqbroker.cmd -c conf\2m-2s-sync\broker-b-s.properties
+</code></pre>
+<h2 id="问题汇总"><a class="header" href="#问题汇总">问题汇总</a></h2>
+<ul>
+<li>无报错直接退出
+<ul>
+<li>配置文件路径问题，windows和linux不同。</li>
+<li>存储数据的路径权限不够</li>
+<li>端口分配，貌似rocket会占用临近的端口号</li>
+</ul>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="安装xxl-job"><a class="header" href="#安装xxl-job">安装xxl-job</a></h1>
+<ul>
+<li>初始化数据库
+执行脚本  /xxl-job/doc/db/tables_xxl_job.sql/xxl-job/doc/db/tables_xxl_job.sql</li>
+<li>编译xxl-job-admin
+mvn spring-boot:run</li>
+<li>执行</li>
+</ul>
+<h1 id="使用-1"><a class="header" href="#使用-1">使用</a></h1>
+<h2 id="引入依赖-1"><a class="header" href="#引入依赖-1">引入依赖</a></h2>
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;com.xuxueli&lt;/groupId&gt;
+  &lt;artifactId&gt;xxl-job-core&lt;/artifactId&gt;
+  &lt;version&gt;2.2.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h2 id="配置-2"><a class="header" href="#配置-2">配置</a></h2>
+<pre><code class="language-yml">xxl:
+  job:
+    port: 9998
+    accessToken: &quot;&quot;
+    admin:
+      addresses: http://wsl2:9999/xxl-job-admin
+    executor:
+      appName: contract
+      logpath: &quot;/Users/mac/workspace/xxl-job/runable/client&quot;
+      logretentiondays: 10
+
+</code></pre>
+<h2 id="初始化"><a class="header" href="#初始化">初始化</a></h2>
+<pre><code class="language-java">    @Value(&quot;${xxl.job.admin.addresses}&quot;)
+    private String adminAddress;
+    @Value(&quot;${xxl.job.accessToken}&quot;)
+    private String accessToken;
+    @Value(&quot;${xxl.job.executor.appName}&quot;)
+    private String appName;
+    @Value(&quot;${xxl.job.executor.logpath}&quot;)
+    private String logPath;
+    @Value(&quot;${xxl.job.executor.logretentiondays}&quot;)
+    private int logRententionDays;
+
+    @Value(&quot;${xxl.job.port}&quot;)
+    private int port;
+
+
+    @Bean
+    public XxlJobSpringExecutor xxlJobExecutor() {
+        XxlJobSpringExecutor xxlJobSpringExecutor = new XxlJobSpringExecutor();
+        xxlJobSpringExecutor.setAdminAddresses(this.adminAddress);
+        xxlJobSpringExecutor.setAppname(this.appName);
+        xxlJobSpringExecutor.setLogPath(this.logPath);
+        xxlJobSpringExecutor.setLogRetentionDays(this.logRententionDays);
+        xxlJobSpringExecutor.setPort(port);
+        return xxlJobSpringExecutor;
+    }
+</code></pre>
+<h2 id="handler"><a class="header" href="#handler">Handler</a></h2>
+<pre><code class="language-java">
+    @XxlJob(&quot;payCreatorForOld&quot;)
+    public ReturnT&lt;String&gt; updateOldContract(String param) {
+        List&lt;Contract&gt; contracts = contractService.getOldContract();
+        contracts.stream().forEach(contract -&gt; {
+            try {
+                log.debug(&quot;===================&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&quot;);
+                rocketMQService.syncSend(contract);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        XxlJobLogger.log(&quot;XXl-job for old  &quot;+ param);
+        return ReturnT.SUCCESS;
+    }
+
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><h1 id="包含各个项目文档"><a class="header" href="#包含各个项目文档">包含各个项目文档</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="爱家家居商城"><a class="header" href="#爱家家居商城">爱家家居商城</a></h1>
+<pre><code>系统需要采用spring cloud微服务架构，包含 注册中心，配置中心，网关等。
+</code></pre>
+<h2 id="需求描述"><a class="header" href="#需求描述">需求描述</a></h2>
+<p>爱家家居是一家对标宜家的家居商家，目前需要开拓网上市场。
+作为一个合格的研发者，你需要完成以下功能。</p>
+<h2 id="1-登录页面"><a class="header" href="#1-登录页面">1 登录页面</a></h2>
+<p>登录时需要有验证码验证。
+验证码有效期为3分钟，3分钟内输入有效。
+<img src="project/aijia/./imgs/login1.png" alt="登录" /></p>
+<h2 id="2-查看家具列表"><a class="header" href="#2-查看家具列表">2 查看家具列表</a></h2>
+<pre><code>用户可以查看爱家家居的所有家具，因为预计访问者较多，因此需要对
+家具列表添加缓存功能。同时防止缓存被击穿和穿透。
+</code></pre>
+<p><img src="project/aijia/./imgs/list.png" alt="家居列表" />
+注意，以上家具列表中需要自行添加《添加到购物车》按钮，样式参考详情页按钮。
+<img src="project/aijia/./imgs/detail.png" alt="家居详情" /></p>
+<h2 id="3-加入购物车"><a class="header" href="#3-加入购物车">3 加入购物车</a></h2>
+<pre><code>遇到感兴趣的家具可以放入购物车，挑选完毕后可以点击确认购买以生成订单。
+</code></pre>
+<p><img src="project/aijia/./imgs/gwc.png" alt="购物车" /></p>
+<h2 id="4-选择配送地址"><a class="header" href="#4-选择配送地址">4 选择配送地址</a></h2>
+<p>在支付前需要用户设置联系手机号和配送地址，需要用三级联动方式实现。</p>
+<h2 id="5-支付"><a class="header" href="#5-支付">5 支付</a></h2>
+<pre><code>在订单页可以点击支付，支付使用支付宝。
+</code></pre>
+<h2 id="6-退款"><a class="header" href="#6-退款">6 退款</a></h2>
+<pre><code>在订单列表页可以对已付款成功的订单发起退款申请。
+</code></pre>
+<h2 id="7-定时对账跑批"><a class="header" href="#7-定时对账跑批">7 定时对账跑批</a></h2>
+<pre><code>每天上午xx点钟运行支付宝订单对账程序。
+</code></pre>
+<h2 id="8-配送"><a class="header" href="#8-配送">8 配送</a></h2>
+<p>在配送列表页有所有的订单，未配送的有配送按钮，点击后订单状态改为已配送，且同时通过消息队列向用户</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="爱家家居项目"><a class="header" href="#爱家家居项目">爱家家居项目</a></h1>
+<h2 id="项目分析"><a class="header" href="#项目分析">项目分析</a></h2>
+<h3 id="功能列表"><a class="header" href="#功能列表">功能列表</a></h3>
+<ul>
+<li>登录</li>
+<li>家居列表和详情</li>
+<li>加入购物车</li>
+<li>配送</li>
+<li>支付</li>
+<li>退款</li>
+<li>定时对账跑批</li>
+</ul>
+<h3 id="分析"><a class="header" href="#分析">分析</a></h3>
+<ul>
+<li>用户中心
+登录</li>
+<li>商品中心
+商品列表
+商品详情</li>
+<li>订单中心
+购物车
+订单
+配送</li>
+<li>支付中心
+支付
+退款
+对账跑批</li>
+</ul>
+<h2 id="数据结构设计"><a class="header" href="#数据结构设计">数据结构设计</a></h2>
+<pre><code>user
+    id, name, password, created, updated
+product
+    id name price picture
+order
+    order
+        id userId productId, name, price,address, picture, status, detail, created, updated
+    orderItem
+        id orderId, productId, price, num
+    cart
+        id userId productId, price, num
+</code></pre>
+<h2 id="项目创建"><a class="header" href="#项目创建">项目创建</a></h2>
+<h3 id="eureka-1"><a class="header" href="#eureka-1">eureka</a></h3>
+<p>参考 unit_1.md</p>
+<h3 id="config"><a class="header" href="#config">config</a></h3>
+<p>参考 ../unit_5.md</p>
+<h3 id="gateway"><a class="header" href="#gateway">gateway</a></h3>
+<p>参考 ../unit_7.md</p>
+<h3 id="service"><a class="header" href="#service">service</a></h3>
+<p>参考 resources.md</p>
+<h2 id="页面"><a class="header" href="#页面">页面</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="spring-cloud-版本"><a class="header" href="#spring-cloud-版本">Spring Cloud 版本</a></h1>
+<p>Hoxton.REALEASE</p>
+<h2 id="cloud依赖-版本"><a class="header" href="#cloud依赖-版本">cloud依赖 版本：</a></h2>
+<pre><code class="language-xml">&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;2.2.5.RELEASE&lt;/version&gt;
+    &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
+&lt;/parent&gt;
+
+&lt;properties&gt;
+    &lt;java.version&gt;1.8&lt;/java.version&gt;
+    &lt;springcloud.version&gt;Hoxton.RELEASE&lt;/springcloud.version&gt;
+    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+&lt;/properties&gt;
+
+&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;!--一般都需要，但是gateway得去掉这个依赖--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-cloud-starter&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;!--监控和管理实例信息--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;!--lombok--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+        &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+&lt;!--依赖管理--&gt;
+&lt;dependencyManagement&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;
+            &lt;version&gt;${springcloud.version}&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;
+&lt;!--springboot 插件--&gt;
+&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+            &lt;version&gt;2.5.6&lt;/version&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
+<p>web依赖</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h1 id="applicationyml"><a class="header" href="#applicationyml">application.yml</a></h1>
+<pre><code class="language-yaml">server:
+  #需要改 eureka:8761 gateway:8080 config:8888 user:8083
+  port: 8083
+
+spring:
+  application:
+    #需要改
+    name: user
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/user?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=Asia/Shanghai
+    username: dev
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: test_group_1
+    topic: get_order
+  consumer:
+    group: consumer_group_1
+
+  redis:
+    database: 1
+    host: 127.0.0.1
+    port: 6379
+
+eureka:
+  client:
+    register-with-eureka: true # 注册到eureka
+    fetch_registry: true #从服务器获取注册信息
+    service-url:
+      defaultZone: http://localhost:8761/eureka/ # 注册中心地址
+
+logging:
+  level:
+    root: info
+    org:
+      springframework:
+        web:
+          filter:
+            CommonsRequestLoggingFilter: debug
+</code></pre>
+<h2 id="打开请求日志"><a class="header" href="#打开请求日志">打开请求日志</a></h2>
+<pre><code class="language-java">    @Bean
+    public CommonsRequestLoggingFilter logFilter() {
+        CommonsRequestLoggingFilter loggingFilter = new CommonsRequestLoggingFilter();
+        loggingFilter.setIncludeQueryString(true);
+        loggingFilter.setIncludePayload(true);
+        loggingFilter.setMaxPayloadLength(2048);
+        return loggingFilter;
+    }
+</code></pre>
+<pre><code class="language-java">org.springframework.web.filter.CommonsRequestLoggingFilter: debug
+</code></pre>
+<h2 id="通用返回包装"><a class="header" href="#通用返回包装">通用返回包装</a></h2>
+<pre><code class="language-java">@Data
+public class Result&lt;T&gt; {
+    private int state = 0;//ok
+    private T data;
+
+    public static &lt;D&gt; Result&lt;D&gt; ok(D d) {
+        Result&lt;D&gt; result = new Result&lt;&gt;();
+        result.data = d;
+        return result;
+    }
+
+    public static &lt;D&gt; Result&lt;D&gt; err(int state, D d) {
+        Result&lt;D&gt; result = new Result&lt;&gt;();
+        result.state = state;
+        result.data = d;
+        return result;
+    }
+}
+
+</code></pre>
+<h1 id="redis"><a class="header" href="#redis">Redis</a></h1>
+<p>依赖</p>
+<pre><code class="language-xml">		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+		&lt;/dependency&gt;
+</code></pre>
+<p>配置</p>
+<pre><code class="language-yaml">spring:
+    redis:
+    database: 2
+    host: 127.0.0.1
+    port: 6379
+</code></pre>
+<h1 id="安全-1"><a class="header" href="#安全-1">安全</a></h1>
+<p>依赖</p>
+<pre><code class="language-xml">    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+</code></pre>
+<p>如果不使用spring-security的话需要添加</p>
+<pre><code class="language-java">@SpringBootApplication(exclude = {SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class})
+</code></pre>
+<p>验证加盐加密的代码</p>
+<pre><code class="language-java">    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    return encoder.matches(password, user.getPassword());
+</code></pre>
+<h1 id="参考-2"><a class="header" href="#参考-2">参考</a></h1>
+<h2 id="支付宝"><a class="header" href="#支付宝">支付宝</a></h2>
+<p><a href="https://open.alipay.com/api/apiDebug?apiNames=alipay.trade.refund&amp;frontProdCode=I1080300001000041203&amp;backProdCode=I1011000100000000005">支付宝api调用示例</a>## 通用返回包装</p>
+<pre><code class="language-java">@Data
+public class Result&lt;T&gt; {
+    private int state = 0;//ok
+    private T data;
+
+    public static &lt;D&gt; Result&lt;D&gt; ok(D d) {
+        Result&lt;D&gt; result = new Result&lt;&gt;();
+        result.data = d;
+        return result;
+    }
+
+    public static &lt;D&gt; Result&lt;D&gt; err(int state, D d) {
+        Result&lt;D&gt; result = new Result&lt;&gt;();
+        result.state = state;
+        result.data = d;
+        return result;
+    }
+}
+
+</code></pre>
+<h1 id="redis-1"><a class="header" href="#redis-1">Redis</a></h1>
+<p>依赖</p>
+<pre><code class="language-xml">		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+		&lt;/dependency&gt;
+</code></pre>
+<p>配置</p>
+<pre><code class="language-yaml">spring:
+    redis:
+    database: 2
+    host: 127.0.0.1
+    port: 6379
+</code></pre>
+<h1 id="前端"><a class="header" href="#前端">前端</a></h1>
+<h2 id="创建"><a class="header" href="#创建">创建</a></h2>
+<p>vue create front
+npm install axios
+npm install element-ui -S</p>
+<h2 id="编辑mainjs-引入element-ui-axios-配置axios"><a class="header" href="#编辑mainjs-引入element-ui-axios-配置axios">编辑main.js, 引入element-ui, axios; 配置axios，</a></h2>
+<pre><code class="language-javascript">import axios from 'axios'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.use(ElementUI);
+Vue.config.productionTip = false
+
+axios.defaults.baseURL = &quot;http://localhost:8080/&quot;
+axios.defaults.withCredentials=true;
+Vue.prototype.axios = axios;
+</code></pre>
+<h1 id="安全-2"><a class="header" href="#安全-2">安全</a></h1>
+<p>依赖</p>
+<pre><code class="language-xml">    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+</code></pre>
+<p>如果不使用spring-security的话需要添加</p>
+<pre><code class="language-java">@SpringBootApplication(exclude = {SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class})
+</code></pre>
+<p>验证加盐加密的代码</p>
+<pre><code class="language-java">    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    return encoder.matches(password, user.getPassword());
+</code></pre>
+<h1 id="参考-3"><a class="header" href="#参考-3">参考</a></h1>
+<h2 id="支付宝-1"><a class="header" href="#支付宝-1">支付宝</a></h2>
+<p><a href="https://open.alipay.com/api/apiDebug?apiNames=alipay.trade.refund&amp;frontProdCode=I1080300001000041203&amp;backProdCode=I1011000100000000005">支付宝api调用示例</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="引进jar包"><a class="header" href="#引进jar包">引进jar包</a></h1>
+<h1 id="mybatis-plus"><a class="header" href="#mybatis-plus">mybatis-plus</a></h1>
+<ul>
+<li>配置jar包依赖</li>
+</ul>
+<pre><code class="language-xml">    &lt;dependency&gt;
+        &lt;groupId&gt;com.baomidou&lt;/groupId&gt;
+        &lt;artifactId&gt;mybatis-plus-boot-starter&lt;/artifactId&gt;
+        &lt;version&gt;3.0.5&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!-- 使用druid连接池，一并引入--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+        &lt;artifactId&gt;druid-spring-boot-starter&lt;/artifactId&gt;
+        &lt;version&gt;1.1.10&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!--因为是基于mysql开发，所以一并引入--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;mysql&lt;/groupId&gt;
+        &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+        &lt;scope&gt;runtime&lt;/scope&gt;
+    &lt;/dependency&gt;
+</code></pre>
+<ul>
+<li>在入口类配置mapper扫描</li>
+</ul>
+<pre><code class="language-java">@MapperScan(&quot;com.eight.user.mapper&quot;)
+</code></pre>
+<ul>
+<li>数据库配置</li>
+</ul>
+<pre><code class="language-yaml">  datasource:
+    url: jdbc:mysql://localhost:3306/user?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=Asia/Shanghai
+    username: dev
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+</code></pre>
+<h2 id="数据库"><a class="header" href="#数据库">数据库</a></h2>
+<h3 id="创建mysql用户及授权"><a class="header" href="#创建mysql用户及授权">创建mysql用户及授权</a></h3>
+<pre><code class="language-sql-mysql">create user 'dev'@'localhost' identified by '123456';
+grant all on `order` to 'dev'@'localhost';
+grant all on *.* to dev@localhost;
+insert into user(name, password, actor) values('admin','$2a$10$XEpgbj4JkA1jtCSQ8HNlXOEk2VOONYL4vmyxDRgkG4NvlqILaHmty','ADMIN');
+insert into user(name, password, actor) values('user','$2a$10$XEpgbj4JkA1jtCSQ8HNlXOEk2VOONYL4vmyxDRgkG4NvlqILaHmty','USER');
+</code></pre>
+<p>引入generator依赖</p>
+<pre><code class="language-xml">&lt;!--MP的代码生成器--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.baomidou&lt;/groupId&gt;
+    &lt;artifactId&gt;mybatis-plus-generator&lt;/artifactId&gt;
+    &lt;version&gt;3.3.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--generator的模版依赖--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.velocity&lt;/groupId&gt;
+    &lt;artifactId&gt;velocity-engine-core&lt;/artifactId&gt;
+    &lt;version&gt;2.2&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h1 id="mybatis-plus-generator"><a class="header" href="#mybatis-plus-generator">mybatis-plus-generator</a></h1>
+<pre><code class="language-java">public class CodeGenerator {
+    public static void main(String[] args) {
+        AutoGenerator mpg = new AutoGenerator();
+
+        String project = &quot;house&quot;;
+        String projectPath = &quot;/Volumes/workspace/lessions/unit_10/&quot;+project+&quot;/&quot;;
+        String dbName = &quot;house&quot;;
+        String userName = &quot;dev&quot;;
+        String password = &quot;123456&quot;;
+        String author = &quot;nixinfeng&quot;;
+        String pkg = &quot;com.eight&quot;;
+
+        // 数据源配置
+        DataSourceConfig dsc = new DataSourceConfig();
+        dsc.setDbType(DbType.MYSQL);
+        dsc.setDriverName(&quot;com.mysql.cj.jdbc.Driver&quot;);
+        dsc.setUsername(userName);
+        dsc.setPassword(password);
+        mpg.setDataSource(dsc);
+
+        // 选择 freemarker 引擎，默认 Veloctiy
+        //mpg.setTemplateEngine(new FreemarkerTemplateEngine());
+
+        // 全局配置
+
+
+
+
+        GlobalConfig gc = new GlobalConfig();
+        gc.setAuthor(author);
+        gc.setFileOverride(true); //是否覆盖
+        gc.setActiveRecord(true);// 不需要ActiveRecord特性的请改为false
+        gc.setEnableCache(false);// XML 二级缓存
+        gc.setBaseResultMap(true);// XML ResultMap
+        gc.setBaseColumnList(true);// XML columList
+        mpg.setGlobalConfig(gc);
+
+
+        // 策略配置
+        StrategyConfig strategy = new StrategyConfig();
+        strategy.setEntityLombokModel(true);
+        //strategy.setTablePrefix(new String[] { &quot;tb_&quot;, &quot;tsys_&quot; });// 此处可以修改为您的表前缀
+        strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
+        strategy.setColumnNaming(NamingStrategy.underline_to_camel);//列名规则
+        strategy.setEntityLombokModel(true);//是否生成lombok注解
+        //自动填充的配置
+        TableFill create_time = new TableFill(&quot;created&quot;, FieldFill.INSERT);//设置时的生成策略
+        TableFill update_time = new TableFill(&quot;updated&quot;, FieldFill.INSERT_UPDATE);//设置更新时间的生成策略
+        ArrayList&lt;TableFill&gt; list = new ArrayList&lt;&gt;();
+        list.add(create_time);
+        list.add(update_time);
+        strategy.setTableFillList(list);
+        strategy.setRestControllerStyle(true);//开启驼峰命名
+
+        strategy.setChainModel(true);
+        mpg.setStrategy(strategy);
+
+        // 包配置
+        PackageConfig pc = new PackageConfig();
+        pc.setParent(pkg);
+        pc.setController(&quot;controller&quot;);
+        pc.setEntity(&quot;entity&quot;);
+        pc.setMapper(&quot;mapper&quot;);
+        pc.setService(&quot;service&quot;);
+        pc.setServiceImpl(&quot;service.impl&quot;);
+
+        pc.setModuleName(project);
+        gc.setOutputDir( projectPath + &quot;src/main/java/&quot;);
+        dsc.setUrl(&quot;jdbc:mysql://localhost:3306/&quot;+dbName+&quot;?useUnicode=true&amp;characterEncoding=utf8&amp;allowMultiQueries=true&amp;serverTimezone=UTC&quot;);
+
+        mpg.setPackageInfo(pc);
+
+        mpg.execute();
+
+    }
+}
+</code></pre>
+<h1 id="分页"><a class="header" href="#分页">分页</a></h1>
+<pre><code class="language-java">@Configuration
+public class MyBatisConfig {
+
+    @Bean
+    public PaginationInterceptor createPageIntercepter() {
+        return new PaginationInterceptor();
+    }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="常见问题"><a class="header" href="#常见问题">常见问题：</a></h1>
+<h2 id="穿透"><a class="header" href="#穿透">穿透</a></h2>
+<h3 id="定义"><a class="header" href="#定义">定义</a></h3>
+<p>被访问的数据不存在，导致每次请求得数据都不能在缓存中找到，导致请求都要到数据库里。
+最终导致数据库压力过大。</p>
+<h3 id="解决方案"><a class="header" href="#解决方案">解决方案</a></h3>
+<p>每次从数据库中读不到的数据，都在缓存里存放一个空对象。一般要设置一个过期时间，
+以防止以后某个时间对应的数据又有了。</p>
+<h2 id="击穿"><a class="header" href="#击穿">击穿</a></h2>
+<h3 id="定义-1"><a class="header" href="#定义-1">定义</a></h3>
+<pre><code>某个非常热点的数据在key失效的瞬间，导致大量的请求直接到了数据库。
+</code></pre>
+<h3 id="解决方案-1"><a class="header" href="#解决方案-1">解决方案</a></h3>
+<ul>
+<li>基于redis或zookeeper实现互斥锁</li>
+<li>将热点数据设置为永不过期</li>
+</ul>
+<h2 id="雪崩"><a class="header" href="#雪崩">雪崩</a></h2>
+<h3 id="定义-2"><a class="header" href="#定义-2">定义</a></h3>
+<p>雪崩在不同的语境里有不同的内涵，在redis这里的雪崩就是大量热点数据过期，导致大部分缓存数据
+在redis层失效，请求直接到数据库层，进而导致数据库压力堵塞甚至宕机。</p>
+<h3 id="解决方案-2"><a class="header" href="#解决方案-2">解决方案</a></h3>
+<ul>
+<li>缓存过期时间分散化</li>
+<li>热点数据均匀分布到不同的redis和数据库 （业务不一定允许）</li>
+<li>多级缓存 ehcache + redis</li>
+</ul>
+<h1 id="修改密码"><a class="header" href="#修改密码">修改密码</a></h1>
+<pre><code class="language-shell">    # 如果是docker，则需要进入docker内部
+    docker exec -it myredis redis-cli;
+    # 查询当前密码
+    config get requirepass
+    # 设置密码 your_password 替换成你自己的密码
+    config set requirepass your_password
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="普通登录"><a class="header" href="#普通登录">普通登录</a></h1>
+<h2 id="jwt"><a class="header" href="#jwt">JWT</a></h2>
+<pre><code class="language-xml">	&lt;!-- jwt  --&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;com.auth0&lt;/groupId&gt;
+		&lt;artifactId&gt;java-jwt&lt;/artifactId&gt;
+		&lt;version&gt;3.10.3&lt;/version&gt;
+	&lt;/dependency&gt;
+</code></pre>
+<pre><code class="language-java">public class JWTUtils {
+    public static final String USER_LOGIN_KEY = &quot;jwt&quot;;
+    private String secret;
+    private String issure;
+
+    public JWTUtils(String secret, String issure) {
+        this.secret = secret;
+        this.issure = issure;
+    }
+
+    public String creatToken( String uid, String actor, String name) {
+        Algorithm algorithm = Algorithm.HMAC256(this.secret);
+        Calendar calendar = Calendar.getInstance();
+        Date issuedAt = calendar.getTime();
+        calendar.add(Calendar.HOUR, 2);
+        Date expired = calendar.getTime();
+        String token = JWT.create().withIssuer(issure)
+                .withIssuedAt(issuedAt)
+                .withExpiresAt(expired)
+                .withClaim(&quot;uid&quot;, uid)
+                .withClaim(&quot;actor&quot;, actor)
+				.withClaim(&quot;name&quot;, name)
+                .sign(algorithm);
+        return token;
+    }
+
+    public DecodedJWT verify(String token) {
+        Algorithm algorithm = Algorithm.HMAC256(this.secret);
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer(this.issure)
+                .build();
+        return verifier.verify(token);
+    }
+
+    public Long getId(String token) {
+        DecodedJWT jwt = this.verify(token);
+        Claim claim = jwt.getClaim(&quot;uid&quot;);
+        return claim.asLong();
+    }
+    public String getActor(String token) {
+        DecodedJWT jwt = this.verify(token);
+        Claim claim = jwt.getClaim(&quot;actor&quot;);
+        return claim.asString();
+    }
+    public String getName(String token) {
+        DecodedJWT jwt = this.verify(token);
+        Claim claim = jwt.getClaim(&quot;name&quot;);
+        return claim.asString();
+    }
+}
+
+</code></pre>
+<p>前端jwt：</p>
+<pre><code class="language-javascript">decodeJWT(jwt) {
+    return JSON.parse(decodeURIComponent(window.atob(token.split(&quot;.&quot;)[1])))
+}
+</code></pre>
+<h1 id="spring-security"><a class="header" href="#spring-security">Spring Security</a></h1>
+<h2 id="基础表结构"><a class="header" href="#基础表结构">基础表结构</a></h2>
+<pre><code class="language-mysql">create table users(
+	username varchar_ignorecase(50) not null primary key,
+	password varchar_ignorecase(50) not null,
+	enabled boolean not null
+);
+
+create table authorities (
+	username varchar_ignorecase(50) not null,
+	authority varchar_ignorecase(50) not null,
+	constraint fk_authorities_users foreign key(username) references users(username)
+);
+create unique index ix_auth_username on authorities (username,authority);
+
+create table persistent_logins (
+	username varchar(64) not null,
+	series varchar(64) primary key,
+	token varchar(64) not null,
+	last_used timestamp not null
+);
+
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="登录验证码生成"><a class="header" href="#登录验证码生成">登录验证码生成</a></h1>
+<h2 id="创建-1"><a class="header" href="#创建-1">创建</a></h2>
+<p>vue create project</p>
+<h2 id="安装-1"><a class="header" href="#安装-1">安装</a></h2>
+<pre><code class="language-shell">npm i element-ui -S
+npm i axios -S
+</code></pre>
+<h2 id="启动-1"><a class="header" href="#启动-1">启动</a></h2>
+<p>npm run serve -- --port=8081</p>
+<p>前端安装
+npm install nanoid</p>
+<h1 id="前端-1"><a class="header" href="#前端-1">前端</a></h1>
+<h2 id="创建-2"><a class="header" href="#创建-2">创建</a></h2>
+<pre><code class="language-shell">vue create front
+npm install axios
+npm install element-ui -S
+</code></pre>
+<h2 id="编辑mainjs-引入element-ui-axios-配置axios-1"><a class="header" href="#编辑mainjs-引入element-ui-axios-配置axios-1">编辑main.js, 引入element-ui, axios; 配置axios，</a></h2>
+<pre><code class="language-javascript">import axios from 'axios'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.use(ElementUI);
+Vue.config.productionTip = false
+
+axios.defaults.baseURL = &quot;http://localhost:8080/&quot;
+axios.defaults.withCredentials=true;
+Vue.prototype.axios = axios;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rocketmq-console"><a class="header" href="#rocketmq-console">rocketmq-console</a></h1>
+<p>启动报 java.xml 异常</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+        &lt;groupId&gt;javax.xml.bind&lt;/groupId&gt;
+        &lt;artifactId&gt;jaxb-api&lt;/artifactId&gt;
+        &lt;version&gt;2.3.0&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.sun.xml.bind&lt;/groupId&gt;
+        &lt;artifactId&gt;jaxb-impl&lt;/artifactId&gt;
+        &lt;version&gt;2.3.0&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.sun.xml.bind&lt;/groupId&gt;
+        &lt;artifactId&gt;jaxb-core&lt;/artifactId&gt;
+        &lt;version&gt;2.3.0&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;javax.activation&lt;/groupId&gt;
+        &lt;artifactId&gt;activation&lt;/artifactId&gt;
+        &lt;version&gt;1.1.1&lt;/version&gt;
+    &lt;/dependency&gt;
+</code></pre>
+<h1 id="alipay"><a class="header" href="#alipay">alipay</a></h1>
+<p>https://openhome.alipay.com/develop/sandbox/app</p>
+<p>dermol5132@sandbox.com</p>
+<h1 id="mysql"><a class="header" href="#mysql">mysql</a></h1>
+<p>修改docker中的数据库时区
+docker exec -it mysql sh</p>
+<p>ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</p>
+<h1 id="短信"><a class="header" href="#短信">短信</a></h1>
+<p>http://sms_developer.zhenzikj.com/zhenzisms_user/login.html
+http://smsow.zhenzikj.com/doc/java_sdk_doc.html</p>
+<pre><code class="language-xml">	&lt;dependency&gt;
+	  &lt;groupId&gt;com.zhenzikj&lt;/groupId&gt;
+	  &lt;artifactId&gt;zhenzisms&lt;/artifactId&gt;
+	  &lt;version&gt;2.0.2&lt;/version&gt;
+	&lt;/dependency&gt;
+</code></pre>
+<pre><code class="language-yaml"># 榛子云短信
+zzy:
+  url: https://sms_developer.zhenzikj.com
+  appId: 112605
+  secret: 6a987156-398b-4c3c-9d84-ce6b3921bd18
+
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="mermaid.min.js"></script>
+        <script type="text/javascript" src="mermaid-init.js"></script>
+
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </body>
+</html>
