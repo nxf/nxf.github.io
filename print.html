@@ -1068,6 +1068,19 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
 }
 </code></pre>
+<p>客户端添加安全配置：</p>
+<pre><code class="language-yaml">  cloud:
+    config: # house-dev.yml
+      profile: dev # 指定开发环境，还可以是test product等。
+      label: master # git分支
+#      uri: http://localhost:8888  #config 服务地址
+      name: house    #当前应用名，用于匹配git内的配置文件
+      discovery: # 启用自动寻址
+        enabled: true # 打开为TRUE
+        service-id: config  # config的服务ID--即eureka的注册名
+      username: admin
+      password: 123456
+</code></pre>
 <p>使用Postman刷新：
 <img src="./imgs/config-security-refresh.png" alt="Postman刷新配置" /></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rabbit-安装"><a class="header" href="#rabbit-安装">Rabbit 安装</a></h1>
