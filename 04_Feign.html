@@ -146,19 +146,23 @@
 <p>netflix feign -&gt; Spring Cloud OpenFeign</p>
 <h1 id="基本使用"><a class="header" href="#基本使用">基本使用</a></h1>
 <h2 id="加依赖"><a class="header" href="#加依赖">加依赖</a></h2>
-<pre><code class="language-xml">&lt;dependency&gt;
+<pre><code class="language-xml">&lt;!-- eureka客户端 --&gt;
+&lt;dependency&gt;
     &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
     &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
 &lt;/dependency&gt;
+&lt;!-- Feign依赖 --&gt;
 &lt;dependency&gt;
     &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
     &lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt;
 &lt;/dependency&gt;
 </code></pre>
 <h2 id="按开关"><a class="header" href="#按开关">按开关</a></h2>
+<p>在入口类上添加注解：</p>
 <pre><code class="language-java">@EnableFeignClients
 </code></pre>
 <h2 id="写配置"><a class="header" href="#写配置">写配置</a></h2>
+<p>如果没有添加eureka配置的需要添加此配置：</p>
 <pre><code class="language-yaml">eureka:
   client:
     register-with-eureka: true
@@ -167,6 +171,7 @@
       defaultZone: http://localhost:8761/eureka/
 </code></pre>
 <h2 id="写代码"><a class="header" href="#写代码">写代码</a></h2>
+<p>注意，确保 path的值 + @GetMapping中的路径  ==  被调用放controller上的@RequestMapping()的值 + 被调用方@GetMappping的值</p>
 <pre><code class="language-java">@FeignClient(name=&quot;order&quot;, path=&quot;/api&quot;)
 public interface OrderServiceFeign {
 
@@ -175,13 +180,19 @@ public interface OrderServiceFeign {
 }
 </code></pre>
 <h1 id="负载均衡"><a class="header" href="#负载均衡">负载均衡</a></h1>
+<p>和上一节ribbon配置方法一样。</p>
 <pre><code class="language-java">@Bean
 public IRule myRule() {
     return new RandomRule();
 }
 </code></pre>
-<h1 id="服务降级"><a class="header" href="#服务降级">服务降级</a></h1>
+<h1 id="feign的服务降级"><a class="header" href="#feign的服务降级">Feign的服务降级</a></h1>
+<h2 id="修改feign接口"><a class="header" href="#修改feign接口">修改Feign接口</a></h2>
+<p>添加降级类</p>
+<pre><code class="language-java">@FeignClient(name=&quot;house&quot;, fallback = HouseFeignServiceFallback.class)
+</code></pre>
 <h2 id="新建降级fallback类"><a class="header" href="#新建降级fallback类">新建降级fallback类</a></h2>
+<p>类要实现Feign接口，注意添加@Service注解</p>
 <pre><code class="language-java">@Service
 public class OrderServiceCallback implements OrderServiceFeign{
     @Override
@@ -200,25 +211,13 @@ public class OrderServiceCallback implements OrderServiceFeign{
 
 </code></pre>
 <h2 id="改配置"><a class="header" href="#改配置">改配置</a></h2>
+<p>同时，因为feign也是使用hystrix实现的降级，所以需要打开hystrix功能：</p>
 <pre><code class="language-yaml">feign:
   hystrix:
     enabled: true
 </code></pre>
-<h2 id="实现降级方法"><a class="header" href="#实现降级方法">实现降级方法</a></h2>
-<pre><code class="language-java">      public Map postOrderNumberOfUser(Long id) {
-        Map result = new HashMap();
-        result.put(&quot;number&quot;,23);
-
-        return result;
-    }
-</code></pre>
-<h2 id="降级并记录降级原因"><a class="header" href="#降级并记录降级原因">降级并记录降级原因</a></h2>
-<pre><code class="language-java">@FeignClient(name=&quot;order&quot;,path=&quot;/api&quot;,fallbackFactory=FeignClientFallbackFactory.class)
-</code></pre>
-<pre><code class="language-java">public class FeignClientFallbackFactory implements FallbackFactory&lt;OrderServiceFeign&gt;
-</code></pre>
 <h1 id="日志"><a class="header" href="#日志">日志</a></h1>
-<h2 id=""><a class="header" href="#"></a></h2>
+<h2 id="打开feign调用日志方便查找问题"><a class="header" href="#打开feign调用日志方便查找问题">打开Feign调用日志，方便查找问题。</a></h2>
 <pre><code class="language-java">import org.springframework.context.annotation.Bean;
 
 @Bean
@@ -226,6 +225,7 @@ Logger.Level feignLogLevel() {
     return Logger.Level.FULL;
 }
 </code></pre>
+<p>同时，需要配置yml文件中的日志等级。</p>
 <pre><code class="language-yaml">logging:
   level:
     com.eight.lession.service: debug

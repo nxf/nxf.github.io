@@ -222,7 +222,7 @@ public RestTemplate restTemplate() {
 </code></pre>
 <h2 id="服务降级实现"><a class="header" href="#服务降级实现">服务降级实现</a></h2>
 <h3 id="情景描述"><a class="header" href="#情景描述">情景描述</a></h3>
-<p>在需要实现服务降级的方法上添加注解 @HysrixCommand . 
+<p>在需要实现服务降级的方法上添加注解 @HystrixCommand . 
 然后配置 fallbackMethod 属性，其参数为发生异常时要降级到的方法的名称，此方法需要与
 @HystrixCommand修饰的方法返回类型及参数保持一致。</p>
 <h3 id="hystrixcommand详解"><a class="header" href="#hystrixcommand详解">HystrixCommand详解</a></h3>
@@ -245,24 +245,6 @@ R{重试}--重试失败--&gt;F
 S --5秒后--&gt; R
 R---一旦请求成功则关闭熔断---&gt;N
 </pre>
-<h3 id="全局配置"><a class="header" href="#全局配置">全局配置</a></h3>
-<h1 id="hystrix-dashboard"><a class="header" href="#hystrix-dashboard">Hystrix Dashboard</a></h1>
-<h2 id="添加依赖"><a class="header" href="#添加依赖">添加依赖</a></h2>
-<pre><code class="language-xml">&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-cloud-starter-netflix-hystrix-dashboard&lt;/artifactId&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</code></pre>
-<h2 id="按开关-1"><a class="header" href="#按开关-1">按开关</a></h2>
-<pre><code class="language-java">@EnableHystrixDashboard
-</code></pre>
-<h2 id="两个地址"><a class="header" href="#两个地址">两个地址</a></h2>
-<p>http://localhost:8083/actuator/hystrix.stream
-http://localhost:8083/hystrix</p>
 
                     </main>
 

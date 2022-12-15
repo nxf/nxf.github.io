@@ -465,7 +465,7 @@ public RestTemplate restTemplate() {
 </code></pre>
 <h2 id="服务降级实现"><a class="header" href="#服务降级实现">服务降级实现</a></h2>
 <h3 id="情景描述"><a class="header" href="#情景描述">情景描述</a></h3>
-<p>在需要实现服务降级的方法上添加注解 @HysrixCommand . 
+<p>在需要实现服务降级的方法上添加注解 @HystrixCommand . 
 然后配置 fallbackMethod 属性，其参数为发生异常时要降级到的方法的名称，此方法需要与
 @HystrixCommand修饰的方法返回类型及参数保持一致。</p>
 <h3 id="hystrixcommand详解"><a class="header" href="#hystrixcommand详解">HystrixCommand详解</a></h3>
@@ -488,41 +488,27 @@ R{重试}--重试失败--&gt;F
 S --5秒后--&gt; R
 R---一旦请求成功则关闭熔断---&gt;N
 </pre>
-<h3 id="全局配置"><a class="header" href="#全局配置">全局配置</a></h3>
-<h1 id="hystrix-dashboard"><a class="header" href="#hystrix-dashboard">Hystrix Dashboard</a></h1>
-<h2 id="添加依赖"><a class="header" href="#添加依赖">添加依赖</a></h2>
-<pre><code class="language-xml">&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-cloud-starter-netflix-hystrix-dashboard&lt;/artifactId&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</code></pre>
-<h2 id="按开关-1"><a class="header" href="#按开关-1">按开关</a></h2>
-<pre><code class="language-java">@EnableHystrixDashboard
-</code></pre>
-<h2 id="两个地址"><a class="header" href="#两个地址">两个地址</a></h2>
-<p>http://localhost:8083/actuator/hystrix.stream
-http://localhost:8083/hystrix</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="feign简介"><a class="header" href="#feign简介">feign简介</a></h1>
 <p>netflix feign -&gt; Spring Cloud OpenFeign</p>
 <h1 id="基本使用"><a class="header" href="#基本使用">基本使用</a></h1>
 <h2 id="加依赖-1"><a class="header" href="#加依赖-1">加依赖</a></h2>
-<pre><code class="language-xml">&lt;dependency&gt;
+<pre><code class="language-xml">&lt;!-- eureka客户端 --&gt;
+&lt;dependency&gt;
     &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
     &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
 &lt;/dependency&gt;
+&lt;!-- Feign依赖 --&gt;
 &lt;dependency&gt;
     &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
     &lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt;
 &lt;/dependency&gt;
 </code></pre>
-<h2 id="按开关-2"><a class="header" href="#按开关-2">按开关</a></h2>
+<h2 id="按开关-1"><a class="header" href="#按开关-1">按开关</a></h2>
+<p>在入口类上添加注解：</p>
 <pre><code class="language-java">@EnableFeignClients
 </code></pre>
 <h2 id="写配置"><a class="header" href="#写配置">写配置</a></h2>
+<p>如果没有添加eureka配置的需要添加此配置：</p>
 <pre><code class="language-yaml">eureka:
   client:
     register-with-eureka: true
@@ -531,6 +517,7 @@ http://localhost:8083/hystrix</p>
       defaultZone: http://localhost:8761/eureka/
 </code></pre>
 <h2 id="写代码"><a class="header" href="#写代码">写代码</a></h2>
+<p>注意，确保 path的值 + @GetMapping中的路径  ==  被调用放controller上的@RequestMapping()的值 + 被调用方@GetMappping的值</p>
 <pre><code class="language-java">@FeignClient(name=&quot;order&quot;, path=&quot;/api&quot;)
 public interface OrderServiceFeign {
 
@@ -539,13 +526,19 @@ public interface OrderServiceFeign {
 }
 </code></pre>
 <h1 id="负载均衡"><a class="header" href="#负载均衡">负载均衡</a></h1>
+<p>和上一节ribbon配置方法一样。</p>
 <pre><code class="language-java">@Bean
 public IRule myRule() {
     return new RandomRule();
 }
 </code></pre>
-<h1 id="服务降级"><a class="header" href="#服务降级">服务降级</a></h1>
+<h1 id="feign的服务降级"><a class="header" href="#feign的服务降级">Feign的服务降级</a></h1>
+<h2 id="修改feign接口"><a class="header" href="#修改feign接口">修改Feign接口</a></h2>
+<p>添加降级类</p>
+<pre><code class="language-java">@FeignClient(name=&quot;house&quot;, fallback = HouseFeignServiceFallback.class)
+</code></pre>
 <h2 id="新建降级fallback类"><a class="header" href="#新建降级fallback类">新建降级fallback类</a></h2>
+<p>类要实现Feign接口，注意添加@Service注解</p>
 <pre><code class="language-java">@Service
 public class OrderServiceCallback implements OrderServiceFeign{
     @Override
@@ -564,25 +557,13 @@ public class OrderServiceCallback implements OrderServiceFeign{
 
 </code></pre>
 <h2 id="改配置"><a class="header" href="#改配置">改配置</a></h2>
+<p>同时，因为feign也是使用hystrix实现的降级，所以需要打开hystrix功能：</p>
 <pre><code class="language-yaml">feign:
   hystrix:
     enabled: true
 </code></pre>
-<h2 id="实现降级方法"><a class="header" href="#实现降级方法">实现降级方法</a></h2>
-<pre><code class="language-java">      public Map postOrderNumberOfUser(Long id) {
-        Map result = new HashMap();
-        result.put(&quot;number&quot;,23);
-
-        return result;
-    }
-</code></pre>
-<h2 id="降级并记录降级原因"><a class="header" href="#降级并记录降级原因">降级并记录降级原因</a></h2>
-<pre><code class="language-java">@FeignClient(name=&quot;order&quot;,path=&quot;/api&quot;,fallbackFactory=FeignClientFallbackFactory.class)
-</code></pre>
-<pre><code class="language-java">public class FeignClientFallbackFactory implements FallbackFactory&lt;OrderServiceFeign&gt;
-</code></pre>
 <h1 id="日志"><a class="header" href="#日志">日志</a></h1>
-<h2 id=""><a class="header" href="#"></a></h2>
+<h2 id="打开feign调用日志方便查找问题"><a class="header" href="#打开feign调用日志方便查找问题">打开Feign调用日志，方便查找问题。</a></h2>
 <pre><code class="language-java">import org.springframework.context.annotation.Bean;
 
 @Bean
@@ -590,6 +571,7 @@ Logger.Level feignLogLevel() {
     return Logger.Level.FULL;
 }
 </code></pre>
+<p>同时，需要配置yml文件中的日志等级。</p>
 <pre><code class="language-yaml">logging:
   level:
     com.eight.lession.service: debug
@@ -614,9 +596,8 @@ Logger.Level feignLogLevel() {
     enabled: true
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="gateway-简介"><a class="header" href="#gateway-简介">gateway 简介</a></h1>
-<h1 id="核心概念"><a class="header" href="#核心概念">核心概念</a></h1>
-<h2 id="如果没有gateway网页需要分别访问-house-contract服务"><a class="header" href="#如果没有gateway网页需要分别访问-house-contract服务">如果没有gateway，网页需要分别访问 house contract服务。</a></h2>
-<p>user和order还需要分别实现安全，流量控制。</p>
+<p>如果没有gateway，网页需要分别访问 house contract服务。
+各服务还需要分别实现安全，流量控制。</p>
 <h1 id="基础使用"><a class="header" href="#基础使用">基础使用</a></h1>
 <h2 id="1添加依赖-1"><a class="header" href="#1添加依赖-1">1.添加依赖</a></h2>
 <pre><code class="language-xml">&lt;dependency&gt;
@@ -639,12 +620,12 @@ Logger.Level feignLogLevel() {
         - id: user
 #          uri: http://localhost:8083  #直接指定服务器地址，不推荐
           uri: lb://user # 指定服务器注册实例名
-          filters:
+          filters: #在请求被转向后端服务之前可以进行更改。
             - StripPrefix=1 # 去掉前缀过滤器
-          predicates:
+          predicates: #断言，只有满足断言的请求才会被放过去。
             - Path=/services/**  # 如果访问路径以services开头，则执行本路由规则
 
-eureka: # 定格：另外记得入口类添加@EnableEurekaClient
+eureka: # 顶格：另外记得入口类添加@EnableEurekaClient
   client:
     fetch-registry: true
     register-with-eureka: true
@@ -652,6 +633,7 @@ eureka: # 定格：另外记得入口类添加@EnableEurekaClient
       defaultZone: http://localhost:8761/eureka/
 </code></pre>
 <h3 id="22代码配置"><a class="header" href="#22代码配置">2.2代码配置</a></h3>
+<p>一般不使用，了解就好。</p>
 <pre><code class="language-java">@Configuration
 public class GatewayConfig {
 
@@ -670,7 +652,7 @@ public class GatewayConfig {
 }
 </code></pre>
 <h2 id="3测试接口"><a class="header" href="#3测试接口">3.测试接口</a></h2>
-<p><a href="http://localhost:8080/services/another/5">访问路径</a></p>
+<p>通过网关来访问后面某个服务接口。</p>
 <pre><code class="language-java">@RestController
 public class RouteTestController {
 
@@ -680,7 +662,7 @@ public class RouteTestController {
     }
 }
 </code></pre>
-<h1 id="route-predicate"><a class="header" href="#route-predicate">Route Predicate</a></h1>
+<h1 id="route-predicate-一些常见断言"><a class="header" href="#route-predicate-一些常见断言">Route Predicate 一些常见断言</a></h1>
 <ul>
 <li>Path Route Predicate
 <pre><code class="language-yaml"> - Path=/user/{id} # curl http://localhost:8080/services/another/1
@@ -734,7 +716,7 @@ Cookie路由断言
 <pre><code class="language-yaml">- Between=2019-09-24T16:30:00+08:00[Asia/Shanghai],2023-09-24T16:30:00+08:00[Asia/Shanghai] 
 </code></pre>
 <h1 id="filter"><a class="header" href="#filter">Filter</a></h1>
-<h2 id="route-filter"><a class="header" href="#route-filter">Route Filter</a></h2>
+<h2 id="route-filter-部分过滤器"><a class="header" href="#route-filter-部分过滤器">Route Filter 部分过滤器</a></h2>
 <ul>
 <li>AddRequestParameter</li>
 </ul>
@@ -774,7 +756,7 @@ Cookie路由断言
 </code></pre>
 <ul>
 <li>Hystrix
-先添加依赖</li>
+先添加依赖，可以在网关实现降级</li>
 </ul>
 <pre><code class="language-xml">&lt;dependency&gt;
   &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
@@ -799,7 +781,7 @@ public class IndexController {
                 name: fallbackcmd
                 fallbackUri: forward:/badthinghappend
 </code></pre>
-<p>还可以把它设置为缺省的filters：</p>
+<p>还可以把它设置为缺省的filters：（？？需要再找下不起作用的原因）</p>
 <pre><code class="language-yaml">  cloud:
     gateway:
       default-filters:
@@ -817,6 +799,21 @@ public class IndexController {
   &lt;artifactId&gt;spring-boot-starter-data-redis-reactive&lt;/artifactId&gt;
 &lt;/dependency&gt;
 </code></pre>
+<p>添加redis配置：</p>
+<pre><code class="language-yaml">spring:
+  redis:
+    host: localhost
+    port: 6379
+</code></pre>
+<p>添加过滤器配置</p>
+<pre><code class="language-yaml">    filters:
+      - name: RequestRateLimiter
+        args:
+          redis-rate-limiter.replenishRate: 1 # 放令牌的速率
+          redis-rate-limiter.burstCapacity: 2 # 令牌桶最大放多少个
+          redis-rate-limiter.requestedTokens: 20 #每次请求消耗几个令牌（3.0以上支持）
+          key-resolver: &quot;#{@userKeyResolver}&quot; # 根据userName来限流
+</code></pre>
 <p>添加KeyResolver：</p>
 <pre><code class="language-java">@Configuration
         public class RedisRateLimiterConfig {
@@ -833,26 +830,6 @@ public class IndexController {
   //  return exchange -&gt; Mono.just(exchange.getRequest().getQueryParams().getFirst(&quot;userName&quot;));
   }
   }
-</code></pre>
-<p>添加过滤器配置</p>
-<pre><code class="language-yaml">    filters:
-      - name: RequestRateLimiter
-        args:
-          redis-rate-limiter.replenishRate: 1 # 放令牌的速率
-          redis-rate-limiter.burstCapacity: 2 # 令牌桶最大放多少个
-          key-resolver: &quot;#{@userKeyResolver}&quot; # 根据userName来限流
-</code></pre>
-<p>添加redis配置：</p>
-<pre><code class="language-yaml">spring:
-  redis:
-    host: localhost
-    port: 6379
-</code></pre>
-<ul>
-<li>Retry</li>
-</ul>
-<pre><code class="language-yaml">  default-filters:
-  - AddRequestHeader=myName,Hello world?
 </code></pre>
 <h2 id="global-filters"><a class="header" href="#global-filters">Global Filters</a></h2>
 <p>添加global Filter定义</p>
@@ -873,6 +850,7 @@ public class LogGlobalFilter implements GlobalFilter, Ordered {
 }
 </code></pre>
 <h1 id="cors-配置"><a class="header" href="#cors-配置">CORS 配置</a></h1>
+<p>注意！！！，在网关添加了跨域后，后面微服务自己添加的跨域需要去掉，否则会出错。</p>
 <pre><code class="language-yaml">spring:
   cloud:
     gateway:
@@ -885,12 +863,16 @@ public class LogGlobalFilter implements GlobalFilter, Ordered {
             allowCredentials: true
             maxAge: 360000
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="创建config的配置项目"><a class="header" href="#创建config的配置项目">创建config的配置项目</a></h1>
-<h1 id="图"><a class="header" href="#图">图</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="spring-cloud-config"><a class="header" href="#spring-cloud-config">Spring Cloud Config</a></h1>
+<h2 id="示意图"><a class="header" href="#示意图">示意图</a></h2>
 <p><img src="imgs/config.png" alt="cnfig架构图" /></p>
-<h1 id="git"><a class="header" href="#git">git</a></h1>
-<p><a href="https://gitee.com/nixf/config-repo.git">config-repo</a></p>
-<h1 id="加依赖-2"><a class="header" href="#加依赖-2">加依赖</a></h1>
+<h2 id="git"><a class="header" href="#git">git</a></h2>
+<p>示例：
+<a href="https://gitee.com/nixf/config-repo.git">config-repo</a>
+各位同学要创建自己的repo。</p>
+<h1 id="config服务端"><a class="header" href="#config服务端">Config服务端</a></h1>
+<h2 id="新建项目"><a class="header" href="#新建项目">新建项目</a></h2>
+<h2 id="项目填加依赖"><a class="header" href="#项目填加依赖">项目填加依赖</a></h2>
 <pre><code class="language-xml">&lt;dependency&gt;
 	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
 	&lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
@@ -900,7 +882,7 @@ public class LogGlobalFilter implements GlobalFilter, Ordered {
 	&lt;artifactId&gt;spring-cloud-config-server&lt;/artifactId&gt;
 &lt;/dependency&gt;
 </code></pre>
-<h1 id="加注解"><a class="header" href="#加注解">加注解</a></h1>
+<h1 id="入口类加注解"><a class="header" href="#入口类加注解">入口类加注解</a></h1>
 <pre><code class="language-java">@EnableConfigServer
 </code></pre>
 <h1 id="服务端配置"><a class="header" href="#服务端配置">服务端配置</a></h1>
@@ -917,10 +899,15 @@ public class LogGlobalFilter implements GlobalFilter, Ordered {
           default-label: master # 默认的分支
       label: master #分支信息
 </code></pre>
-<h1 id="使用"><a class="header" href="#使用">使用</a></h1>
-<p><a href="http://localhost:8888/user/dev/master">http://localhost:8888/application_name/profile/branch_name</a></p>
+<h1 id="测试"><a class="header" href="#测试">测试</a></h1>
+<p>application_name:  指应用的注册名
+profile： 环境（dev,test,product) 
+branch_name: git分支名
+<a href="http://localhost:8888/user/dev/master">http://localhost:8888/application_name/profile/branch_name</a></p>
 <h1 id="客户端配置user"><a class="header" href="#客户端配置user">客户端配置（user)</a></h1>
-<pre><code class="language-xml">&lt;dependency&gt;
+<h2 id="添加依赖"><a class="header" href="#添加依赖">添加依赖</a></h2>
+<pre><code class="language-xml">&lt;!--此jar包会读取bootstrap.yml，给应用使用config服务的机会 --&gt;
+&lt;dependency&gt;
   &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
   &lt;artifactId&gt;spring-cloud-starter-bootstrap&lt;/artifactId&gt;
   &lt;version&gt;3.1.1&lt;/version&gt;
@@ -939,15 +926,16 @@ spring:
     name: message # 修改为你应用的注册名
   cloud:
     config:
-      profile: dev
-      label: master
-      uri: http://localhost:8888
-      name: user
+      profile: dev # 指定开发环境，还可以是test product等。
+      label: master # git分支
+      uri: http://localhost:8888  #config 服务地址
+      name: user    #当前应用名，用于匹配git内的配置文件
 </code></pre>
 <p>演示</p>
 <pre><code class="language-java">@RestController
 public class ConfigController {
 
+    //读取配置中的值，此值只在git内有
     @Value(&quot;${my-name}&quot;)
     private String myName;
 
@@ -959,12 +947,14 @@ public class ConfigController {
 }
 </code></pre>
 <h2 id="刷新"><a class="header" href="#刷新">刷新</a></h2>
+<p>刷新需要使用actuator的refresh端口。</p>
 <h3 id="添加actuator依赖"><a class="header" href="#添加actuator依赖">添加actuator依赖</a></h3>
 <pre><code class="language-xml">		&lt;dependency&gt;
 			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
 			&lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
 		&lt;/dependency&gt;
 </code></pre>
+<p>同时打开refresh端口</p>
 <pre><code class="language-yaml">management:
   endpoints:
     web:
@@ -972,20 +962,19 @@ public class ConfigController {
         include: 'refresh'
 </code></pre>
 <h1 id="config-高可用"><a class="header" href="#config-高可用">config 高可用</a></h1>
+<p>配置config高可用后，就不能再指定一个url路径了，需要使用eureka的帮助自动匹配服务地址。</p>
 <pre><code class="language-yaml">  cloud:
     config:
       profile: dev
       lable: master
 #      uri: http://localhost:8888
       name: user
-      discovery:
-        enabled: true
-        service-id: config
+      discovery: # 启用自动寻址
+        enabled: true # 打开为TRUE
+        service-id: config  # config的服务ID--即eureka的注册名
 </code></pre>
 <h1 id="spring-cloud-bus"><a class="header" href="#spring-cloud-bus">Spring Cloud Bus</a></h1>
-<p>erlang安装： http://erlang.org/download/otp_win32_21.3.exe<br />
-rabbitMQ下载： https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.7.14</p>
-<p>过程参考：https://www.macrozheng.com/cloud/bus.html#rabbitmq%E7%9A%84%E5%AE%89%E8%A3%85</p>
+<p>Spring Cloud Bus需要使用RabbitMQ。 参见《Rabbit安装》</p>
 <p>rabbitMQ安装注意问题：</p>
 <pre><code>1，文件路径不要有中文、空格；
 2，计算机名不要有中文
@@ -1007,6 +996,7 @@ Broker --接收消息--&gt; Receiver
 <li>Binding exchange和queue之间的虚拟连接</li>
 </ul>
 <h2 id="config-server配置"><a class="header" href="#config-server配置">config server配置</a></h2>
+<p>服务端需要接入rammbitMQ,所以增加以下依赖：</p>
 <pre><code class="language-xml">&lt;dependency&gt;
     &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
     &lt;artifactId&gt;spring-cloud-starter-bus-amqp&lt;/artifactId&gt;
@@ -1017,6 +1007,7 @@ Broker --接收消息--&gt; Receiver
 &lt;/dependency&gt;
 
 </code></pre>
+<p>同时，配置文件中添加rabbitMQ的配置。同时打开bus-refresh端口，通过此端口通知Config服务刷新配置。</p>
 <pre><code class="language-yaml">spring:
   rabbitmq:
     host: localhost
@@ -1031,7 +1022,7 @@ management:
         include: 'bus-refresh'
 </code></pre>
 <h2 id="config-client配置"><a class="header" href="#config-client配置">config client配置</a></h2>
-<p>添加依赖：</p>
+<p>Config 客户端也需要接入RabbitMQ。添加依赖：</p>
 <pre><code class="language-xml">&lt;dependency&gt;
     &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
     &lt;artifactId&gt;spring-cloud-starter-bus-amqp&lt;/artifactId&gt;
@@ -1046,17 +1037,17 @@ management:
     password: guest
 
 </code></pre>
-<h2 id="测试"><a class="header" href="#测试">测试</a></h2>
+<h2 id="测试-1"><a class="header" href="#测试-1">测试</a></h2>
 <p>更改git的配置后，调用
 http://localhost:8888/actuator/bus-refresh 即可更新所有通过bus链接到config的服务的配置。</p>
-<h2 id="安全"><a class="header" href="#安全">安全</a></h2>
+<h2 id="config服务器安全"><a class="header" href="#config服务器安全">Config服务器安全</a></h2>
 <p>引进安全jar包：</p>
 <pre><code class="language-xml">&lt;dependency&gt;
   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
   &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
 &lt;/dependency&gt;
 </code></pre>
-<p>添加用户名和密码：</p>
+<p>设置服务的用户名和密码：</p>
 <pre><code class="language-yaml">spring:
   application:
     name: config
@@ -1115,13 +1106,13 @@ rabbitMQ下载： https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.7.
 <h2 id="sleuth-简介"><a class="header" href="#sleuth-简介">Sleuth 简介</a></h2>
 <p>请求追踪，问题（性能，异常）定位</p>
 <h2 id="给服务添加链路追踪"><a class="header" href="#给服务添加链路追踪">给服务添加链路追踪</a></h2>
-<h3 id="加依赖-3"><a class="header" href="#加依赖-3">加依赖</a></h3>
+<h3 id="加依赖-2"><a class="header" href="#加依赖-2">加依赖</a></h3>
 <pre><code class="language-xml">&lt;dependency&gt;
     &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
     &lt;artifactId&gt;spring-cloud-starter-zipkin&lt;/artifactId&gt;
 &lt;/dependency&gt;
 </code></pre>
-<h3 id="-1"><a class="header" href="#-1"></a></h3>
+<h3 id=""><a class="header" href="#"></a></h3>
 <pre><code class="language-yaml">spring:
   zipkin:
     base-url: http://localhost:9411
@@ -1510,7 +1501,7 @@ private static Map&lt;String, String&gt; combineRequestParams(HttpServletRequest
     return params;
 }
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="-2"><a class="header" href="#-2"></a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="-1"><a class="header" href="#-1"></a></h2>
 <p>掉单：</p>
 <pre><code class="language-java">
 </code></pre>
@@ -1619,7 +1610,7 @@ vi ./bin/runbroker.sh
 <p>启动broker服务</p>
 <pre><code class="language-shell">nohup sh bin/mqbroker -n localhost:9876 &amp;
 </code></pre>
-<h3 id="测试-1"><a class="header" href="#测试-1">测试</a></h3>
+<h3 id="测试-2"><a class="header" href="#测试-2">测试</a></h3>
 <pre><code class="language-shell">export NAMESRV_ADDR=‘localhost:9876'  
 
 ./bin/tools.sh org.apache.rocketmq.example.quickstart.Producer  
@@ -1888,7 +1879,7 @@ start bin\mqbroker.cmd -c conf\2m-2s-sync\broker-b-s.properties
 mvn spring-boot:run</li>
 <li>执行</li>
 </ul>
-<h1 id="使用-1"><a class="header" href="#使用-1">使用</a></h1>
+<h1 id="使用"><a class="header" href="#使用">使用</a></h1>
 <h2 id="引入依赖-1"><a class="header" href="#引入依赖-1">引入依赖</a></h2>
 <pre><code class="language-xml">&lt;dependency&gt;
   &lt;groupId&gt;com.xuxueli&lt;/groupId&gt;
@@ -2208,7 +2199,7 @@ public class Result&lt;T&gt; {
     host: 127.0.0.1
     port: 6379
 </code></pre>
-<h1 id="安全-1"><a class="header" href="#安全-1">安全</a></h1>
+<h1 id="安全"><a class="header" href="#安全">安全</a></h1>
 <p>依赖</p>
 <pre><code class="language-xml">    &lt;dependency&gt;
         &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
@@ -2276,7 +2267,7 @@ axios.defaults.baseURL = &quot;http://localhost:8080/&quot;
 axios.defaults.withCredentials=true;
 Vue.prototype.axios = axios;
 </code></pre>
-<h1 id="安全-2"><a class="header" href="#安全-2">安全</a></h1>
+<h1 id="安全-1"><a class="header" href="#安全-1">安全</a></h1>
 <p>依赖</p>
 <pre><code class="language-xml">    &lt;dependency&gt;
         &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
