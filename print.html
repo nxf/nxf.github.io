@@ -386,10 +386,9 @@ eureka:
 <p>#其它：
 <img src="./imgs/unit_1-idea-service.jpg" alt="查看运行的服务" /></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ribbon"><a class="header" href="#ribbon">Ribbon</a></h1>
-<p>user提供获取用户信息和订单的接口 <a href="http://localhost:8083/user/1">用户信息</a>
-order 提供订单信息，供user使用。</p>
+<p>微服务架构中会有很多微服务实例，实例之间的远程调用可以使用RestTemplate。</p>
 <h2 id="resttemplate"><a class="header" href="#resttemplate">RestTemplate</a></h2>
-<p><a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html">api参考</a></p>
+<p>使用之前需要先定义一个实例：</p>
 <pre><code class="language-java">@Bean
 public RestTemplate restTemplate(RestTemplateBuilder builder){
     return builder
@@ -398,11 +397,19 @@ public RestTemplate restTemplate(RestTemplateBuilder builder){
             .build();
 }
 </code></pre>
+<p>然后通过如下方式使用：</p>
+<pre><code class="language-java">// 通过ip地址（域名）直接访问
+AllType allType =  restTemplate.getForObject(&quot;http://localhost:8081/type/&quot;, AllType.class);
+// 接入eureka和ribbon后
+AllType allType =  restTemplate.getForObject(&quot;http://type/type/&quot;, AllType.class);
+
+</code></pre>
 <p><a href="http://localhost:8086/api/order/2">测试url</a></p>
 <pre><code>&lt;T&gt; T	getForObject(String url, Class&lt;T&gt; responseType, Map&lt;String,?&gt; uriVariables)
 &lt;T&gt; T	getForObject(URI url, Class&lt;T&gt; responseType)
 </code></pre>
-<p>其他的post，put，delete都类似。</p>
+<p>其他的post，put，delete都类似。<br />
+<a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html">api参考</a></p>
 <h2 id="添加ribbon依赖"><a class="header" href="#添加ribbon依赖">添加ribbon依赖</a></h2>
 <pre><code class="language-xml">&lt;!-- 负载均衡 --&gt;
 &lt;dependency&gt;
@@ -428,6 +435,7 @@ public RestTemplate restTemplate(RestTemplateBuilder builder){
 <li>--spring.profiles.active=xxx</li>
 </ul>
 <h2 id="使用负载均衡"><a class="header" href="#使用负载均衡">使用负载均衡</a></h2>
+<p>这里的RestTemplate跟上面不同，主要是没有对一些特性没有自定义，直接使用缺省值。</p>
 <pre><code class="language-java">@Bean
 @LoadBalanced
 public RestTemplate restTemplate() {
@@ -441,7 +449,7 @@ public RestTemplate restTemplate() {
         return new RandomRule();
     }
 </code></pre>
-<p>在 @Configuration修饰的类中，也可以防止启动类内。</p>
+<p>在 @Configuration修饰的类中，也可以放置在启动类内。</p>
 <h1 id="hystrix"><a class="header" href="#hystrix">Hystrix</a></h1>
 <p>负责服务的熔断与降级</p>
 <h2 id="引入依赖"><a class="header" href="#引入依赖">引入依赖</a></h2>
