@@ -1130,7 +1130,7 @@ rabbitMQ下载： https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.7.
   zipkin:
     base-url: http://localhost:9411
   sleuth:
-    samplerr:
+    sampler:
       probability: 0.1 # 设置Sleuth抽样收集的概率
 
 </code></pre>
@@ -1362,10 +1362,11 @@ String id = "HT"+snowlake.nextId();
     乐观锁
 </span>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="合同录入下"><a class="header" href="#合同录入下">合同录入下：</a></h1>
-<p><a href="10_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8B.html#integrity">房间租赁合同和客户身份证上传失败</a>
-<a href="10_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8B.html#net-security">网络请求被篡改</a>
-<a href="10_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8B.html#precision">应收房款分期计算有误</a>
+<p><a href="10_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8B.html#integrity">房间租赁合同和客户身份证上传失败</a><br />
+<a href="10_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8B.html#net-security">网络请求被篡改</a><br />
+<a href="10_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8B.html#precision">应收房款分期计算有误</a><br />
 <a href="10_%E5%90%88%E5%90%8C%E5%BD%95%E5%85%A5-%E4%B8%8B.html#ingrity">租房合同保存失败，数据不完整</a></p>
+<p>MinIO <a href="http://min.io/download#/windows">MinIO</a></p>
 <h2 id="参考-1"><a class="header" href="#参考-1">参考</a></h2>
 <p id="net-security">
     服务端验证请求、计算金额
@@ -1562,6 +1563,12 @@ private static Map&lt;String, String&gt; combineRequestParams(HttpServletRequest
 <h1 id="环境复杂度"><a class="header" href="#环境复杂度">环境复杂度</a></h1>
 <h2 id="短信通知实现"><a class="header" href="#短信通知实现">短信通知实现</a></h2>
 <pre><code>接入第三方短信平台，业界有阿里云，腾讯云，青牛云等，我们采用的是榛子云
+</code></pre>
+<p>登录注册：</p>
+<pre><code>  http://sms_developer.zhenzikj.com/zhenzisms_user/login.html
+</code></pre>
+<p>SDK:</p>
+<pre><code>  http://smsow.zhenzikj.com/doc/java_sdk_doc.html
 </code></pre>
 <h2 id="短信发送失败如何处理"><a class="header" href="#短信发送失败如何处理">短信发送失败如何处理</a></h2>
 <p>发生错误的原因：
