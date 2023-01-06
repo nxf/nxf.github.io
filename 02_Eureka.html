@@ -199,6 +199,10 @@ eureka:
 <h3 id="3加配置"><a class="header" href="#3加配置">3.加配置</a></h3>
 <pre><code class="language-yaml">#顶格放
 eureka:
+  instance:
+    prefer-ip-address: true # 优先使用ip地址
+    ip-address: 127.0.0.1 # 使用这个ip
+    instance-id: user # 显示实例名称
   client:
     register-with-eureka: true # 注册到eureka
     fetch_registry: true #从服务器获取注册信息
@@ -234,7 +238,17 @@ eureka:
     &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
 &lt;/dependency&gt;
 </code></pre>
+<h2 id="配置文件添加用户名和密码"><a class="header" href="#配置文件添加用户名和密码">配置文件添加用户名和密码</a></h2>
+<pre><code class="language-yaml">spring:
+  application:
+    name: eureka
+  security:
+    user:
+      name: admin
+      password: 123456
+</code></pre>
 <h2 id="添加安全配置"><a class="header" href="#添加安全配置">添加安全配置</a></h2>
+<p>在Eureka服务中添加以下配置类</p>
 <pre><code class="language-java">@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
