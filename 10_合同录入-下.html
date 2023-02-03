@@ -147,7 +147,24 @@
 <a href="#net-security">网络请求被篡改</a><br />
 <a href="#precision">应收房款分期计算有误</a><br />
 <a href="#ingrity">租房合同保存失败，数据不完整</a></p>
-<p>MinIO <a href="http://min.io/download#/windows">MinIO</a></p>
+<p>MinIO <a href="http://min.io/download#/windows">MinIO</a>
+安装
+<img src="./imgs/minio%E5%AE%89%E8%A3%85%E7%B2%BE%E7%AE%80%E7%89%88.mp4" alt="安装MiniO" /></p>
+<pre><code>    @PostMapping(&quot;/upload&quot;)
+    public String upload(MultipartFile file) throws InvalidPortException, InvalidEndpointException, IOException, InvalidBucketNameException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        //改写名字，但是不能改写类型；
+        String name = file.getOriginalFilename(); // a.jpg;
+
+        name = name.substring(name.indexOf(&quot;.&quot;)); //.jpg
+        name = IdUtil.getSnowflakeNextIdStr()+name;// 随机数 + .jpg
+        MinioClient minioClient = new MinioClient(&quot;http://localhost:9000&quot;, &quot;GPFi8qPrjA41fskp&quot;, &quot;YjnyuCDJHp20qbjIrfRsjicJWsVsNAsC&quot;);
+        PutObjectOptions options = new PutObjectOptions(file.getSize(), 10485760);
+        options.setContentType(file.getContentType());
+        minioClient.putObject(BUCKET_NAME, name, file.getInputStream(), options);
+
+        return &quot;http://localhost:9000/&quot;+BUCKET_NAME+&quot;/&quot;+name;
+    }
+</code></pre>
 <h2 id="参考"><a class="header" href="#参考">参考</a></h2>
 <p id="net-security">
     服务端验证请求、计算金额
