@@ -154,8 +154,8 @@
 <a href="https://open.alipay.com/dev/workspace/apidebug" title="支付宝调试">https://open.alipay.com/dev/workspace/apidebug</a></p>
 <h2 id="花生壳"><a class="header" href="#花生壳">花生壳</a></h2>
 <pre><code>需要去线上认证下：
-[https://hsk.oray.com/](https://hsk.oray.com/)
 </code></pre>
+<p><a href="https://hsk.oray.com/">https://hsk.oray.com/</a></p>
 <h2 id="ngrok"><a class="header" href="#ngrok">ngrok</a></h2>
 <h2 id="依赖"><a class="header" href="#依赖">依赖</a></h2>
 <pre><code class="language-xml">&lt;dependency&gt;
@@ -201,7 +201,7 @@ public class AlipayConfiguration {
     }
 }
 </code></pre>
-<p>支付：</p>
+<h2 id="支付"><a class="header" href="#支付">支付：</a></h2>
 <pre><code class="language-java">    @GetMapping(&quot;/pay/{id}&quot;)
     public String pay(@PathVariable int id) throws AlipayApiException {
         Pay pay = payService.getById(id);
@@ -220,7 +220,7 @@ public class AlipayConfiguration {
         return response.getBody();
     }
 </code></pre>
-<p>支付回调：</p>
+<h2 id="支付回调完整实现"><a class="header" href="#支付回调完整实现">支付回调（完整实现）：</a></h2>
 <pre><code class="language-java">@RequestMapping(&quot;/ali_callback&quot;)
 public Object aliCallback(HttpServletRequest request) {
     Map&lt;String,String&gt; params = combineRequestParams(request);
@@ -263,6 +263,29 @@ private static Map&lt;String, String&gt; combineRequestParams(HttpServletRequest
     params.remove(&quot;sign_type&quot;);
     return params;
 }
+</code></pre>
+<h2 id="后端支付回调简化实现"><a class="header" href="#后端支付回调简化实现">后端支付回调（简化实现）</a></h2>
+<pre><code class="language-java">    @RequestMapping(&quot;/ali_callback&quot;)
+    public String callback(String out_trade_no) {  //OutTradeNo  --&gt; out_trade_no
+       Pay pay =  payService.getByUUID(out_trade_no);
+       pay.setStatus(PayStatus.PAID.name());
+       boolean success = payService.updateById(pay);
+       // 成功返回 succes  失败 返回 fail
+       return success ? &quot;success&quot; : &quot;fail&quot;;
+    }
+</code></pre>
+<h2 id="前端支付回调-简化实现"><a class="header" href="#前端支付回调-简化实现">前端支付回调 （简化实现）</a></h2>
+<pre><code class="language-java">    //本实现方式为简化实现方式，仅用于内网穿透不可用时，工作中不可这样使用。
+    @GetMapping(&quot;/callback&quot;)
+    public void callback(@RequestParam String out_trade_no, HttpServletResponse response) throws IOException {
+        QueryWrapper query = new QueryWrapper();
+        query.eq(&quot;uuid&quot;, out_trade_no); //根据传入的参数out_trade_no(数据库中的uuid字段)构建查询
+        Order order = orderService.getOne(query);
+        order.setStatus(&quot;PAID&quot;);    //更新支付单为已支付
+        orderService.updateById(order);
+        response.sendRedirect(&quot;http://localhost:8081/products&quot;); //跳转页面到目的页面
+    }
+
 </code></pre>
 
                     </main>

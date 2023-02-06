@@ -142,11 +142,54 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h2 id=""><a class="header" href="#"></a></h2>
-<p>掉单：</p>
-<pre><code class="language-java">
+                        <h1 id="支付宝支付下"><a class="header" href="#支付宝支付下">支付宝支付（下）</a></h1>
+<h2 id="扫单"><a class="header" href="#扫单">扫单：</a></h2>
+<pre><code>定时查询未支付单，进行处理：
 </code></pre>
-<p>退款：</p>
+<ol>
+<li>已支付更新状态。</li>
+<li>未支付视情况通知支付。</li>
+</ol>
+<h3 id="定时任务实现"><a class="header" href="#定时任务实现">定时任务实现：</a></h3>
+<ol>
+<li>在入口类添加注解：</li>
+</ol>
+<pre><code class="language-java">   @EnableScheduling   
+</code></pre>
+<ol>
+<li>在要执行的方法上添加</li>
+</ol>
+<pre><code class="language-java">@Scheduled(cron = &quot;0 * * * * ? &quot;)
+// 秒 分 时 日 月 周
+</code></pre>
+<h2 id="掉单"><a class="header" href="#掉单">掉单：</a></h2>
+<pre><code class="language-java">  @GetMapping(&quot;/query/{id}&quot;)
+    public Result&lt;Boolean&gt; query(@PathVariable int id) throws AlipayApiException, JsonProcessingException {
+        Pay pay = payService.getById(id);
+        AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+        AlipayTradeQueryModel model = new AlipayTradeQueryModel();
+        model.setOutTradeNo(pay.getUuid());
+        request.setBizModel(model);
+        AlipayTradeQueryResponse response = alipayClient.execute(request);
+        System.out.println(response.getBody());
+        Map result = objectMapper.readValue(response.getBody(), Map.class);
+        result = (Map)result.get(&quot;alipay_trade_query_response&quot;);
+        if(&quot;TRADE_SUCCESS&quot;.equals(result.get(&quot;trade_status&quot;))) {
+            if(PayStatus.PAID.name().equals(pay.getStatus())) {
+                //不做事情
+                return Result.ok(true);
+            }else {
+                pay.setStatus(PayStatus.PAID.name());
+                payService.updateById(pay);
+                return Result.ok(true);
+            }
+        }else {
+            return Result.ok(false);
+        }
+        //wqt
+    }
+</code></pre>
+<h2 id="退款"><a class="header" href="#退款">退款：</a></h2>
 <pre><code class="language-java">    public boolean refund(int orderId, BigDecimal amount) throws AlipayApiException {
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
         AlipayTradeRefundModel model = new AlipayTradeRefundModel();
@@ -157,7 +200,19 @@
         return response.isSuccess();
     }
 </code></pre>
-<p>下载支付单：</p>
+<h2 id="退款查询"><a class="header" href="#退款查询">退款查询：</a></h2>
+<pre><code class="language-java">    public boolean checkRefund(int id) {
+        Pay pay = payService.getById(id);
+        AlipayTradeFastpayRefundQueryRequest request = new AlipayTradeFastpayRefundQueryRequest();
+        AlipayTradeFastpayRefundQueryModel model = new AlipayTradeFastpayRefundQueryModel();
+        model.setOutRequestNo(pay.getUuid());
+        request.setBizModel(model);
+        AlipayTradeFastpayRefundQueryResponse response = alipayClient.execute(request);
+        .....
+    }
+
+</code></pre>
+<h2 id="下载支付单"><a class="header" href="#下载支付单">下载支付单：</a></h2>
 <pre><code class="language-java">    public String billDownload(String date) throws AlipayApiException {
         AlipayDataDataserviceBillDownloadurlQueryRequest request = new AlipayDataDataserviceBillDownloadurlQueryRequest();
         AlipayDataDataserviceBillDownloadurlQueryModel model = new AlipayDataDataserviceBillDownloadurlQueryModel();
@@ -171,16 +226,6 @@
         System.out.println(response.getBody());
         String url = response.getBillDownloadUrl();
         return url;
-    }
-</code></pre>
-<p>检查支付单</p>
-<pre><code class="language-java">
-    public AlipayTradeQueryResponse check(String outTradeId) throws AlipayApiException {
-        AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
-        AlipayTradeQueryModel checkModel = new AlipayTradeQueryModel();
-        checkModel.setOutTradeNo(outTradeId);
-        request.setBizModel(checkModel);
-        return alipayClient.execute(request);
     }
 </code></pre>
 

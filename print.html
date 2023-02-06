@@ -1427,8 +1427,8 @@ String id = "HT"+snowlake.nextId();
 <a href="https://open.alipay.com/dev/workspace/apidebug" title="支付宝调试">https://open.alipay.com/dev/workspace/apidebug</a></p>
 <h2 id="花生壳"><a class="header" href="#花生壳">花生壳</a></h2>
 <pre><code>需要去线上认证下：
-[https://hsk.oray.com/](https://hsk.oray.com/)
 </code></pre>
+<p><a href="https://hsk.oray.com/">https://hsk.oray.com/</a></p>
 <h2 id="ngrok"><a class="header" href="#ngrok">ngrok</a></h2>
 <h2 id="依赖"><a class="header" href="#依赖">依赖</a></h2>
 <pre><code class="language-xml">&lt;dependency&gt;
@@ -1474,7 +1474,7 @@ public class AlipayConfiguration {
     }
 }
 </code></pre>
-<p>支付：</p>
+<h2 id="支付"><a class="header" href="#支付">支付：</a></h2>
 <pre><code class="language-java">    @GetMapping(&quot;/pay/{id}&quot;)
     public String pay(@PathVariable int id) throws AlipayApiException {
         Pay pay = payService.getById(id);
@@ -1493,7 +1493,7 @@ public class AlipayConfiguration {
         return response.getBody();
     }
 </code></pre>
-<p>支付回调：</p>
+<h2 id="支付回调完整实现"><a class="header" href="#支付回调完整实现">支付回调（完整实现）：</a></h2>
 <pre><code class="language-java">@RequestMapping(&quot;/ali_callback&quot;)
 public Object aliCallback(HttpServletRequest request) {
     Map&lt;String,String&gt; params = combineRequestParams(request);
@@ -1537,11 +1537,77 @@ private static Map&lt;String, String&gt; combineRequestParams(HttpServletRequest
     return params;
 }
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="-1"><a class="header" href="#-1"></a></h2>
-<p>掉单：</p>
-<pre><code class="language-java">
+<h2 id="后端支付回调简化实现"><a class="header" href="#后端支付回调简化实现">后端支付回调（简化实现）</a></h2>
+<pre><code class="language-java">    @RequestMapping(&quot;/ali_callback&quot;)
+    public String callback(String out_trade_no) {  //OutTradeNo  --&gt; out_trade_no
+       Pay pay =  payService.getByUUID(out_trade_no);
+       pay.setStatus(PayStatus.PAID.name());
+       boolean success = payService.updateById(pay);
+       // 成功返回 succes  失败 返回 fail
+       return success ? &quot;success&quot; : &quot;fail&quot;;
+    }
 </code></pre>
-<p>退款：</p>
+<h2 id="前端支付回调-简化实现"><a class="header" href="#前端支付回调-简化实现">前端支付回调 （简化实现）</a></h2>
+<pre><code class="language-java">    //本实现方式为简化实现方式，仅用于内网穿透不可用时，工作中不可这样使用。
+    @GetMapping(&quot;/callback&quot;)
+    public void callback(@RequestParam String out_trade_no, HttpServletResponse response) throws IOException {
+        QueryWrapper query = new QueryWrapper();
+        query.eq(&quot;uuid&quot;, out_trade_no); //根据传入的参数out_trade_no(数据库中的uuid字段)构建查询
+        Order order = orderService.getOne(query);
+        order.setStatus(&quot;PAID&quot;);    //更新支付单为已支付
+        orderService.updateById(order);
+        response.sendRedirect(&quot;http://localhost:8081/products&quot;); //跳转页面到目的页面
+    }
+
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="支付宝支付下"><a class="header" href="#支付宝支付下">支付宝支付（下）</a></h1>
+<h2 id="扫单"><a class="header" href="#扫单">扫单：</a></h2>
+<pre><code>定时查询未支付单，进行处理：
+</code></pre>
+<ol>
+<li>已支付更新状态。</li>
+<li>未支付视情况通知支付。</li>
+</ol>
+<h3 id="定时任务实现"><a class="header" href="#定时任务实现">定时任务实现：</a></h3>
+<ol>
+<li>在入口类添加注解：</li>
+</ol>
+<pre><code class="language-java">   @EnableScheduling   
+</code></pre>
+<ol>
+<li>在要执行的方法上添加</li>
+</ol>
+<pre><code class="language-java">@Scheduled(cron = &quot;0 * * * * ? &quot;)
+// 秒 分 时 日 月 周
+</code></pre>
+<h2 id="掉单"><a class="header" href="#掉单">掉单：</a></h2>
+<pre><code class="language-java">  @GetMapping(&quot;/query/{id}&quot;)
+    public Result&lt;Boolean&gt; query(@PathVariable int id) throws AlipayApiException, JsonProcessingException {
+        Pay pay = payService.getById(id);
+        AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+        AlipayTradeQueryModel model = new AlipayTradeQueryModel();
+        model.setOutTradeNo(pay.getUuid());
+        request.setBizModel(model);
+        AlipayTradeQueryResponse response = alipayClient.execute(request);
+        System.out.println(response.getBody());
+        Map result = objectMapper.readValue(response.getBody(), Map.class);
+        result = (Map)result.get(&quot;alipay_trade_query_response&quot;);
+        if(&quot;TRADE_SUCCESS&quot;.equals(result.get(&quot;trade_status&quot;))) {
+            if(PayStatus.PAID.name().equals(pay.getStatus())) {
+                //不做事情
+                return Result.ok(true);
+            }else {
+                pay.setStatus(PayStatus.PAID.name());
+                payService.updateById(pay);
+                return Result.ok(true);
+            }
+        }else {
+            return Result.ok(false);
+        }
+        //wqt
+    }
+</code></pre>
+<h2 id="退款"><a class="header" href="#退款">退款：</a></h2>
 <pre><code class="language-java">    public boolean refund(int orderId, BigDecimal amount) throws AlipayApiException {
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
         AlipayTradeRefundModel model = new AlipayTradeRefundModel();
@@ -1552,7 +1618,19 @@ private static Map&lt;String, String&gt; combineRequestParams(HttpServletRequest
         return response.isSuccess();
     }
 </code></pre>
-<p>下载支付单：</p>
+<h2 id="退款查询"><a class="header" href="#退款查询">退款查询：</a></h2>
+<pre><code class="language-java">    public boolean checkRefund(int id) {
+        Pay pay = payService.getById(id);
+        AlipayTradeFastpayRefundQueryRequest request = new AlipayTradeFastpayRefundQueryRequest();
+        AlipayTradeFastpayRefundQueryModel model = new AlipayTradeFastpayRefundQueryModel();
+        model.setOutRequestNo(pay.getUuid());
+        request.setBizModel(model);
+        AlipayTradeFastpayRefundQueryResponse response = alipayClient.execute(request);
+        .....
+    }
+
+</code></pre>
+<h2 id="下载支付单"><a class="header" href="#下载支付单">下载支付单：</a></h2>
 <pre><code class="language-java">    public String billDownload(String date) throws AlipayApiException {
         AlipayDataDataserviceBillDownloadurlQueryRequest request = new AlipayDataDataserviceBillDownloadurlQueryRequest();
         AlipayDataDataserviceBillDownloadurlQueryModel model = new AlipayDataDataserviceBillDownloadurlQueryModel();
@@ -1566,16 +1644,6 @@ private static Map&lt;String, String&gt; combineRequestParams(HttpServletRequest
         System.out.println(response.getBody());
         String url = response.getBillDownloadUrl();
         return url;
-    }
-</code></pre>
-<p>检查支付单</p>
-<pre><code class="language-java">
-    public AlipayTradeQueryResponse check(String outTradeId) throws AlipayApiException {
-        AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
-        AlipayTradeQueryModel checkModel = new AlipayTradeQueryModel();
-        checkModel.setOutTradeNo(outTradeId);
-        request.setBizModel(checkModel);
-        return alipayClient.execute(request);
     }
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="预约看房业务流程"><a class="header" href="#预约看房业务流程">预约看房业务流程</a></h1>
