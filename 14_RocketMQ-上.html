@@ -165,7 +165,35 @@ broker -- 早写盘，多备份
 <pre><code>https://rocketmq.apache.org/download  
 版本选择 4.9.3
 </code></pre>
-<h3 id="修改启动脚本"><a class="header" href="#修改启动脚本">修改启动脚本</a></h3>
+<h3 id="windows版本方法"><a class="header" href="#windows版本方法">windows版本方法：</a></h3>
+<h4 id="修改启动脚本"><a class="header" href="#修改启动脚本">修改启动脚本</a></h4>
+<p>将namesrv和broker的内存占用修改一下， 即将下面划红线部分修改为：  -server -Xms256m -Xmx256m -Xmn128m</p>
+<ul>
+<li>修改 runserver.cmd 
+<img src="./imgs/runserver_cmd.png" alt="修改runserver.cmd" /></li>
+<li>修改 runbroker.cmd
+<img src="./imgs/runbroker_cmd.png" alt="修改runbroker.cmd" /></li>
+</ul>
+<h4 id="设置环境变量"><a class="header" href="#设置环境变量">设置环境变量：</a></h4>
+<p>在系统环境变量中新增 ROCKETMQ_HOME 指向 RocketMQ的安装目录（bin的上一层目录）</p>
+<h4 id="启动"><a class="header" href="#启动">启动</a></h4>
+<p>启动名称服务器,先跳转到bin目录</p>
+<pre><code class="language-shell">    mqnamesrv
+</code></pre>
+<p>启动broker服务器：</p>
+<pre><code class="language-shell">    mqbroker -n localhost:9876
+</code></pre>
+<p>启动时需要指定名称服务器地址，这个是通过-n来指定的。</p>
+<h4 id="测试"><a class="header" href="#测试">测试</a></h4>
+<p>先设置环境变量： set NAMESRV_ADDR=localhost:9876
+然后运行生产者</p>
+<pre><code class="language-shell">    tools.cmd org.apache.rocketmq.example.quickstart.Producer
+</code></pre>
+<p>和消费者</p>
+<pre><code class="language-shell">    tools.cmd org.apache.rocketmq.example.quickstart.Consumer
+</code></pre>
+<h3 id="linux版本方法"><a class="header" href="#linux版本方法">linux版本方法：</a></h3>
+<h4 id="修改启动脚本-1"><a class="header" href="#修改启动脚本-1">修改启动脚本</a></h4>
 <p>将namesrv和broker的内存占用修改为： -server -Xms256m -Xmx256m -Xmn128m</p>
 <ul>
 <li>
@@ -183,15 +211,15 @@ vi ./bin/runbroker.sh
 <img src="./imgs/runbroker2_sh.png" alt="修改后的脚本" /></p>
 </li>
 </ul>
-<h3 id="启动"><a class="header" href="#启动">启动</a></h3>
+<h4 id="启动-1"><a class="header" href="#启动-1">启动</a></h4>
 <p>启动名称服务器</p>
 <pre><code class="language-shell">nohup sh bin/mqnamesrv &amp;
 </code></pre>
 <p>启动broker服务</p>
 <pre><code class="language-shell">nohup sh bin/mqbroker -n localhost:9876 &amp;
 </code></pre>
-<h3 id="测试"><a class="header" href="#测试">测试</a></h3>
-<pre><code class="language-shell">export NAMESRV_ADDR=‘localhost:9876'  
+<h4 id="测试-1"><a class="header" href="#测试-1">测试</a></h4>
+<pre><code class="language-shell">export NAMESRV_ADDR=localhost:9876
 
 ./bin/tools.sh org.apache.rocketmq.example.quickstart.Producer  
 ./bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer s
