@@ -1,0 +1,368 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>generator - Spring cloud</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="01_介绍.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="02_Eureka.html"><strong aria-hidden="true">2.</strong> Eureka</a></li><li class="chapter-item expanded "><a href="03_Ribbon_Hystrix.html"><strong aria-hidden="true">3.</strong> Ribbon&Hystrix</a></li><li class="chapter-item expanded "><a href="04_Feign.html"><strong aria-hidden="true">4.</strong> Feign</a></li><li class="chapter-item expanded "><a href="05_Gateway.html"><strong aria-hidden="true">5.</strong> Gateway</a></li><li class="chapter-item expanded "><a href="06_Config.html"><strong aria-hidden="true">6.</strong> Config</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="06_Config_Rabbit_install.html"><strong aria-hidden="true">6.1.</strong> Rabbit安装</a></li></ol></li><li class="chapter-item expanded "><a href="07_Sleuth.html"><strong aria-hidden="true">7.</strong> Sleuth</a></li><li class="chapter-item expanded "><a href="08_Admin.html"><strong aria-hidden="true">8.</strong> Admin</a></li><li class="chapter-item expanded "><a href="09_合同录入-上.html"><strong aria-hidden="true">9.</strong> 合同录入-上</a></li><li class="chapter-item expanded "><a href="10_合同录入-下.html"><strong aria-hidden="true">10.</strong> 合同录入-下</a></li><li class="chapter-item expanded "><a href="11_支付中心-上.html"><strong aria-hidden="true">11.</strong> 支付中心-上</a></li><li class="chapter-item expanded "><a href="12_支付中心-下.html"><strong aria-hidden="true">12.</strong> 支付中心-下</a></li><li class="chapter-item expanded "><a href="13_预约看房.html"><strong aria-hidden="true">13.</strong> 预约看房</a></li><li class="chapter-item expanded "><a href="14_RocketMQ-上.html"><strong aria-hidden="true">14.</strong> RocketMQ入门</a></li><li class="chapter-item expanded "><a href="15_RocketMQ-下.html"><strong aria-hidden="true">15.</strong> RocketMQ集群</a></li><li class="chapter-item expanded "><a href="16_预约看房消息推送.html"><strong aria-hidden="true">16.</strong> 预约看房消息推送</a></li><li class="chapter-item expanded "><a href="17_外卖抢单-上.html"><strong aria-hidden="true">17.</strong> 外卖抢单-上</a></li><li class="chapter-item expanded "><a href="18_外卖抢单-下.html"><strong aria-hidden="true">18.</strong> 外卖抢单-下</a></li><li class="chapter-item expanded "><a href="19_企业级测试与解决方案.html"><strong aria-hidden="true">19.</strong> 企业级测试与解决方案</a></li><li class="chapter-item expanded "><a href="20_结项.html"><strong aria-hidden="true">20.</strong> 结项</a></li><li class="chapter-item expanded "><a href="project/index.html"><strong aria-hidden="true">21.</strong> 项目</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="project/aijia/aijia.html"><strong aria-hidden="true">21.1.</strong> 爱家家具</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="project/aijia/analyze.html"><strong aria-hidden="true">21.1.1.</strong> 分析</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="resources.html">基础资源</a></li><li class="chapter-item expanded affix "><a href="mysql.html">mysql</a></li><li class="chapter-item expanded affix "><a href="generator.html" class="active">generator</a></li><li class="chapter-item expanded affix "><a href="redis.html">redis</a></li><li class="chapter-item expanded affix "><a href="security.html">security</a></li><li class="chapter-item expanded affix "><a href="front.html">前端</a></li><li class="chapter-item expanded affix "><a href="other.html">其他零碎</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Spring cloud</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="代码生成"><a class="header" href="#代码生成">代码生成</a></h1>
+<h2 id="引入jar包"><a class="header" href="#引入jar包">引入Jar包</a></h2>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;com.baomidou&lt;/groupId&gt;
+    &lt;artifactId&gt;mybatis-plus-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;3.0.5&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- 使用druid连接池，一并引入--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+    &lt;artifactId&gt;druid-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;1.1.10&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--因为是基于mysql开发，所以一并引入--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;!--MP的代码生成器--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.baomidou&lt;/groupId&gt;
+    &lt;artifactId&gt;mybatis-plus-generator&lt;/artifactId&gt;
+    &lt;version&gt;3.3.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--generator的模版依赖--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.velocity&lt;/groupId&gt;
+    &lt;artifactId&gt;velocity-engine-core&lt;/artifactId&gt;
+    &lt;version&gt;2.2&lt;/version&gt;
+&lt;/dependency&gt;
+
+</code></pre>
+<h2 id="生成代码"><a class="header" href="#生成代码">生成代码</a></h2>
+<pre><code class="language-java">
+public class CodeGenerator {
+
+    public static void main(String[] args) {
+        String base = &quot;D:\\tmp\\code&quot;;// 项目根路径
+        // 参数分别为数据库名； 数据库用户名； 数据库用户密码；生成的代码包名； 项目根路径
+        DbConfig config = DbConfig.of(&quot;wsgy&quot;, &quot;dev&quot;, &quot;123456&quot;, &quot;org.example&quot;, base);
+        // config 为基础配置
+        // 第二个参数为项目名
+        // 后面的参数名为项目包含的数据表名，可以是多个。
+        write(config, &quot;contract&quot;, &quot;contract&quot;);
+        write(config, &quot;house&quot;, &quot;house&quot;, &quot;appointment&quot;);
+        write(config, &quot;pay&quot;, &quot;pay&quot;);
+        write(config, &quot;user&quot;, &quot;user&quot;);
+    }
+
+
+
+
+    private static void write(DbConfig config, String project, String... tables) {
+        AutoGenerator autoGenerator = generator(config);
+        String projectPath = config.getBase() ;
+
+        String[] pathes = new String[] {project, &quot;src&quot;, &quot;main&quot;, &quot;java&quot;};
+
+        for(String path : pathes) {
+            projectPath = projectPath+&quot;\\&quot;+path;
+            File dir = new File(projectPath);
+            dir.mkdir();
+        }
+        //+ &quot;\\src\\main\\java&quot;;
+        GlobalConfig gc = autoGenerator.getGlobalConfig();
+        gc.setOutputDir(projectPath);
+
+        PackageConfig pc = new PackageConfig();
+        pc.setModuleName(project);
+
+        StrategyConfig strategyConfig = autoGenerator.getStrategy();
+        strategyConfig.setInclude(tables);
+        autoGenerator.execute();
+    }
+
+    public static AutoGenerator generator(DbConfig config) {
+        AutoGenerator mpg = new AutoGenerator();
+
+
+        String author = &quot;nixinfeng&quot;;
+
+        // 数据源配置
+        DataSourceConfig dsc = new DataSourceConfig();
+        dsc.setDbType(DbType.MYSQL);
+        dsc.setDriverName(&quot;com.mysql.cj.jdbc.Driver&quot;);
+        dsc.setUsername(config.userName);
+        dsc.setPassword(config.getPassword());
+        dsc.setUrl(&quot;jdbc:mysql://localhost:3306/&quot;+config.getDbName()+&quot;?useUnicode=true&amp;characterEncoding=utf8&amp;allowMultiQueries=true&amp;serverTimezone=UTC&quot;);
+        mpg.setDataSource(dsc);
+
+
+        GlobalConfig gc = new GlobalConfig();
+        gc.setAuthor(author);
+        gc.setFileOverride(true); //是否覆盖
+        gc.setActiveRecord(true);// 不需要ActiveRecord特性的请改为false
+        gc.setEnableCache(false);// XML 二级缓存
+        gc.setBaseResultMap(true);// XML ResultMap
+        gc.setBaseColumnList(true);// XML columList
+        mpg.setGlobalConfig(gc);
+
+        // 策略配置
+        StrategyConfig strategy = new StrategyConfig();
+        strategy.setEntityLombokModel(true);
+
+        strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
+        strategy.setColumnNaming(NamingStrategy.underline_to_camel);//列名规则
+        strategy.setEntityLombokModel(true);//是否生成lombok注解
+
+        //自动填充的配置
+        TableFill create_time = new TableFill(&quot;created&quot;, FieldFill.INSERT);//设置时的生成策略
+        TableFill update_time = new TableFill(&quot;updated&quot;, FieldFill.INSERT_UPDATE);//设置更新时间的生成策略
+        ArrayList&lt;TableFill&gt; list = new ArrayList&lt;&gt;();
+        list.add(create_time);
+        list.add(update_time);
+        strategy.setTableFillList(list);
+        strategy.setRestControllerStyle(true);//开启驼峰命名
+
+        strategy.setChainModel(true);
+        mpg.setStrategy(strategy);
+
+        // 包配置
+        PackageConfig pc = new PackageConfig();
+        pc.setParent(config.getPkg());
+        pc.setController(&quot;controller&quot;);
+        pc.setEntity(&quot;entity&quot;);
+        pc.setMapper(&quot;mapper&quot;);
+        pc.setService(&quot;service&quot;);
+        pc.setServiceImpl(&quot;service.impl&quot;);
+
+        mpg.setPackageInfo(pc);
+        return mpg;
+    }
+}
+@Data
+class DbConfig {
+    String dbName;
+    String userName;
+    String password;
+    String pkg;
+    String base;
+
+    public static DbConfig of(String dbName, String userName, String password, String pkg, String base) {
+        DbConfig dbConfig = new DbConfig();
+        dbConfig.setDbName(dbName);
+        dbConfig.setUserName(userName);
+        dbConfig.setPassword(password);
+        dbConfig.setPkg(pkg);
+        dbConfig.setBase(base);
+        return dbConfig;
+    }
+}
+
+
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="mysql.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="redis.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="mysql.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="redis.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="mermaid.min.js"></script>
+        <script type="text/javascript" src="mermaid-init.js"></script>
+
+
+    </body>
+</html>
