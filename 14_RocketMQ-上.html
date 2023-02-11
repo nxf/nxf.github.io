@@ -167,7 +167,9 @@ broker -- 早写盘，多备份
 </code></pre>
 <h3 id="windows版本方法"><a class="header" href="#windows版本方法">windows版本方法：</a></h3>
 <h4 id="修改启动脚本"><a class="header" href="#修改启动脚本">修改启动脚本</a></h4>
-<p>将namesrv和broker的内存占用修改一下， 即将下面划红线部分修改为：  -server -Xms256m -Xmx256m -Xmn128m</p>
+<p>因为RocketMQ的名称服务器和broker占用内存较大，所以需要将内存调低些。具体是将下面划红线部分替换为：</p>
+<pre><code class="language-shell">-server -Xms256m -Xmx256m -Xmn128m
+</code></pre>
 <ul>
 <li>修改 runserver.cmd 
 <img src="./imgs/runserver_cmd.png" alt="修改runserver.cmd" /></li>
@@ -175,7 +177,10 @@ broker -- 早写盘，多备份
 <img src="./imgs/runbroker_cmd.png" alt="修改runbroker.cmd" /></li>
 </ul>
 <h4 id="设置环境变量"><a class="header" href="#设置环境变量">设置环境变量：</a></h4>
-<p>在系统环境变量中新增 ROCKETMQ_HOME 指向 RocketMQ的安装目录（bin的上一层目录）</p>
+<p>在系统环境变量中新增</p>
+<pre><code class="language-shell">ROCKETMQ_HOME
+</code></pre>
+<p>指向 RocketMQ的安装目录（<strong>bin的上一层目录</strong>）</p>
 <h4 id="启动"><a class="header" href="#启动">启动</a></h4>
 <p>启动名称服务器,先跳转到bin目录</p>
 <pre><code class="language-shell">    mqnamesrv

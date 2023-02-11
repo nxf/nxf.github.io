@@ -143,21 +143,28 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="环境介绍"><a class="header" href="#环境介绍">环境介绍</a></h1>
-<h2 id="管理平台"><a class="header" href="#管理平台">管理平台</a></h2>
-<p>创建应用。
-<a href="https://open.alipay.com/develop/manage">创建应用</a></p>
 <h2 id="沙箱环境"><a class="header" href="#沙箱环境">沙箱环境</a></h2>
-<p>获取测试环境的应用号等信息
+<p>在我们的学习，考试中主要使用这个环境的信息，包含appId，支付网关地址，签名等信息。
 <a href="https://open.alipay.com/develop/sandbox/app">沙箱环境</a></p>
 <h2 id="调试中心"><a class="header" href="#调试中心">调试中心</a></h2>
-<p>开发学习主要参考：
+<p>调试中心包含各api的调用例子，使我们开发学习的主要参考：
 <a href="https://open.alipay.com/dev/workspace/apidebug" title="支付宝调试">https://open.alipay.com/dev/workspace/apidebug</a></p>
-<h2 id="花生壳"><a class="header" href="#花生壳">花生壳</a></h2>
+<h2 id="管理平台"><a class="header" href="#管理平台">管理平台</a></h2>
+<p>正式的开发需要创建应用，并使用它的appId等信息，但是现在不是必须使用它。
+<a href="https://open.alipay.com/develop/manage">创建应用</a></p>
+<h2 id="内网穿透工具"><a class="header" href="#内网穿透工具">内网穿透工具</a></h2>
+<p>支付宝支付成功后有个回调地址，因为支付宝只能访问外网地址，所以我们或者自己部署到云服务器，或者使用内网穿透工具提供外网地址。
+如下是两个（类）常用的穿透工具。</p>
+<h3 id="花生壳"><a class="header" href="#花生壳">花生壳</a></h3>
 <pre><code>需要去线上认证下：
 </code></pre>
 <p><a href="https://hsk.oray.com/">https://hsk.oray.com/</a></p>
-<h2 id="ngrok"><a class="header" href="#ngrok">ngrok</a></h2>
+<h3 id="ngrok"><a class="header" href="#ngrok">ngrok</a></h3>
+<pre><code>版本众多，可用的不多。
+</code></pre>
+<h1 id="开发"><a class="header" href="#开发">开发</a></h1>
 <h2 id="依赖"><a class="header" href="#依赖">依赖</a></h2>
+<p>首先需要引进依赖的jar包。</p>
 <pre><code class="language-xml">&lt;dependency&gt;
     &lt;groupId&gt;com.alipay.sdk&lt;/groupId&gt;
     &lt;artifactId&gt;alipay-sdk-java&lt;/artifactId&gt;
@@ -165,7 +172,7 @@
 &lt;/dependency&gt;
 </code></pre>
 <h2 id="配置"><a class="header" href="#配置">配置</a></h2>
-<p>配置AliClient</p>
+<p>使用从沙箱环境获得的信息配置AliClient。</p>
 <pre><code class="language-java">@Configuration
 public class AlipayConfiguration {
 
@@ -220,7 +227,38 @@ public class AlipayConfiguration {
         return response.getBody();
     }
 </code></pre>
-<h2 id="支付回调完整实现"><a class="header" href="#支付回调完整实现">支付回调（完整实现）：</a></h2>
+<h3 id="打开支付页面"><a class="header" href="#打开支付页面">打开支付页面</a></h3>
+<p>在前端页面打开支付页面时，需要在前端el-button的click事件处理中使用类似如下的代码打开</p>
+<pre><code class="language-javascript">//order 是要支付的订单
+    pay(order) {
+      window.open(&quot;http://localhost:8080/order/pay/pay/&quot;+order.id)
+    }
+    
+</code></pre>
+<h2 id="后端支付回调简化实现--内网穿透工具可用时"><a class="header" href="#后端支付回调简化实现--内网穿透工具可用时">后端支付回调（简化实现--内网穿透工具可用时）</a></h2>
+<pre><code class="language-java">    @RequestMapping(&quot;/ali_callback&quot;)
+    public String callback(String out_trade_no) {  //OutTradeNo  --&gt; out_trade_no
+       Pay pay =  payService.getByUUID(out_trade_no);
+       pay.setStatus(PayStatus.PAID.name());
+       boolean success = payService.updateById(pay);
+       // 成功返回 succes  失败 返回 fail
+       return success ? &quot;success&quot; : &quot;fail&quot;;
+    }
+</code></pre>
+<h2 id="前端支付回调-简化实现--内网穿透工具不可用时"><a class="header" href="#前端支付回调-简化实现--内网穿透工具不可用时">前端支付回调 （简化实现--内网穿透工具不可用时）</a></h2>
+<pre><code class="language-java">    //本实现方式为简化实现方式，仅用于内网穿透不可用时，工作中不可这样使用。
+    @GetMapping(&quot;/callback&quot;)
+    public void callback(@RequestParam String out_trade_no, HttpServletResponse response) throws IOException {
+        QueryWrapper query = new QueryWrapper();
+        query.eq(&quot;uuid&quot;, out_trade_no); //根据传入的参数out_trade_no(数据库中的uuid字段)构建查询
+        Order order = orderService.getOne(query);
+        order.setStatus(&quot;PAID&quot;);    //更新支付单为已支付
+        orderService.updateById(order);
+        response.sendRedirect(&quot;http://localhost:8081/products&quot;); //跳转页面到目的页面
+    }
+
+</code></pre>
+<h2 id="支付回调完整实现--实际工作时"><a class="header" href="#支付回调完整实现--实际工作时">支付回调（完整实现--实际工作时）：</a></h2>
 <pre><code class="language-java">@RequestMapping(&quot;/ali_callback&quot;)
 public Object aliCallback(HttpServletRequest request) {
     Map&lt;String,String&gt; params = combineRequestParams(request);
@@ -263,29 +301,6 @@ private static Map&lt;String, String&gt; combineRequestParams(HttpServletRequest
     params.remove(&quot;sign_type&quot;);
     return params;
 }
-</code></pre>
-<h2 id="后端支付回调简化实现"><a class="header" href="#后端支付回调简化实现">后端支付回调（简化实现）</a></h2>
-<pre><code class="language-java">    @RequestMapping(&quot;/ali_callback&quot;)
-    public String callback(String out_trade_no) {  //OutTradeNo  --&gt; out_trade_no
-       Pay pay =  payService.getByUUID(out_trade_no);
-       pay.setStatus(PayStatus.PAID.name());
-       boolean success = payService.updateById(pay);
-       // 成功返回 succes  失败 返回 fail
-       return success ? &quot;success&quot; : &quot;fail&quot;;
-    }
-</code></pre>
-<h2 id="前端支付回调-简化实现"><a class="header" href="#前端支付回调-简化实现">前端支付回调 （简化实现）</a></h2>
-<pre><code class="language-java">    //本实现方式为简化实现方式，仅用于内网穿透不可用时，工作中不可这样使用。
-    @GetMapping(&quot;/callback&quot;)
-    public void callback(@RequestParam String out_trade_no, HttpServletResponse response) throws IOException {
-        QueryWrapper query = new QueryWrapper();
-        query.eq(&quot;uuid&quot;, out_trade_no); //根据传入的参数out_trade_no(数据库中的uuid字段)构建查询
-        Order order = orderService.getOne(query);
-        order.setStatus(&quot;PAID&quot;);    //更新支付单为已支付
-        orderService.updateById(order);
-        response.sendRedirect(&quot;http://localhost:8081/products&quot;); //跳转页面到目的页面
-    }
-
 </code></pre>
 
                     </main>

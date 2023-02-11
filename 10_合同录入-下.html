@@ -147,9 +147,17 @@
 <a href="#net-security">网络请求被篡改</a><br />
 <a href="#precision">应收房款分期计算有误</a><br />
 <a href="#ingrity">租房合同保存失败，数据不完整</a></p>
-<p>MinIO <a href="http://min.io/download#/windows">MinIO</a>
-安装
-<img src="./imgs/minio%E5%AE%89%E8%A3%85%E7%B2%BE%E7%AE%80%E7%89%88.mp4" alt="安装MiniO" /></p>
+<p>MinIO <a href="http://min.io/download#/windows">MinIO</a></p>
+<h2 id="安装"><a class="header" href="#安装">安装</a></h2>
+<p><a href="./imgs/minio%E5%AE%89%E8%A3%85%E7%B2%BE%E7%AE%80%E7%89%88.mp4">安装MiniO</a></p>
+<h2 id="添加依赖"><a class="header" href="#添加依赖">添加依赖</a></h2>
+<pre><code class="language-xml">        &lt;dependency&gt;
+            &lt;groupId&gt;io.minio&lt;/groupId&gt;
+            &lt;artifactId&gt;minio&lt;/artifactId&gt;
+            &lt;version&gt;7.0.2&lt;/version&gt;
+        &lt;/dependency&gt;
+</code></pre>
+<h2 id="示例代码"><a class="header" href="#示例代码">示例代码</a></h2>
 <pre><code>    @PostMapping(&quot;/upload&quot;)
     public String upload(MultipartFile file) throws InvalidPortException, InvalidEndpointException, IOException, InvalidBucketNameException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         //改写名字，但是不能改写类型；
