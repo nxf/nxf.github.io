@@ -231,7 +231,10 @@ public class AlipayConfiguration {
 <p>在前端页面打开支付页面时，需要在前端el-button的click事件处理中使用类似如下的代码打开</p>
 <pre><code class="language-javascript">//order 是要支付的订单
     pay(order) {
-      window.open(&quot;http://localhost:8080/order/pay/pay/&quot;+order.id)
+      //以下为新开页面打开
+      window.open(&quot;http://localhost:8080/order/pay/pay/&quot;+order.id);
+      //以下为原页面打开
+      //window.location.href=&quot;http://localhost:8080/order/pay/pay/&quot;+order.id
     }
     
 </code></pre>

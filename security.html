@@ -231,6 +231,20 @@ create table persistent_logins (
 );
 
 </code></pre>
+<h1 id="安全"><a class="header" href="#安全">安全</a></h1>
+<p>依赖</p>
+<pre><code class="language-xml">    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+</code></pre>
+<p>如果不使用spring-security的话需要添加</p>
+<pre><code class="language-java">@SpringBootApplication(exclude = {SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class})
+</code></pre>
+<p>验证加盐加密的代码</p>
+<pre><code class="language-java">    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    return encoder.matches(password, user.getPassword());
+</code></pre>
 
                     </main>
 

@@ -143,53 +143,48 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="合同录入下"><a class="header" href="#合同录入下">合同录入下：</a></h1>
-<p><a href="#integrity">房间租赁合同和客户身份证上传失败</a><br />
-<a href="#net-security">网络请求被篡改</a><br />
-<a href="#precision">应收房款分期计算有误</a><br />
-<a href="#ingrity">租房合同保存失败，数据不完整</a></p>
-<p>MinIO <a href="http://min.io/download#/windows">MinIO</a></p>
+<ul>
+<li>[房间租赁合同和客户身份证上传失败]
+大文件时涉及断点上传</li>
+<li>[网络请求被篡改]
+服务端验证请求、计算金额
+[应收房款分期计算有误差]<br />
+使用BigDecimal
+[租房合同保存失败，数据不完整]
+事务</li>
+</ul>
+<h1 id="文件上传-minio"><a class="header" href="#文件上传-minio">文件上传 MinIO</a></h1>
+<p><a href="http://min.io/download#/windows">MinIO</a></p>
 <h2 id="安装"><a class="header" href="#安装">安装</a></h2>
-<p><a href="./imgs/minio%E5%AE%89%E8%A3%85%E7%B2%BE%E7%AE%80%E7%89%88.mp4">安装MiniO</a></p>
+<p>参考视频
+<a href="./imgs/minio%E5%AE%89%E8%A3%85%E7%B2%BE%E7%AE%80%E7%89%88.mp4">安装MiniO</a></p>
 <h2 id="添加依赖"><a class="header" href="#添加依赖">添加依赖</a></h2>
-<pre><code class="language-xml">        &lt;dependency&gt;
-            &lt;groupId&gt;io.minio&lt;/groupId&gt;
-            &lt;artifactId&gt;minio&lt;/artifactId&gt;
-            &lt;version&gt;7.0.2&lt;/version&gt;
-        &lt;/dependency&gt;
+<pre><code class="language-xml">&lt;dependency&gt;
+   &lt;groupId&gt;io.minio&lt;/groupId&gt;
+   &lt;artifactId&gt;minio&lt;/artifactId&gt;
+   &lt;version&gt;7.0.2&lt;/version&gt;
+&lt;/dependency&gt;
 </code></pre>
-<h2 id="示例代码"><a class="header" href="#示例代码">示例代码</a></h2>
-<pre><code>    @PostMapping(&quot;/upload&quot;)
-    public String upload(MultipartFile file) throws InvalidPortException, InvalidEndpointException, IOException, InvalidBucketNameException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        //改写名字，但是不能改写类型；
-        String name = file.getOriginalFilename(); // a.jpg;
+<h2 id="上传示例代码"><a class="header" href="#上传示例代码">上传示例代码</a></h2>
+<pre><code class="language-java">public static FileType getFileType(String type, MultipartFile file) throws InvalidEndpointException, InvalidPortException, ErrorResponseException, InsufficientDataException, InternalException, InvalidBucketNameException, InvalidKeyException, InvalidResponseException, IOException, NoSuchAlgorithmException, XmlParserException {
+   //改写名字，但是不能改写类型；
+   String name = file.getOriginalFilename(); // a.jpg;
 
-        name = name.substring(name.indexOf(&quot;.&quot;)); //.jpg
-        name = IdUtil.getSnowflakeNextIdStr()+name;// 随机数 + .jpg
-        MinioClient minioClient = new MinioClient(&quot;http://localhost:9000&quot;, &quot;GPFi8qPrjA41fskp&quot;, &quot;YjnyuCDJHp20qbjIrfRsjicJWsVsNAsC&quot;);
-        PutObjectOptions options = new PutObjectOptions(file.getSize(), 10485760);
-        options.setContentType(file.getContentType());
-        minioClient.putObject(BUCKET_NAME, name, file.getInputStream(), options);
+   name = name.substring(name.indexOf(&quot;.&quot;)); //.jpg
+   name = IdUtil.getSnowflakeNextIdStr()+name;// 随机数 + .jpg
 
-        return &quot;http://localhost:9000/&quot;+BUCKET_NAME+&quot;/&quot;+name;
-    }
+   MinioClient minioClient = new MinioClient(&quot;http://localhost:9000&quot;, &quot;GPFi8qPrjA41fskp&quot;, &quot;YjnyuCDJHp20qbjIrfRsjicJWsVsNAsC&quot;);
+
+   PutObjectOptions options = new PutObjectOptions(file.getSize(), 10485760);
+   options.setContentType(file.getContentType());
+
+   minioClient.putObject(BUCKET_NAME, name, file.getInputStream(), options);
+   FileType fileType = new FileType();
+   fileType.setType(type);
+   fileType.setUrl(&quot;http://localhost:9000/&quot;+BUCKET_NAME+&quot;/&quot;+name);
+   return fileType;
+}
 </code></pre>
-<h2 id="参考"><a class="header" href="#参考">参考</a></h2>
-<p id="net-security">
-    服务端验证请求、计算金额
- </p>
- <p id="precision">
-    BigDecimal
- </p>
- <p id="integrity">
-    使用事务
- </p>
- <p id="security">
-   文件上传的目录设置为不可执行<br/> 
-   文件类型设置白名单  <br/>
-   图片使用压缩或resize处理函数 <br/> 
-   使用随机数重命名文件 <br/> 
-   单独设置文件服务器域名 <br/> 
-</p>
 
                     </main>
 

@@ -142,29 +142,68 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="预约看房业务流程"><a class="header" href="#预约看房业务流程">预约看房业务流程</a></h1>
-<h1 id="预约看房表结构设计"><a class="header" href="#预约看房表结构设计">预约看房表结构设计</a></h1>
-<h1 id="预约看房前后端交互实现"><a class="header" href="#预约看房前后端交互实现">预约看房前后端交互实现</a></h1>
-<h1 id="短信发送"><a class="header" href="#短信发送">短信发送</a></h1>
-<h1 id="环境复杂度"><a class="header" href="#环境复杂度">环境复杂度</a></h1>
-<h2 id="短信通知实现"><a class="header" href="#短信通知实现">短信通知实现</a></h2>
-<pre><code>接入第三方短信平台，业界有阿里云，腾讯云，青牛云等，我们采用的是榛子云
-</code></pre>
-<p>登录注册：
+                        <h1 id="看房"><a class="header" href="#看房">看房</a></h1>
+<ul>
+<li>
+<p>预约看房业务流程</p>
+</li>
+<li>
+<p>预约看房表结构设计</p>
+</li>
+<li>
+<p>预约看房前后端交互实现</p>
+</li>
+<li>
+<p>短信发送</p>
+</li>
+<li>
+<p>环境复杂度</p>
+</li>
+<li>
+<p>短信通知实现</p>
+</li>
+</ul>
+<h2 id="榛子云"><a class="header" href="#榛子云">榛子云</a></h2>
+<pre><code>//注册
 http://sms_developer.zhenzikj.com/zhenzisms_user/register.html
-http://sms_developer.zhenzikj.com/zhenzisms_user/login.html</p>
-<p>SDK:</p>
-<pre><code>  http://smsow.zhenzikj.com/doc/java_sdk_doc.html
+//登录
+http://sms_developer.zhenzikj.com/zhenzisms_user/login.html
+//SDK
+http://smsow.zhenzikj.com/doc/java_sdk_doc.html
+</code></pre>
+<h3 id="依赖"><a class="header" href="#依赖">依赖</a></h3>
+<pre><code class="language-xml">	&lt;dependency&gt;
+	  &lt;groupId&gt;com.zhenzikj&lt;/groupId&gt;
+	  &lt;artifactId&gt;zhenzisms&lt;/artifactId&gt;
+	  &lt;version&gt;2.0.2&lt;/version&gt;
+	&lt;/dependency&gt;
+</code></pre>
+<h3 id="配置"><a class="header" href="#配置">配置</a></h3>
+<pre><code class="language-yaml"># 榛子云短信
+zzy:
+  url: https://sms_developer.zhenzikj.com
+  appId: 112605
+  secret: 6a987156-398b-4c3c-9d84-ce6b3921bd18
+
 </code></pre>
 <h2 id="短信发送失败如何处理"><a class="header" href="#短信发送失败如何处理">短信发送失败如何处理</a></h2>
-<p>发生错误的原因：
+<ol>
+<li>
+<p>找到错误的原因
+一般可以根据api调用的返回判断，一般发生错误的原因：
 格式出错
 违禁词汇
 区域受限
-技术层面出错</p>
+技术层面出错
+达到限额
+余额不足</p>
+</li>
+<li>
 <p>出现错误怎么解决：<br />
-寻找客服人员的帮助
-多使用短信模板或固定模板</p>
+自己找不到原因时要寻找客服人员的帮助
+为预防错误，多使用短信模板或固定模板。</p>
+</li>
+</ol>
 <h2 id="短信接口异常如何处理"><a class="header" href="#短信接口异常如何处理">短信接口异常如何处理</a></h2>
 <p>可以针对特定异常或异常吗进行重试
 记录日志，后期和运营商沟通</p>

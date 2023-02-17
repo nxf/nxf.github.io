@@ -142,8 +142,8 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="feign简介"><a class="header" href="#feign简介">feign简介</a></h1>
-<p>netflix feign -&gt; Spring Cloud OpenFeign</p>
+                        <h1 id="feign简介"><a class="header" href="#feign简介">Feign简介</a></h1>
+<p>相比RestTemplate，Feign是更好更方便的远程访问工具。</p>
 <h1 id="基本使用"><a class="header" href="#基本使用">基本使用</a></h1>
 <h2 id="加依赖"><a class="header" href="#加依赖">加依赖</a></h2>
 <pre><code class="language-xml">&lt;!-- eureka客户端 --&gt;
@@ -161,9 +161,12 @@
 <p>在入口类上添加注解：</p>
 <pre><code class="language-java">@EnableFeignClients
 </code></pre>
-<h2 id="写配置"><a class="header" href="#写配置">写配置</a></h2>
+<h2 id="添加配置"><a class="header" href="#添加配置">添加配置</a></h2>
 <p>如果没有添加eureka配置的需要添加此配置：</p>
 <pre><code class="language-yaml">eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
   client:
     register-with-eureka: true
     fetch-registry: true
@@ -171,7 +174,7 @@
       defaultZone: http://localhost:8761/eureka/
 </code></pre>
 <h2 id="写代码"><a class="header" href="#写代码">写代码</a></h2>
-<p>注意，确保 path的值 + @GetMapping中的路径  ==  被调用放controller上的@RequestMapping()的值 + 被调用方@GetMappping的值</p>
+<p>注意，确保 path的值 + @GetMapping中的路径  ==  被调用放controller上的@RequestMapping()中的值 + 被调用方@GetMappping中的路径</p>
 <pre><code class="language-java">@FeignClient(name=&quot;order&quot;, path=&quot;/api&quot;)
 public interface OrderServiceFeign {
 
@@ -179,8 +182,8 @@ public interface OrderServiceFeign {
     public List&lt;Order&gt; getOrdersByOwnerId(@PathVariable(&quot;id&quot;) Long id);
 }
 </code></pre>
-<h1 id="负载均衡"><a class="header" href="#负载均衡">负载均衡</a></h1>
-<p>和上一节ribbon配置方法一样。</p>
+<h2 id="负载均衡"><a class="header" href="#负载均衡">负载均衡</a></h2>
+<p>负载均衡使用ribbon来实现，所以修改负载均衡和上一节ribbon的修改方法一样。</p>
 <pre><code class="language-java">@Bean
 public IRule myRule() {
     return new RandomRule();
@@ -188,11 +191,11 @@ public IRule myRule() {
 </code></pre>
 <h1 id="feign的服务降级"><a class="header" href="#feign的服务降级">Feign的服务降级</a></h1>
 <h2 id="修改feign接口"><a class="header" href="#修改feign接口">修改Feign接口</a></h2>
-<p>添加降级类</p>
+<p>添加降级类，降级类会在发生异常时接管处理。</p>
 <pre><code class="language-java">@FeignClient(name=&quot;house&quot;, fallback = HouseFeignServiceFallback.class)
 </code></pre>
 <h2 id="新建降级fallback类"><a class="header" href="#新建降级fallback类">新建降级fallback类</a></h2>
-<p>类要实现Feign接口，注意添加@Service注解</p>
+<p>降级类要实现上面定义的接口，并实现降级方法，另外注意在降级类上添加@Service注解，以纳入spring管理</p>
 <pre><code class="language-java">@Service
 public class OrderServiceCallback implements OrderServiceFeign{
     @Override
@@ -242,12 +245,6 @@ Logger.Level feignLogLevel() {
     request:
       enabled: true
 
-</code></pre>
-<p>服务端</p>
-<pre><code class="language-yaml">server:
-  port: 8086
-  compression:
-    enabled: true
 </code></pre>
 
                     </main>

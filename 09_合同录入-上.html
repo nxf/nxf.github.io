@@ -145,12 +145,39 @@
                         <h1 id="合同录入"><a class="header" href="#合同录入">合同录入</a></h1>
 <p>环境复杂度</p>
 <ul>
-<li><a href="#snowflake">合同编号重复</a></li>
-<li><a href="#idcard">身份证号码格式不正确</a></li>
-<li>租客身份证和租客姓名不真实</li>
-<li><a href="#precision">计算合同金额精度缺失</a></li>
-<li><a href="#lock">签合同期间房屋被租出去</a></li>
+<li>[合同编号重复]</li>
 </ul>
+<pre><code class="language-java">    Snowflake snowflake = IdUtil.getSnowflake();
+    String id = &quot;HT&quot;+snowlake.nextId();
+</code></pre>
+<ul>
+<li>[身份证号码格式不正确]</li>
+</ul>
+<pre><code class="language-javascript">/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|[xX])$/
+</code></pre>
+<ul>
+<li>租客身份证和租客姓名不真实</li>
+<li>[计算合同金额精度缺失]</li>
+<li>主要涉及BigDecimal的计算。</li>
+</ul>
+<pre><code class="language-java">        BigDecimal first = BigDecimal.valueOf(10.22);
+        BigDecimal second = BigDecimal.valueOf(8);
+
+        BigDecimal sum = first.add(second);
+        BigDecimal subtract = first.subtract(second);
+        BigDecimal subtract2 = second.subtract(first);
+        BigDecimal multiply = first.multiply(second);
+        BigDecimal divide = first.divide(second);
+
+        boolean bigger = first.compareTo(second) &gt; 0;
+        boolean equal = first.compareTo(BigDecimal.valueOf(10.220)) == 0;
+        boolean less = second.compareTo(first) &lt; 0;
+</code></pre>
+<ul>
+<li>[签合同期间房屋被租出去]</li>
+</ul>
+<pre><code class="language-java">//TODO 
+</code></pre>
 <h2 id="收房合同录入功能"><a class="header" href="#收房合同录入功能">收房合同录入功能</a></h2>
 <ul>
 <li>合同信息录入</li>
@@ -160,20 +187,6 @@
 </ul>
 <h2 id="表设计"><a class="header" href="#表设计">表设计</a></h2>
 <h2 id="合同信息录入"><a class="header" href="#合同信息录入">合同信息录入</a></h2>
-<h2 id="参考"><a class="header" href="#参考">参考</a></h2>
-<span id="snowflake">
-Snowflake snowflake = IdUtil.getSnowflake();
-String id = "HT"+snowlake.nextId();
-</span>
-<p id="idcard">
-/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|[xX])$/
-</p>
-<p id="precision">
-    BigDecimal
-</p>
-<span id="lock">
-    乐观锁
-</span>
 
                     </main>
 

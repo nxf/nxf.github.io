@@ -142,31 +142,26 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="ribbon"><a class="header" href="#ribbon">Ribbon</a></h1>
-<p>微服务架构中会有很多微服务实例，实例之间的远程调用可以使用RestTemplate。</p>
-<h2 id="resttemplate"><a class="header" href="#resttemplate">RestTemplate</a></h2>
+                        <h1 id="resttemplate"><a class="header" href="#resttemplate">RestTemplate</a></h1>
 <p>使用之前需要先定义一个实例：</p>
 <pre><code class="language-java">@Bean
-public RestTemplate restTemplate(RestTemplateBuilder builder){
-    return builder
-            .setReadTimeout(Duration.ofMillis(1200)) //读取时间
-            .setConnectTimeout(Duration.ofMillis(800)) //链接时间
-            .build();
+public RestTemplate restTemplate(){
+    return new RestTemplate();
 }
 </code></pre>
 <p>然后通过如下方式使用：</p>
 <pre><code class="language-java">// 通过ip地址（域名）直接访问
 AllType allType =  restTemplate.getForObject(&quot;http://localhost:8081/type/&quot;, AllType.class);
-// 接入eureka和ribbon后
-AllType allType =  restTemplate.getForObject(&quot;http://type/type/&quot;, AllType.class);
 
 </code></pre>
-<p><a href="http://localhost:8086/api/order/2">测试url</a></p>
 <pre><code>&lt;T&gt; T	getForObject(String url, Class&lt;T&gt; responseType, Map&lt;String,?&gt; uriVariables)
 &lt;T&gt; T	getForObject(URI url, Class&lt;T&gt; responseType)
 </code></pre>
-<p>其他的post，put，delete都类似。<br />
-<a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html">api参考</a></p>
+<p>其他的post，put，delete都类似。
+<a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html">restTemplate api参考</a></p>
+<h1 id="ribbon"><a class="header" href="#ribbon">Ribbon</a></h1>
+<p>微服务架构中会有服务实例间的互相调用，实例之间的远程调用可能需要使用RestTemplate来进行。当被调用的服务部署多个实例后，请求需要公平的发送到这些实例（负载均衡），这时
+就需要Ribbon来帮助RestTemplate来实现。</p>
 <h2 id="添加ribbon依赖"><a class="header" href="#添加ribbon依赖">添加ribbon依赖</a></h2>
 <pre><code class="language-xml">&lt;!-- 负载均衡 --&gt;
 &lt;dependency&gt;
@@ -184,31 +179,36 @@ AllType allType =  restTemplate.getForObject(&quot;http://type/type/&quot;, AllT
 <li>com.netflix.loadbalancer.AvailabilityFilteringRule //过滤掉故障实例，并发最小</li>
 <li>com.netflix.loadbalancer.ZoneAwareLoadBalancer //考虑到区域相同</li>
 </ul>
-<h2 id="增加order服务实例"><a class="header" href="#增加order服务实例">增加order服务实例</a></h2>
+<h2 id="实践"><a class="header" href="#实践">实践：</a></h2>
+<h3 id="增加order服务实例"><a class="header" href="#增加order服务实例">增加order服务实例</a></h3>
 <p>上节课学过。</p>
 <ul>
-<li>增加profile</li>
-<li>右上角 Edit Configuration</li>
-<li>--spring.profiles.active=xxx</li>
+<li>增加配置文件,例如：application-02.yml</li>
+<li>添加运行入口，右上角 Edit Configuration</li>
+<li>运行入口中指定使用的配置文件， --spring.profiles.active=xxx</li>
 </ul>
-<h2 id="使用负载均衡"><a class="header" href="#使用负载均衡">使用负载均衡</a></h2>
-<p>这里的RestTemplate跟上面不同，主要是没有对一些特性没有自定义，直接使用缺省值。</p>
+<h3 id="使用负载均衡"><a class="header" href="#使用负载均衡">使用负载均衡</a></h3>
 <pre><code class="language-java">@Bean
-@LoadBalanced
+@LoadBalanced  # 赋予RestTemplate负载均衡能力
 public RestTemplate restTemplate() {
     return new RestTemplate();
 }
 
 </code></pre>
-<h2 id="修改ribon负载均衡算法"><a class="header" href="#修改ribon负载均衡算法">修改ribon负载均衡算法</a></h2>
+<h3 id="修改resttemplate对远程服务的访问方式"><a class="header" href="#修改resttemplate对远程服务的访问方式">修改restTemplate对远程服务的访问方式</a></h3>
+<pre><code class="language-java">// 接入eureka和ribbon后
+AllType allType =  restTemplate.getForObject(&quot;http://type/type/&quot;, AllType.class);
+</code></pre>
+<h2 id="更换ribon负载均衡算法"><a class="header" href="#更换ribon负载均衡算法">更换ribon负载均衡算法</a></h2>
 <pre><code class="language-java">    @Bean
     IRule myRule() {
         return new RandomRule();
     }
 </code></pre>
-<p>在 @Configuration修饰的类中，也可以放置在启动类内。</p>
-<h1 id="hystrix"><a class="header" href="#hystrix">Hystrix</a></h1>
-<p>负责服务的熔断与降级</p>
+<p>上述代码需要放在 @Configuration修饰的类中。</p>
+<h1 id="hystrix---熔断与降级"><a class="header" href="#hystrix---熔断与降级">Hystrix - 熔断与降级</a></h1>
+<p>负责服务的熔断与降级,考虑如下的服务调用：</p>
+<p><img src="./imgs/hystrix.png" alt="服务调用" /></p>
 <h2 id="引入依赖"><a class="header" href="#引入依赖">引入依赖</a></h2>
 <pre><code class="language-xml">&lt;dependency&gt;
     &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
@@ -220,12 +220,12 @@ public RestTemplate restTemplate() {
 //@EnableCircuitBreaker
 @EnableHystrix
 </code></pre>
-<h2 id="服务降级实现"><a class="header" href="#服务降级实现">服务降级实现</a></h2>
+<h2 id="hystrixcommand"><a class="header" href="#hystrixcommand">HystrixCommand</a></h2>
 <h3 id="情景描述"><a class="header" href="#情景描述">情景描述</a></h3>
 <p>在需要实现服务降级的方法上添加注解 @HystrixCommand . 
 然后配置 fallbackMethod 属性，其参数为发生异常时要降级到的方法的名称，此方法需要与
 @HystrixCommand修饰的方法返回类型及参数保持一致。</p>
-<h3 id="hystrixcommand详解"><a class="header" href="#hystrixcommand详解">HystrixCommand详解</a></h3>
+<h3 id="hystrixcommand参数介绍"><a class="header" href="#hystrixcommand参数介绍">HystrixCommand参数介绍</a></h3>
 <ul>
 <li>fallbackMethod：指定服务降级处理方法；</li>
 <li>ignoreExceptions：忽略某些异常，不发生服务降级； </li>
@@ -233,10 +233,14 @@ public RestTemplate restTemplate() {
 <li>groupKey：分组名称，Hystrix 会根据不同的分组来统计命令的告警及仪表盘信息；</li>
 <li>threadPoolKey：线程池名称，用于划分线程池。</li>
 </ul>
-<h4 id="ignoreexceptions"><a class="header" href="#ignoreexceptions">ignoreExceptions</a></h4>
+<h4 id="fallbackmethod-回调方法"><a class="header" href="#fallbackmethod-回调方法">fallbackMethod （回调方法）</a></h4>
+<pre><code>指定降级到的方法，此方法的返回类型及参数需要与@HystrixCommand修饰的方法返回类型及参数保持一致。
+</code></pre>
+<h4 id="ignoreexceptions-忽略异常"><a class="header" href="#ignoreexceptions-忽略异常">ignoreExceptions （忽略异常）</a></h4>
+<p>指定忽略掉某些异常，设置忽略这些异常后，在发生这些异常后不会降级。</p>
 <pre><code class="language-java">ignoreExceptions = {NullPointerException.class}
 </code></pre>
-<h3 id="熔断状态"><a class="header" href="#熔断状态">熔断状态</a></h3>
+<h3 id="扩展--熔断状态"><a class="header" href="#扩展--熔断状态">扩展--熔断状态</a></h3>
 <pre class="mermaid">graph LR;
 N[关闭状态]--有异常--&gt;V{验证}
 V--10S_and_50%--&gt;S[启动状态]

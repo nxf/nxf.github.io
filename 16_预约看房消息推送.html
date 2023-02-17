@@ -142,29 +142,35 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="安装xxl-job"><a class="header" href="#安装xxl-job">安装xxl-job</a></h1>
+                        <h1 id="xxl-job"><a class="header" href="#xxl-job">xxl-job</a></h1>
 <h2 id="下载"><a class="header" href="#下载">下载：</a></h2>
-<p>https://gitee.com/xuxueli0323/xxl-job/tags</p>
+<p><a href="https://gitee.com/xuxueli0323/xxl-job/tags">https://gitee.com/xuxueli0323/xxl-job/tags</a></p>
 <p>选择一个双数版本，例如：2.2.0版本。</p>
 <ul>
-<li>
-<p>初始化数据库
-执行脚本  /xxl-job/doc/db/tables_xxl_job.sql</p>
-</li>
-<li>
-<p>修改配置文件
-进入到xxl-job-admin项目中，修改配置文件中的端口号； 数据库用户名； 数据库密码；</p>
-</li>
-<li>
-<p>编译运行xxl-job-admin
-mvn spring-boot:run</p>
-</li>
-<li>
-<p>缺省密码
-admin/123456</p>
-</li>
+<li>初始化数据库
+执行脚本</li>
 </ul>
-<h1 id="使用"><a class="header" href="#使用">使用</a></h1>
+<pre><code class="language-shell">  /xxl-job/doc/db/tables_xxl_job.sql
+</code></pre>
+<ul>
+<li>修改配置文件
+进入到xxl-job-admin项目中，修改配置文件(application.properties)中的端口号； 数据库用户名及密码；</li>
+<li>编译运行xxl-job-admin</li>
+</ul>
+<pre><code class="language-shell">  mvn spring-boot:run
+</code></pre>
+<ul>
+<li>xxl-job-admin的缺省密码</li>
+</ul>
+<pre><code>  admin/123456
+</code></pre>
+<h2 id="介绍"><a class="header" href="#介绍">介绍：</a></h2>
+<p>主要涉及到两个概念</p>
+<h3 id="执行器"><a class="header" href="#执行器">执行器</a></h3>
+<p>执行器用来执行任务的对象XxlJobSpringExecutor，XxlJobSpringExecutor定义在我们自己的项目中，它的名称用来在xxl-job-admin中标识某个项目。</p>
+<h3 id="任务"><a class="header" href="#任务">任务</a></h3>
+<p>任务是真正执行逻辑的地方，它的运营受到xxl-job-admin的指挥。</p>
+<h1 id="在项目中使用"><a class="header" href="#在项目中使用">在项目中使用</a></h1>
 <h2 id="引入依赖"><a class="header" href="#引入依赖">引入依赖</a></h2>
 <pre><code class="language-xml">&lt;dependency&gt;
   &lt;groupId&gt;com.xuxueli&lt;/groupId&gt;
@@ -172,20 +178,21 @@ admin/123456</p>
   &lt;version&gt;2.2.0&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
-<h2 id="配置"><a class="header" href="#配置">配置</a></h2>
+<h2 id="添加配置"><a class="header" href="#添加配置">添加配置</a></h2>
 <pre><code class="language-yml">xxl:
   job:
-    port: 9998
+    port: 9998   # xxl-job服务本地监听端口，如果有多个需要使用不同的端口
     accessToken: &quot;&quot;
     admin:
-      addresses: http://wsl2:9999/xxl-job-admin
-    executor:
-      appName: contract
-      logpath: &quot;/Users/mac/workspace/xxl-job/runable/client&quot;
-      logretentiondays: 10
+      addresses: http://localhost:9999/xxl-job-admin  # 这里的端口需要跟上文中在xxl-job-admin中配置的端口号一致
+    executor: # 执行器，负责和xxl-job-admin通信
+      appName: contract # 执行器名称，在xxl-job-admin中定义执行器时需要使用这里定义的名字。
+      logpath: D:\tmp\logs # xxl执行器日志存放地址
+      logretentiondays: 10 # 日志保留多少天
 
 </code></pre>
 <h2 id="初始化"><a class="header" href="#初始化">初始化</a></h2>
+<p>在这里使用上面的配合信息，构建一个执行器实例。</p>
 <pre><code class="language-java">    @Value(&quot;${xxl.job.admin.addresses}&quot;)
     private String adminAddress;
     @Value(&quot;${xxl.job.accessToken}&quot;)
@@ -213,6 +220,7 @@ admin/123456</p>
     }
 </code></pre>
 <h2 id="handler"><a class="header" href="#handler">Handler</a></h2>
+<p>定时任务中的任务，由它来完成真正的工作。</p>
 <pre><code class="language-java">
     @XxlJob(&quot;payCreatorForOld&quot;)
     public ReturnT&lt;String&gt; updateOldContract(String param) {

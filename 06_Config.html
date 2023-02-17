@@ -149,9 +149,18 @@
 <p>示例：
 <a href="https://gitee.com/nixf/config-repo.git">config-repo</a>
 各位同学要创建自己的repo。</p>
-<h1 id="config服务端"><a class="header" href="#config服务端">Config服务端</a></h1>
+<h3 id="创建步骤简要描述"><a class="header" href="#创建步骤简要描述">创建步骤简要描述：</a></h3>
+<ul>
+<li>创建仓库</li>
+<li>创建文件夹</li>
+<li>在文件夹中创建 user-dev.yml文件</li>
+<li>回到仓库首页，点击管理</li>
+<li>在管理页面下方找到<em>开源</em>选项并选中</li>
+<li>提交后即可访问</li>
+</ul>
+<h1 id="config服务端配置"><a class="header" href="#config服务端配置">Config服务端配置</a></h1>
 <h2 id="新建项目"><a class="header" href="#新建项目">新建项目</a></h2>
-<h2 id="项目填加依赖"><a class="header" href="#项目填加依赖">项目填加依赖</a></h2>
+<h2 id="填加依赖"><a class="header" href="#填加依赖">填加依赖</a></h2>
 <pre><code class="language-xml">&lt;dependency&gt;
 	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
 	&lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
@@ -164,7 +173,7 @@
 <h1 id="入口类加注解"><a class="header" href="#入口类加注解">入口类加注解</a></h1>
 <pre><code class="language-java">@EnableConfigServer
 </code></pre>
-<h1 id="服务端配置"><a class="header" href="#服务端配置">服务端配置</a></h1>
+<h1 id="配置文件添加"><a class="header" href="#配置文件添加">配置文件添加</a></h1>
 <pre><code class="language-yaml">spring:
   cloud:
     config:
@@ -172,18 +181,23 @@
         git: #配置存储信息的Git仓库
           #username: xxx
           #password: 123456
-          uri: https://gitee.com/nixf/config-repo.git
+          uri: https://gitee.com/nixf/config-repo.git  # 仓库地址
           clone-on-start: true # 启动时直接从gitee获取数据
           search-paths: unit_5 # 搜索目录
           default-label: master # 默认的分支
       label: master #分支信息
 </code></pre>
 <h1 id="测试"><a class="header" href="#测试">测试</a></h1>
+<p>测试config服务器配置是否生效，以如下所示格式访问</p>
+<p><a href="http://localhost:8888/user/dev/master">http://localhost:8888/application_name/profile/branch_name</a></p>
 <p>application_name:  指应用的注册名
 profile： 环境（dev,test,product) 
-branch_name: git分支名
-<a href="http://localhost:8888/user/dev/master">http://localhost:8888/application_name/profile/branch_name</a></p>
-<h1 id="客户端配置user"><a class="header" href="#客户端配置user">客户端配置（user)</a></h1>
+branch_name: git分支名</p>
+<p>以我们创建git仓库时建的文件user-dev.yml为例，对它的内容访问路径为：</p>
+<pre><code>http:localhost:8888/user/dev/master
+</code></pre>
+<p>可以在user-dev.yml中添加内容后再查看效果。</p>
+<h1 id="客户端配置"><a class="header" href="#客户端配置">客户端配置</a></h1>
 <h2 id="添加依赖"><a class="header" href="#添加依赖">添加依赖</a></h2>
 <pre><code class="language-xml">&lt;!--此jar包会读取bootstrap.yml，给应用使用config服务的机会 --&gt;
 &lt;dependency&gt;
@@ -210,8 +224,9 @@ spring:
       uri: http://localhost:8888  #config 服务地址
       name: user    #当前应用名，用于匹配git内的配置文件
 </code></pre>
-<p>演示</p>
+<p>演示对git中配置文件定义得属性的访问。</p>
 <pre><code class="language-java">@RestController
+@RefreshScope
 public class ConfigController {
 
     //读取配置中的值，此值只在git内有
@@ -240,6 +255,13 @@ public class ConfigController {
       exposure:
         include: 'refresh'
 </code></pre>
+<p>也可以打开全部端口：</p>
+<pre><code class="language-yaml">management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+</code></pre>
 <h1 id="config-高可用"><a class="header" href="#config-高可用">config 高可用</a></h1>
 <p>配置config高可用后，就不能再指定一个url路径了，需要使用eureka的帮助自动匹配服务地址。</p>
 <pre><code class="language-yaml">  cloud:
@@ -253,27 +275,25 @@ public class ConfigController {
         service-id: config  # config的服务ID--即eureka的注册名
 </code></pre>
 <h1 id="spring-cloud-bus"><a class="header" href="#spring-cloud-bus">Spring Cloud Bus</a></h1>
-<p>Spring Cloud Bus需要使用RabbitMQ。 参见《Rabbit安装》</p>
-<p>rabbitMQ安装注意问题：</p>
-<pre><code>1，文件路径不要有中文、空格；
-2，计算机名不要有中文
-</code></pre>
-<pre class="mermaid">graph LR
-Publisher -- 查询 --&gt; NameServer
-Receiver -- 查询 --&gt; NameServer
-Publisher --发送消息--&gt; Broker
-Broker --接收消息--&gt; Receiver
-</pre>
+<p>Spring Cloud Bus需要使用RabbitMQ帮助。 参见 <a href="./06_Config_Rabbit_install.html">Rabbit安装</a></p>
 <p>RabbitMQ的相关概念</p>
 <ul>
 <li>Broker  消息队列服务</li>
-<li>Vitual host  虚拟分组</li>
 <li>Connection   publisher 和 consumer 与broker的tcp连接</li>
 <li>Channel 逻辑连接</li>
 <li>Exchange 分发消息 p2p topic multicast/fanout</li>
 <li>Queue 真正的消息队列</li>
 <li>Binding exchange和queue之间的虚拟连接</li>
 </ul>
+<p>MQ通用概念：</p>
+<pre class="mermaid">graph LR
+
+Publisher --发送消息--&gt; Broker
+Broker --推消息--&gt; Receiver
+Receiver --拉消息--&gt; Broker
+</pre>
+<p>Config服务和Config客户端接入Spring Cloud Bus后，我们可以只通知Config服务更新配置，即可实现所有的客户端都自动更新配置的目的。
+步骤如下：</p>
 <h2 id="config-server配置"><a class="header" href="#config-server配置">config server配置</a></h2>
 <p>服务端需要接入rammbitMQ,所以增加以下依赖：</p>
 <pre><code class="language-xml">&lt;dependency&gt;
@@ -298,7 +318,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: 'bus-refresh'
+        include: 'bus-refresh'  # config服务端开发端口，通过post访问
 </code></pre>
 <h2 id="config-client配置"><a class="header" href="#config-client配置">config client配置</a></h2>
 <p>Config 客户端也需要接入RabbitMQ。添加依赖：</p>
@@ -317,16 +337,16 @@ management:
 
 </code></pre>
 <h2 id="测试-1"><a class="header" href="#测试-1">测试</a></h2>
-<p>更改git的配置后，调用
-http://localhost:8888/actuator/bus-refresh 即可更新所有通过bus链接到config的服务的配置。</p>
+<p>更改git的配置后，使用Post方法调用
+http://localhost:8888/actuator/bus-refresh 即可更新所有通过bus链接到config服务的配置。</p>
 <h2 id="config服务器安全"><a class="header" href="#config服务器安全">Config服务器安全</a></h2>
-<p>引进安全jar包：</p>
+<h2 id="引进安全jar包"><a class="header" href="#引进安全jar包">引进安全jar包：</a></h2>
 <pre><code class="language-xml">&lt;dependency&gt;
   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
   &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
 &lt;/dependency&gt;
 </code></pre>
-<p>设置服务的用户名和密码：</p>
+<h2 id="设置服务的用户名和密码"><a class="header" href="#设置服务的用户名和密码">设置服务的用户名和密码：</a></h2>
 <pre><code class="language-yaml">spring:
   application:
     name: config
@@ -335,7 +355,7 @@ http://localhost:8888/actuator/bus-refresh 即可更新所有通过bus链接到c
       name: admin
       password: 123456
 </code></pre>
-<p>放开刷新接口的访问：</p>
+<h2 id="放开刷新接口的访问"><a class="header" href="#放开刷新接口的访问">放开刷新接口的访问：</a></h2>
 <pre><code class="language-java">@Configuration
 public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 

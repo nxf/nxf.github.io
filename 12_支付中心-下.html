@@ -228,6 +228,104 @@
         return url;
     }
 </code></pre>
+<h2 id="功能汇总"><a class="header" href="#功能汇总">功能汇总</a></h2>
+<pre><code class="language-java">
+
+public class PayUtils {
+
+    public static String pay(String out_trade_no, String price, String name, String returnUrl, String notifyUrl) throws AlipayApiException {
+        AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
+        AlipayTradePagePayModel model = new AlipayTradePagePayModel();
+        model.setOutTradeNo(out_trade_no);
+        model.setTotalAmount(price);
+        model.setSubject(name);
+        model.setProductCode(&quot;FAST_INSTANT_TRADE_PAY&quot;);
+        request.setBizModel(model);
+
+        request.setReturnUrl(returnUrl);
+        request.setNotifyUrl(notifyUrl);
+        AlipayTradePagePayResponse response = alipayClient().pageExecute(request);
+        return response.getBody();
+    }
+
+    public static boolean check(String out_trade_no) throws AlipayApiException {
+        AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+        AlipayTradeQueryModel model = new AlipayTradeQueryModel();
+        model.setOutTradeNo(out_trade_no);
+        request.setBizModel(model);
+        AlipayTradeQueryResponse response = alipayClient().execute(request);
+        return response.isSuccess();
+    }
+
+    public static boolean refund(String out_trade_no, BigDecimal amount) throws AlipayApiException {
+        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+        AlipayTradeRefundModel model = new AlipayTradeRefundModel();
+        model.setOutTradeNo(out_trade_no);
+        model.setRefundAmount(amount.toPlainString());
+        request.setBizModel(model);
+        AlipayTradeRefundResponse response = alipayClient().execute(request);
+        return response.isSuccess();
+    }
+
+
+    public static String checkRefund(String out_trade_no) throws AlipayApiException {
+
+        AlipayTradeFastpayRefundQueryRequest request = new AlipayTradeFastpayRefundQueryRequest();
+        AlipayTradeFastpayRefundQueryModel model = new AlipayTradeFastpayRefundQueryModel();
+        model.setOutRequestNo(out_trade_no);
+        request.setBizModel(model);
+        AlipayTradeFastpayRefundQueryResponse response = alipayClient().execute(request);
+        return response.getBody();
+    }
+
+
+    public static String billDownload(String date) throws AlipayApiException {
+        AlipayDataDataserviceBillDownloadurlQueryRequest request = new AlipayDataDataserviceBillDownloadurlQueryRequest();
+        AlipayDataDataserviceBillDownloadurlQueryModel model = new AlipayDataDataserviceBillDownloadurlQueryModel();
+        model.setBillType(&quot;trade&quot;);
+        model.setBillDate(date);
+        request.setBizModel(model);
+        //String content = &quot;{\&quot;bill_type\&quot;:\&quot;trade\&quot; , \&quot;bill_date\&quot;:\&quot;&quot;+date+&quot;\&quot;}&quot;;
+        //System.out.println(content);
+        //request.setBizContent(content);
+        AlipayDataDataserviceBillDownloadurlQueryResponse response = alipayClient().execute(request);
+        System.out.println(response.getBody());
+        String url = response.getBillDownloadUrl();
+        return url;
+    }
+
+
+
+
+
+    public static AlipayClient alipayClient() {
+        AlipayConfig config = new AlipayConfig();
+        //支付宝测试环境服务器
+        config.setServerUrl(&quot;https://openapi.alipaydev.com/gateway.do&quot;);
+        //支付宝应用id，在沙箱环境内获取
+        config.setAppId(&quot;2016092100560986&quot;);
+        //引用私钥，建议使用《支付宝开放平台开发助手》生成，RSA2
+        config.setPrivateKey(&quot;MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCLq2XQiqUVyxyO+vT3VIXOhIGWvL1SIs9p28kurzgXzV8JR0X2h+TrSjfyjwYRQH9aV5FFy9NIciA1ce0ZPfxniDt4Bs0pHqLJfkRaUhkotVWn8F6kqqoypy1NfLseDx8GsGXnWVST0wV7xpeOlQM6cflVwYTxx5topyZc5u6NbLssdb/DX1ABjsMsinJQpbgutJFYwy+iWIM7MTSOds4FwZpWdowZ824zfqCMyWibiP1JmguXVcl14eWyOv6LDvDe0niXiF2qMDrTUReVVb+XwEsGb1/cdJT9wU0JDreRH1SSwE6Z+sQdQClfqB/WQJZniveugGf4bXnnZRQfo44fAgMBAAECggEAH7dCHYL+Td6bk5RFQEy/PdA1JSeizh39f4pbOvCrCiymohK/PmZJg2yNG9WCiTReNwOfh3vrdI4F5l0CfDLpOBFlf7H7sJS2Xo7/sormD6pt0v7wXvAqSepQjUH/s6m3X+t6mHhejlri6eKE0+nem8z505FoQQcUsUUTnxEJpq9s1f8SxVF0+6v2va2UqyCbPwKIR0bQLLF7K8a2jl2YBaHRntRi7BCqt4z+IQmHkI6M1zDOysSVbeVX3XlAc54nseorSHAY3ywmjkFSPmBc5MDzNSFgSG2IdHzlTU7R2F4wvExbFGPh64UODzlwcyZFYaTVwUdxhS8JxyXsnHTsQQKBgQDjJs/CMee4AWTN9GNj3XfVW29xjta7XGFJh5BaQRuABpI10nfNyadfwHC7PxjauGqHX2TTpc6991m+kaHOdX5nUyjMOAkhIrmJT1xgPHEjr15Enzp5f8L9NgpMdOJlUne3Uf9cA8pww/lQlEHHcdvoofEYSHoAxMT7wwSut8VdcQKBgQCdaFrfmHtN4AOovtauy3AbdfhhkoyCzN6g/sTDyI4CbLIbMIfqlXTG/RaJYCLVevnmSGCryflDQT69JicSNOVseRZEHli3Qr3G1sS2zU495ZlQGFe6DZomCkw3RxJcX5z25rvvcW3ECDRGpEG17SvMxXWwpD2+0WQL87wEnuwcjwKBgGyak96/SZC6ad3mqNaIftDtxJzAtH4kLwee3y+nzWQqwCEnncwwS+wF8GA2TMXWQmiy/VwL/IrrBmeM7ZXuqx7vraPmbsb++UJjRUFl5JoxMJsSnjyVDz9NZSMlB1F2WnK1q6fs0A+WQ095cvHOyFuzgbggfuR7L8tHdKesiZqhAoGAR4OU3cc6JhxjrTPe95Un/uHvEe1x9y866mw1WznwAvv9Q0seRR7X6lwr9AgAa3sutEgn24SswbiP14HQ+H2dylWNHy+mYMRq0j7bKq5GIOsCZ5hXqwjpAuVk0SxyFBPAjZAwzE19cDXGAl44GH6DisofeTx1bQ9W4/M9dd/6J9MCgYBzW54BbochobX23cFy6QTOQ1zEUGVaabC4rx8/2M9qbORjVWKIcNOLNErm/BmIXkwU/7dPGdkL98poIvYP172obCHdR/vWNEfA9SzTFO2Dkgr7zsJcMM0H/DrUWVx0PFJoQX6uPMnkF71jupqbg0uYtzkVfKVBQ2GA294fWHlvew==&quot;);
+
+        //json
+        config.setFormat(&quot;json&quot;);
+        //支付宝的公钥，不是咱自己的。沙箱应用处获取
+        config.setAlipayPublicKey(&quot;MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtovPlNX2W2/vY7e9FCyb7WTeR61VbgScDzDMpRo866u8ucubHgj9HTt4ebsvwsi5d20l1tqT77mEbEwjCqA8CtfeDyATYuHB+P7SWnotjIIXfFfIAgeAqyIl+7TlsBKt13XAVwQh2LqP2xpzqUCHlhJrvQrrWckzliL/SaqfkHbXRPHqN3O4vNORfOyu5FqXxO5oZ8ADebVkouzi6Rv/wMTazERXIwg2YXYjqkOOQzrojKuHUdHDL9vlC3b0ht1z7cUPLdQE86UoOZCj55dLUvjoZsyxKM/tsGjwvmKJGxvUnDDX88KbGexxFpUS8aN2t0OkE2yzGZgbDtAO3pDTuQIDAQAB&quot;);
+
+        //UTF-8
+        config.setCharset(&quot;UTF-8&quot;);
+        //RSA2
+        config.setSignType(&quot;RSA2&quot;);
+        try {
+            return new DefaultAlipayClient(config);
+        } catch (AlipayApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+
+
+</code></pre>
 
                     </main>
 

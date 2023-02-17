@@ -210,17 +210,20 @@ logging:
 
 </code></pre>
 <h1 id="三-演示"><a class="header" href="#三-演示">三 演示</a></h1>
-<h2 id="1-访问监控地址"><a class="header" href="#1-访问监控地址">1 访问监控地址</a></h2>
-<p>http://localhost:9301</p>
-<h2 id="2-点击wallboard按钮选择要监控的实例查看详情"><a class="header" href="#2-点击wallboard按钮选择要监控的实例查看详情">2 点击wallboard按钮，选择要监控的实例查看详情</a></h2>
-<h2 id="3-度量指标信息-jvmtomcat及进程信息"><a class="header" href="#3-度量指标信息-jvmtomcat及进程信息">3 度量指标信息 JVM，Tomcat及进程信息</a></h2>
-<h2 id="4-环境变量信息"><a class="header" href="#4-环境变量信息">4 环境变量信息</a></h2>
-<h2 id="5-所有的bean信息"><a class="header" href="#5-所有的bean信息">5 所有的Bean信息</a></h2>
-<h2 id="6-查看应用中的所有配置信息"><a class="header" href="#6-查看应用中的所有配置信息">6 查看应用中的所有配置信息</a></h2>
-<h2 id="7-查看日志信息"><a class="header" href="#7-查看日志信息">7 查看日志信息</a></h2>
+<ul>
+<li>1 访问监控地址
+http://localhost:9301</li>
+<li>2 点击wallboard按钮，选择要监控的实例查看详情</li>
+<li>3 度量指标信息 JVM，Tomcat及进程信息</li>
+<li>4 环境变量信息</li>
+<li>5 所有的Bean信息</li>
+<li>6 查看应用中的所有配置信息</li>
+<li>7 查看日志信息</li>
+</ul>
 <h1 id="四-结合注册中心"><a class="header" href="#四-结合注册中心">四 结合注册中心</a></h1>
+<p>上面的配置中我们指定了admin服务的地址，这样admin服务地址变更时就比较麻烦，所以我们可以使用eureka来实现动态查找admin服务。</p>
 <h2 id="admin-server的修改"><a class="header" href="#admin-server的修改">Admin Server的修改</a></h2>
-<p>admin需要引入eureka client依赖和添加相应配置。</p>
+<p>首先需要引入eureka client依赖和添加相应配置。</p>
 <h3 id="添加eureka-client"><a class="header" href="#添加eureka-client">添加eureka-client</a></h3>
 <pre><code class="language-xml">&lt;dependency&gt;
  &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;

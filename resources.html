@@ -163,11 +163,6 @@
         &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
         &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
     &lt;/dependency&gt;
-    &lt;!--一般都需要，但是gateway得去掉这个依赖--&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
-    &lt;/dependency&gt;
     &lt;dependency&gt;
         &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
         &lt;artifactId&gt;spring-cloud-starter&lt;/artifactId&gt;
@@ -296,105 +291,29 @@ public class Result&lt;T&gt; {
 }
 
 </code></pre>
-<h1 id="redis"><a class="header" href="#redis">Redis</a></h1>
-<p>依赖</p>
-<pre><code class="language-xml">		&lt;dependency&gt;
-			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-			&lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
-		&lt;/dependency&gt;
-</code></pre>
-<p>配置</p>
-<pre><code class="language-yaml">spring:
-    redis:
-    database: 2
-    host: 127.0.0.1
-    port: 6379
-</code></pre>
-<h1 id="安全"><a class="header" href="#安全">安全</a></h1>
-<p>依赖</p>
-<pre><code class="language-xml">    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
-    &lt;/dependency&gt;
-</code></pre>
-<p>如果不使用spring-security的话需要添加</p>
-<pre><code class="language-java">@SpringBootApplication(exclude = {SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class})
-</code></pre>
-<p>验证加盐加密的代码</p>
-<pre><code class="language-java">    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    return encoder.matches(password, user.getPassword());
-</code></pre>
 <h1 id="参考"><a class="header" href="#参考">参考</a></h1>
-<h2 id="支付宝"><a class="header" href="#支付宝">支付宝</a></h2>
-<p><a href="https://open.alipay.com/api/apiDebug?apiNames=alipay.trade.refund&amp;frontProdCode=I1080300001000041203&amp;backProdCode=I1011000100000000005">支付宝api调用示例</a>## 通用返回包装</p>
+<h2 id="通用返回包装-1"><a class="header" href="#通用返回包装-1">通用返回包装</a></h2>
 <pre><code class="language-java">@Data
 public class Result&lt;T&gt; {
     private int state = 0;//ok
+    private String message;
     private T data;
 
     public static &lt;D&gt; Result&lt;D&gt; ok(D d) {
-        Result&lt;D&gt; result = new Result&lt;&gt;();
+        Result&lt;D&gt; result = new Result&lt;D&gt;();
         result.data = d;
         return result;
     }
 
-    public static &lt;D&gt; Result&lt;D&gt; err(int state, D d) {
-        Result&lt;D&gt; result = new Result&lt;&gt;();
+    public static &lt;D&gt; Result&lt;D&gt; err(int state, String message) {
+        Result&lt;D&gt; result = new Result&lt;D&gt;();
         result.state = state;
-        result.data = d;
+        result.message = message;
         return result;
     }
 }
 
 </code></pre>
-<h1 id="redis-1"><a class="header" href="#redis-1">Redis</a></h1>
-<p>依赖</p>
-<pre><code class="language-xml">		&lt;dependency&gt;
-			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-			&lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
-		&lt;/dependency&gt;
-</code></pre>
-<p>配置</p>
-<pre><code class="language-yaml">spring:
-    redis:
-    database: 2
-    host: 127.0.0.1
-    port: 6379
-</code></pre>
-<h1 id="前端"><a class="header" href="#前端">前端</a></h1>
-<h2 id="创建"><a class="header" href="#创建">创建</a></h2>
-<p>vue create front
-npm install axios
-npm install element-ui -S</p>
-<h2 id="编辑mainjs-引入element-ui-axios-配置axios"><a class="header" href="#编辑mainjs-引入element-ui-axios-配置axios">编辑main.js, 引入element-ui, axios; 配置axios，</a></h2>
-<pre><code class="language-javascript">import axios from 'axios'
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-
-Vue.use(ElementUI);
-Vue.config.productionTip = false
-
-axios.defaults.baseURL = &quot;http://localhost:8080/&quot;
-axios.defaults.withCredentials=true;
-Vue.prototype.axios = axios;
-</code></pre>
-<h1 id="安全-1"><a class="header" href="#安全-1">安全</a></h1>
-<p>依赖</p>
-<pre><code class="language-xml">    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
-    &lt;/dependency&gt;
-</code></pre>
-<p>如果不使用spring-security的话需要添加</p>
-<pre><code class="language-java">@SpringBootApplication(exclude = {SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class})
-</code></pre>
-<p>验证加盐加密的代码</p>
-<pre><code class="language-java">    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    return encoder.matches(password, user.getPassword());
-</code></pre>
-<h1 id="参考-1"><a class="header" href="#参考-1">参考</a></h1>
-<h2 id="支付宝-1"><a class="header" href="#支付宝-1">支付宝</a></h2>
-<p><a href="https://open.alipay.com/api/apiDebug?apiNames=alipay.trade.refund&amp;frontProdCode=I1080300001000041203&amp;backProdCode=I1011000100000000005">支付宝api调用示例</a></p>
 
                     </main>
 

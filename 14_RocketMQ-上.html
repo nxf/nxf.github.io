@@ -158,8 +158,6 @@
 消费者 -- 使用消息确认
 broker -- 早写盘，多备份
 </code></pre>
-<p>保证消息传递的顺序性？</p>
-<p>保证消息处理一致性？</p>
 <h2 id="安装"><a class="header" href="#安装">安装</a></h2>
 <h3 id="下载地址"><a class="header" href="#下载地址">下载地址：</a></h3>
 <pre><code>https://rocketmq.apache.org/download  
@@ -190,6 +188,7 @@ broker -- 早写盘，多备份
 </code></pre>
 <p>启动时需要指定名称服务器地址，这个是通过-n来指定的。</p>
 <h4 id="测试"><a class="header" href="#测试">测试</a></h4>
+<p>测试是为了确保服务器功能正常，测试方法如下：</p>
 <p>先设置环境变量： set NAMESRV_ADDR=localhost:9876
 然后运行生产者</p>
 <pre><code class="language-shell">    tools.cmd org.apache.rocketmq.example.quickstart.Producer
@@ -197,6 +196,7 @@ broker -- 早写盘，多备份
 <p>和消费者</p>
 <pre><code class="language-shell">    tools.cmd org.apache.rocketmq.example.quickstart.Consumer
 </code></pre>
+<p>看到N多发送消息和接收消息即是正常。</p>
 <h3 id="linux版本方法"><a class="header" href="#linux版本方法">linux版本方法：</a></h3>
 <h4 id="修改启动脚本-1"><a class="header" href="#修改启动脚本-1">修改启动脚本</a></h4>
 <p>将namesrv和broker的内存占用修改为： -server -Xms256m -Xmx256m -Xmn128m</p>
@@ -229,13 +229,15 @@ vi ./bin/runbroker.sh
 ./bin/tools.sh org.apache.rocketmq.example.quickstart.Producer  
 ./bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer s
 </code></pre>
-<h2 id="添加依赖和配置"><a class="header" href="#添加依赖和配置">添加依赖和配置</a></h2>
+<h2 id="开发"><a class="header" href="#开发">开发</a></h2>
+<h3 id="应用引入jar包"><a class="header" href="#应用引入jar包">应用引入jar包：</a></h3>
 <pre><code class="language-xml">  &lt;dependency&gt;
     &lt;groupId&gt;org.apache.rocketmq&lt;/groupId&gt;
     &lt;artifactId&gt;rocketmq-spring-boot-starter&lt;/artifactId&gt;
     &lt;version&gt;2.1.0&lt;/version&gt;
   &lt;/dependency&gt;
 </code></pre>
+<h3 id="配置rocketmq相关信息"><a class="header" href="#配置rocketmq相关信息">配置rocketMQ相关信息</a></h3>
 <pre><code class="language-yaml">rocketmq:
   name-server: 127.0.0.1:9876 # rocketMQ 名称服务器
   producer:
@@ -380,6 +382,12 @@ public class AcknowledgeListener implements MessageListenerOrderly {
 
 }
 </code></pre>
+<h3 id="服务端配置"><a class="header" href="#服务端配置">服务端配置</a></h3>
+<ol>
+<li>集群配置</li>
+<li>主从写同步</li>
+<li>磁盘写同步</li>
+</ol>
 
                     </main>
 
