@@ -223,8 +223,9 @@ spring:
       uri: http://localhost:8888  #config 服务地址
       name: user    #当前应用名，用于匹配git内的配置文件
 </code></pre>
-<p>演示对git中配置文件定义得属性的访问。</p>
-<pre><code class="language-java">@RestController
+<p>演示对git中配置文件定义的属性的访问。</p>
+<pre><code class="language-java">//（6-1）
+@RestController
 @RefreshScope
 public class ConfigController {
 
@@ -247,7 +248,7 @@ public class ConfigController {
 			&lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
 		&lt;/dependency&gt;
 </code></pre>
-<p>同时打开refresh端口</p>
+<h3 id="同时打开refresh端口"><a class="header" href="#同时打开refresh端口">同时打开refresh端口</a></h3>
 <pre><code class="language-yaml">management:
   endpoints:
     web:
@@ -261,6 +262,8 @@ public class ConfigController {
       exposure:
         include: '*'
 </code></pre>
+<h3 id="refreshscope"><a class="header" href="#refreshscope">@RefreshScope</a></h3>
+<p>注意上面例子（6-1）的@RefreshScope注解，它对于使用自定义变量在通过接口通知后自动刷新本地变量至关重要。</p>
 <h1 id="config-高可用"><a class="header" href="#config-高可用">config 高可用</a></h1>
 <p>配置config高可用后，就不能再指定一个url路径了，需要使用eureka的帮助自动匹配服务地址。</p>
 <pre><code class="language-yaml">  cloud:

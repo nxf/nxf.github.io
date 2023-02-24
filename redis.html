@@ -156,6 +156,22 @@
     port: 6379
 </code></pre>
 <h1 id="常见问题"><a class="header" href="#常见问题">常见问题：</a></h1>
+<h2 id="redis-链接不上的一个原因"><a class="header" href="#redis-链接不上的一个原因">redis 链接不上的一个原因：</a></h2>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+    &lt;exclusions&gt;
+        &lt;exclusion&gt;
+            &lt;groupId&gt;io.lettuce&lt;/groupId&gt;
+            &lt;artifactId&gt;lettuce-core&lt;/artifactId&gt;
+        &lt;/exclusion&gt;
+    &lt;/exclusions&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;redis.clients&lt;/groupId&gt;
+    &lt;artifactId&gt;jedis&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
 <h2 id="穿透"><a class="header" href="#穿透">穿透</a></h2>
 <h3 id="定义"><a class="header" href="#定义">定义</a></h3>
 <p>被访问的数据不存在，导致每次请求得数据都不能在缓存中找到，导致请求都要到数据库里。

@@ -178,7 +178,7 @@
 public interface OrderServiceFeign {
 
     @GetMapping(&quot;/user/{id}/orders&quot;)
-    public List&lt;Order&gt; getOrdersByOwnerId(@PathVariable(&quot;id&quot;) Long id);
+    public List&lt;Order&gt; getOrdersByOwnerId(@PathVariable(&quot;id&quot;) Long id); // 注意！！！！ 参数中的注解不能少，特别是 @RequestParam
 }
 </code></pre>
 <h2 id="负载均衡"><a class="header" href="#负载均衡">负载均衡</a></h2>
@@ -243,6 +243,7 @@ Logger.Level feignLogLevel() {
       enabled: true
     request:
       enabled: true
+      min-request-size: 2048  # 超过2M则进行压缩
 
 </code></pre>
 

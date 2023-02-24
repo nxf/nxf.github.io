@@ -556,7 +556,7 @@ R---一旦请求成功则关闭熔断---&gt;N
 public interface OrderServiceFeign {
 
     @GetMapping(&quot;/user/{id}/orders&quot;)
-    public List&lt;Order&gt; getOrdersByOwnerId(@PathVariable(&quot;id&quot;) Long id);
+    public List&lt;Order&gt; getOrdersByOwnerId(@PathVariable(&quot;id&quot;) Long id); // 注意！！！！ 参数中的注解不能少，特别是 @RequestParam
 }
 </code></pre>
 <h2 id="负载均衡"><a class="header" href="#负载均衡">负载均衡</a></h2>
@@ -621,6 +621,7 @@ Logger.Level feignLogLevel() {
       enabled: true
     request:
       enabled: true
+      min-request-size: 2048  # 超过2M则进行压缩
 
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="gateway-简介"><a class="header" href="#gateway-简介">gateway 简介</a></h1>
@@ -1012,8 +1013,9 @@ spring:
       uri: http://localhost:8888  #config 服务地址
       name: user    #当前应用名，用于匹配git内的配置文件
 </code></pre>
-<p>演示对git中配置文件定义得属性的访问。</p>
-<pre><code class="language-java">@RestController
+<p>演示对git中配置文件定义的属性的访问。</p>
+<pre><code class="language-java">//（6-1）
+@RestController
 @RefreshScope
 public class ConfigController {
 
@@ -1036,7 +1038,7 @@ public class ConfigController {
 			&lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
 		&lt;/dependency&gt;
 </code></pre>
-<p>同时打开refresh端口</p>
+<h3 id="同时打开refresh端口"><a class="header" href="#同时打开refresh端口">同时打开refresh端口</a></h3>
 <pre><code class="language-yaml">management:
   endpoints:
     web:
@@ -1050,6 +1052,8 @@ public class ConfigController {
       exposure:
         include: '*'
 </code></pre>
+<h3 id="refreshscope"><a class="header" href="#refreshscope">@RefreshScope</a></h3>
+<p>注意上面例子（6-1）的@RefreshScope注解，它对于使用自定义变量在通过接口通知后自动刷新本地变量至关重要。</p>
 <h1 id="config-高可用"><a class="header" href="#config-高可用">config 高可用</a></h1>
 <p>配置config高可用后，就不能再指定一个url路径了，需要使用eureka的帮助自动匹配服务地址。</p>
 <pre><code class="language-yaml">  cloud:
@@ -2859,6 +2863,22 @@ class DbConfig {
     port: 6379
 </code></pre>
 <h1 id="常见问题"><a class="header" href="#常见问题">常见问题：</a></h1>
+<h2 id="redis-链接不上的一个原因"><a class="header" href="#redis-链接不上的一个原因">redis 链接不上的一个原因：</a></h2>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+    &lt;exclusions&gt;
+        &lt;exclusion&gt;
+            &lt;groupId&gt;io.lettuce&lt;/groupId&gt;
+            &lt;artifactId&gt;lettuce-core&lt;/artifactId&gt;
+        &lt;/exclusion&gt;
+    &lt;/exclusions&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;redis.clients&lt;/groupId&gt;
+    &lt;artifactId&gt;jedis&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
 <h2 id="穿透"><a class="header" href="#穿透">穿透</a></h2>
 <h3 id="定义"><a class="header" href="#定义">定义</a></h3>
 <p>被访问的数据不存在，导致每次请求得数据都不能在缓存中找到，导致请求都要到数据库里。
