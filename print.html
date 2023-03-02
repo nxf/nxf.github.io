@@ -1486,6 +1486,10 @@ public class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
 <h2 id="安装"><a class="header" href="#安装">安装</a></h2>
 <p>参考视频
 <a href="./imgs/minio%E5%AE%89%E8%A3%85%E7%B2%BE%E7%AE%80%E7%89%88.mp4">安装MiniO</a></p>
+<h2 id="启动命令"><a class="header" href="#启动命令">启动命令：</a></h2>
+<pre><code class="language-shell">   minio.exe server D:\tmp\minio
+</code></pre>
+<p>其中 D:\tmp\minio 是图片存储根目录。需要根据自己的情况设置。</p>
 <h2 id="添加依赖-1"><a class="header" href="#添加依赖-1">添加依赖</a></h2>
 <pre><code class="language-xml">&lt;dependency&gt;
    &lt;groupId&gt;io.minio&lt;/groupId&gt;
@@ -1517,6 +1521,8 @@ public class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
 <h2 id="沙箱环境"><a class="header" href="#沙箱环境">沙箱环境</a></h2>
 <p>在我们的学习，考试中主要使用这个环境的信息，包含appId，支付网关地址，签名等信息。
 <a href="https://open.alipay.com/develop/sandbox/app">沙箱环境</a></p>
+<h2 id="文档中心"><a class="header" href="#文档中心">文档中心</a></h2>
+<p><a href="https://opendocs.alipay.com/open/028r8t?ref=api&amp;scene=22">https://opendocs.alipay.com/open/028r8t?ref=api&amp;scene=22</a></p>
 <h2 id="调试中心"><a class="header" href="#调试中心">调试中心</a></h2>
 <p>调试中心包含各api的调用例子，使我们开发学习的主要参考：
 <a href="https://open.alipay.com/dev/workspace/apidebug" title="支付宝调试">https://open.alipay.com/dev/workspace/apidebug</a></p>
@@ -2948,6 +2954,11 @@ class DbConfig {
 <li>热点数据均匀分布到不同的redis和数据库 （业务不一定允许）</li>
 <li>多级缓存 ehcache + redis</li>
 </ul>
+<h2 id="redis-和-mysql-保持一致"><a class="header" href="#redis-和-mysql-保持一致">redis 和 mysql 保持一致</a></h2>
+<pre><code>延时双删
+后删除，失败再由MQ的重试机制重复删除。
+canal 读取binlog再同步到redis。
+</code></pre>
 <h1 id="修改密码"><a class="header" href="#修改密码">修改密码</a></h1>
 <pre><code class="language-shell">    # 如果是docker，则需要进入docker内部
     docker exec -it myredis redis-cli;
@@ -2956,6 +2967,8 @@ class DbConfig {
     # 设置密码 your_password 替换成你自己的密码
     config set requirepass your_password
 </code></pre>
+<h1 id="参考-1"><a class="header" href="#参考-1">参考：</a></h1>
+<pre><code>[canal：]( https://zhuanlan.zhihu.com/p/177001630)</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="普通登录"><a class="header" href="#普通登录">普通登录</a></h1>
 <h2 id="jwt"><a class="header" href="#jwt">JWT</a></h2>
 <pre><code class="language-xml">	&lt;!-- jwt  --&gt;

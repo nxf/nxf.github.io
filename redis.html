@@ -198,6 +198,11 @@
 <li>热点数据均匀分布到不同的redis和数据库 （业务不一定允许）</li>
 <li>多级缓存 ehcache + redis</li>
 </ul>
+<h2 id="redis-和-mysql-保持一致"><a class="header" href="#redis-和-mysql-保持一致">redis 和 mysql 保持一致</a></h2>
+<pre><code>延时双删
+后删除，失败再由MQ的重试机制重复删除。
+canal 读取binlog再同步到redis。
+</code></pre>
 <h1 id="修改密码"><a class="header" href="#修改密码">修改密码</a></h1>
 <pre><code class="language-shell">    # 如果是docker，则需要进入docker内部
     docker exec -it myredis redis-cli;
@@ -206,6 +211,8 @@
     # 设置密码 your_password 替换成你自己的密码
     config set requirepass your_password
 </code></pre>
+<h1 id="参考"><a class="header" href="#参考">参考：</a></h1>
+<pre><code>[canal：]( https://zhuanlan.zhihu.com/p/177001630)</code></pre>
 
                     </main>
 
