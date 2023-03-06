@@ -1031,7 +1031,8 @@ public class ConfigController {
 }
 </code></pre>
 <h2 id="刷新"><a class="header" href="#刷新">刷新</a></h2>
-<p>刷新需要使用actuator的refresh端口。</p>
+<p>刷新需要使用actuator的refresh端口。
+<a href="http://localhost:8888/actuator/refresh">http://localhost:8888/actuator/refresh</a></p>
 <h3 id="添加actuator依赖"><a class="header" href="#添加actuator依赖">添加actuator依赖</a></h3>
 <pre><code class="language-xml">		&lt;dependency&gt;
 			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
@@ -1554,7 +1555,7 @@ public class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
 public class AlipayConfiguration {
 
     @Bean
-    public AlipayConfig alipayConfig() {
+    public static AlipayClient alipayClient() {
         AlipayConfig config = new AlipayConfig();
         //支付宝测试环境服务器
         config.setServerUrl(&quot;https://openapi.alipaydev.com/gateway.do&quot;);
@@ -1572,20 +1573,19 @@ public class AlipayConfiguration {
         config.setCharset(&quot;UTF-8&quot;);
         //RSA2
         config.setSignType(&quot;RSA2&quot;);
-        return config;
-    }
-
-    @Bean
-    public AlipayClient alipayClient(AlipayConfig config) {
         try {
             return new DefaultAlipayClient(config);
         } catch (AlipayApiException e) {
             throw new RuntimeException(e);
         }
     }
+    }
 }
 </code></pre>
 <h2 id="支付"><a class="header" href="#支付">支付：</a></h2>
+<p>建议参考如下文档：
+<a href="https://opendocs.alipay.com/open/028r8t?ref=api&amp;scene=22">https://opendocs.alipay.com/open/028r8t?ref=api&amp;scene=22</a><br />
+或者如下代码</p>
 <pre><code class="language-java">    @GetMapping(&quot;/pay/{id}&quot;)
     public String pay(@PathVariable int id) throws AlipayApiException {
         Pay pay = payService.getById(id);
@@ -1598,8 +1598,8 @@ public class AlipayConfiguration {
         model.setProductCode(&quot;FAST_INSTANT_TRADE_PAY&quot;);//固定写死这个
         request.setBizModel(model);
 
-        request.setReturnUrl(&quot;http://localhost:8081/order&quot;);
-        request.setNotifyUrl(&quot;https://6217to9865.goho.co/pay/cj/ali_callback&quot;);
+        request.setReturnUrl(&quot;http://localhost:8081/order&quot;); // 前端跳转地址
+        request.setNotifyUrl(&quot;https://6217to9865.goho.co/pay/cj/ali_callback&quot;);  //支付宝通过后端回调我们的地址。
         AlipayTradePagePayResponse response = alipayClient.pageExecute(request);
         return response.getBody();
     }
@@ -1702,7 +1702,34 @@ private static Map&lt;String, String&gt; combineRequestParams(HttpServletRequest
 <pre><code class="language-java">@Scheduled(cron = &quot;0 * * * * ? &quot;)
 // 秒 分 时 日 月 周
 </code></pre>
+<ol>
+<li>* 表示所有值。 例如:在分的字段上设置 *,表示每一分钟都会触发。</li>
+<li>? 表示不指定值。使用的场景为不需要关心当前设置这个字段的值。例如:要在每
+月的 10 号触发一个操作，但不关心是周几，所以需要周位置的那个字段设置为”?” 具体
+设置为 0 0 0 10 * ?</li>
+<li>- 表示区间。例如 在小时上设置 “10-12”,表示 10,11,12 点都会触发。</li>
+<li>, 表示指定多个值，例如在周字段上设置 “MON,WED,FRI” 表示周一，周三和周五
+触发</li>
+<li>/ 用于递增触发。如在秒上面设置”5/15” 表示从 5 秒开始，每增 15 秒触发
+(5,20,35,50)。 在日字段上设置’1/3’所示每月 1 号开始，每隔三天触发一次。</li>
+<li>L 表示最后的意思。在日字段设置上，表示当月的最后一天(依据当前月份，如果
+是二月还会依据是否是润年[leap]), 在周字段上表示星期六，相当于”7”或”SAT”。如果在”L”
+前加上数字，则表示该数据的最后一个。例如在周字段上设置”6L”这样的格式,则表示“本
+月最后一个星期五”</li>
+<li>W 表示离指定日期的最近那个工作日(周一至周五). 例如在日字段上置”15W”，表示
+离每月 15 号最近的那个工作日触发。如果 15 号正好是周六，则找最近的周五(14 号)触
+发, 如果 15 号是周未，则找最近的下周一(16 号)触发.如果 15 号正好在工作日(周一至周
+五)，则就在该天触发。如果指定格式为 “1W”,它则表示每月 1 号往后最近的工作日触发。
+如果 1 号正是周六，则将在 3 号下周一触发。(注，”W”前只能设置具体的数字,不允许区
+间”-“)。</li>
+<li># 序号(表示每月的第几个周几)，例如在周字段上设置”6#3”表示在每月的第三个周
+六.注意如果指定”#5”,正好第五周没有周六，则不会触发该配置(用在母亲节和父亲节再
+合适不过了) ；小提示：’L’和 ‘W’可以一组合使用。如果在日字段上设置”LW”,则表示在
+本月的最后一个工作日触发；周字段的设置，若使用英文字母是不区分大小写的，即 MON
+与 mon 相同。</li>
+</ol>
 <h2 id="掉单"><a class="header" href="#掉单">掉单：</a></h2>
+<p><a href="https://opendocs.alipay.com/open/028woa?ref=api&amp;scene=common">查询订单状态文档及示例</a></p>
 <pre><code class="language-java">  @GetMapping(&quot;/query/{id}&quot;)
     public Result&lt;Boolean&gt; query(@PathVariable int id) throws AlipayApiException, JsonProcessingException {
         Pay pay = payService.getById(id);
@@ -1730,45 +1757,49 @@ private static Map&lt;String, String&gt; combineRequestParams(HttpServletRequest
     }
 </code></pre>
 <h2 id="退款"><a class="header" href="#退款">退款：</a></h2>
-<pre><code class="language-java">    public boolean refund(int orderId, BigDecimal amount) throws AlipayApiException {
-        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
-        AlipayTradeRefundModel model = new AlipayTradeRefundModel();
-        model.setOutTradeNo(String.valueOf(orderId));
-        model.setRefundAmount(amount.toPlainString());
-        request.setBizModel(model);
-        AlipayTradeRefundResponse response = alipayClient.execute(request);
-        return response.isSuccess();
-    }
+<p><a href="https://opendocs.alipay.com/open/028sm9?ref=api">退款api文档及示例</a></p>
+<pre><code class="language-java">public boolean refund(int orderId, BigDecimal amount) throws AlipayApiException {
+    AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+    AlipayTradeRefundModel model = new AlipayTradeRefundModel();
+    model.setOutTradeNo(String.valueOf(orderId));
+    model.setRefundAmount(amount.toPlainString());
+    request.setBizModel(model);
+    AlipayTradeRefundResponse response = alipayClient.execute(request);
+    return response.isSuccess();
+}
 </code></pre>
 <h2 id="退款查询"><a class="header" href="#退款查询">退款查询：</a></h2>
-<pre><code class="language-java">    public boolean checkRefund(int id) {
-        Pay pay = payService.getById(id);
-        AlipayTradeFastpayRefundQueryRequest request = new AlipayTradeFastpayRefundQueryRequest();
-        AlipayTradeFastpayRefundQueryModel model = new AlipayTradeFastpayRefundQueryModel();
-        model.setOutRequestNo(pay.getUuid());
-        request.setBizModel(model);
-        AlipayTradeFastpayRefundQueryResponse response = alipayClient.execute(request);
-        .....
-    }
+<p><a href="https://opendocs.alipay.com/open/028sma?ref=api">退款查询文档及示例</a></p>
+<pre><code class="language-java">public boolean checkRefund(int id) {
+    Pay pay = payService.getById(id);
+    AlipayTradeFastpayRefundQueryRequest request = new AlipayTradeFastpayRefundQueryRequest();
+    AlipayTradeFastpayRefundQueryModel model = new AlipayTradeFastpayRefundQueryModel();
+    model.setOutRequestNo(pay.getUuid());
+    request.setBizModel(model);
+    AlipayTradeFastpayRefundQueryResponse response = alipayClient.execute(request);
+    .....
+}
 
 </code></pre>
 <h2 id="下载支付单"><a class="header" href="#下载支付单">下载支付单：</a></h2>
-<pre><code class="language-java">    public String billDownload(String date) throws AlipayApiException {
-        AlipayDataDataserviceBillDownloadurlQueryRequest request = new AlipayDataDataserviceBillDownloadurlQueryRequest();
-        AlipayDataDataserviceBillDownloadurlQueryModel model = new AlipayDataDataserviceBillDownloadurlQueryModel();
-        model.setBillType(&quot;trade&quot;);
-        model.setBillDate(date);
-        request.setBizModel(model);
-        //String content = &quot;{\&quot;bill_type\&quot;:\&quot;trade\&quot; , \&quot;bill_date\&quot;:\&quot;&quot;+date+&quot;\&quot;}&quot;;
-        //System.out.println(content);
-        //request.setBizContent(content);
-        AlipayDataDataserviceBillDownloadurlQueryResponse response = alipayClient.execute(request);
-        System.out.println(response.getBody());
-        String url = response.getBillDownloadUrl();
-        return url;
-    }
+<p><a href="https://opendocs.alipay.com/open/028woc?ref=api">查询对账单文档及示例</a></p>
+<pre><code class="language-java">public String billDownload(String date) throws AlipayApiException {
+    AlipayDataDataserviceBillDownloadurlQueryRequest request = new AlipayDataDataserviceBillDownloadurlQueryRequest();
+    AlipayDataDataserviceBillDownloadurlQueryModel model = new AlipayDataDataserviceBillDownloadurlQueryModel();
+    model.setBillType(&quot;trade&quot;);
+    model.setBillDate(date);
+    request.setBizModel(model);
+    //String content = &quot;{\&quot;bill_type\&quot;:\&quot;trade\&quot; , \&quot;bill_date\&quot;:\&quot;&quot;+date+&quot;\&quot;}&quot;;
+    //System.out.println(content);
+    //request.setBizContent(content);
+    AlipayDataDataserviceBillDownloadurlQueryResponse response = alipayClient.execute(request);
+    System.out.println(response.getBody());
+    String url = response.getBillDownloadUrl();
+    return url;
+}
 </code></pre>
 <h2 id="功能汇总"><a class="header" href="#功能汇总">功能汇总</a></h2>
+<p>定义工具类，完成支付所有功能。（不包含支付后回调）</p>
 <pre><code class="language-java">
 
 public class PayUtils {
@@ -1896,11 +1927,11 @@ http://sms_developer.zhenzikj.com/zhenzisms_user/login.html
 http://smsow.zhenzikj.com/doc/java_sdk_doc.html
 </code></pre>
 <h3 id="依赖-1"><a class="header" href="#依赖-1">依赖</a></h3>
-<pre><code class="language-xml">	&lt;dependency&gt;
-	  &lt;groupId&gt;com.zhenzikj&lt;/groupId&gt;
-	  &lt;artifactId&gt;zhenzisms&lt;/artifactId&gt;
-	  &lt;version&gt;2.0.2&lt;/version&gt;
-	&lt;/dependency&gt;
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;com.zhenzikj&lt;/groupId&gt;
+  &lt;artifactId&gt;zhenzisms&lt;/artifactId&gt;
+  &lt;version&gt;2.0.2&lt;/version&gt;
+&lt;/dependency&gt;
 </code></pre>
 <h3 id="配置-2"><a class="header" href="#配置-2">配置</a></h3>
 <pre><code class="language-yaml"># 榛子云短信

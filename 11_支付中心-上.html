@@ -178,7 +178,7 @@
 public class AlipayConfiguration {
 
     @Bean
-    public AlipayConfig alipayConfig() {
+    public static AlipayClient alipayClient() {
         AlipayConfig config = new AlipayConfig();
         //支付宝测试环境服务器
         config.setServerUrl(&quot;https://openapi.alipaydev.com/gateway.do&quot;);
@@ -196,20 +196,19 @@ public class AlipayConfiguration {
         config.setCharset(&quot;UTF-8&quot;);
         //RSA2
         config.setSignType(&quot;RSA2&quot;);
-        return config;
-    }
-
-    @Bean
-    public AlipayClient alipayClient(AlipayConfig config) {
         try {
             return new DefaultAlipayClient(config);
         } catch (AlipayApiException e) {
             throw new RuntimeException(e);
         }
     }
+    }
 }
 </code></pre>
 <h2 id="支付"><a class="header" href="#支付">支付：</a></h2>
+<p>建议参考如下文档：
+<a href="https://opendocs.alipay.com/open/028r8t?ref=api&amp;scene=22">https://opendocs.alipay.com/open/028r8t?ref=api&amp;scene=22</a><br />
+或者如下代码</p>
 <pre><code class="language-java">    @GetMapping(&quot;/pay/{id}&quot;)
     public String pay(@PathVariable int id) throws AlipayApiException {
         Pay pay = payService.getById(id);
@@ -222,8 +221,8 @@ public class AlipayConfiguration {
         model.setProductCode(&quot;FAST_INSTANT_TRADE_PAY&quot;);//固定写死这个
         request.setBizModel(model);
 
-        request.setReturnUrl(&quot;http://localhost:8081/order&quot;);
-        request.setNotifyUrl(&quot;https://6217to9865.goho.co/pay/cj/ali_callback&quot;);
+        request.setReturnUrl(&quot;http://localhost:8081/order&quot;); // 前端跳转地址
+        request.setNotifyUrl(&quot;https://6217to9865.goho.co/pay/cj/ali_callback&quot;);  //支付宝通过后端回调我们的地址。
         AlipayTradePagePayResponse response = alipayClient.pageExecute(request);
         return response.getBody();
     }
