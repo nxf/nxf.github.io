@@ -142,11 +142,34 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="redis"><a class="header" href="#redis">Redis</a></h1>
+<h2 id="配置"><a class="header" href="#配置">配置：</a></h2>
+<p>两种持久化机制：</p>
+<h3 id="rdb"><a class="header" href="#rdb">RDB</a></h3>
+<p>RDB （Redis Database）</p>
+<pre><code class="language-shell"># save 秒  写请求
+save 900 1 #当有一条 Keys 数据被改变时，900 秒刷新到 Disk 一次
+save 300 10 #当有 10 条 Keys 数据被改变时，300 秒刷新到 Disk 一次
+save 60 10000 #当有 10000 条 Keys 数据被改变时，60 秒刷新到 Disk 一次
+</code></pre>
+<h3 id="aof"><a class="header" href="#aof">AOF</a></h3>
+<p>AOF （Append Only File)</p>
+<pre><code class="language-shell">#启用 AOF 持久化方式
+appendonly yes
+#AOF 文件的名称，默认为 appendonly.aof
+appendfilename appendonly.aof 
+#每次收到写命令就立即强制写入磁盘，是最有保证的完全的持久化，但速度也是最慢的，一般不推荐使用。
+# appendfsync always 
+#每秒钟强制写入磁盘一次，在性能和持久化方面做了很好的折中，是受推荐的方式。
+appendfsync everysec 
+#完全依赖 OS 的写入，一般为 30 秒左右一次，性能最好但是持久化最没有保证，不被推荐。
+# appendfsync no
+</code></pre>
+<h2 id="开发"><a class="header" href="#开发">开发：</a></h2>
 <p>依赖</p>
-<pre><code class="language-xml">		&lt;dependency&gt;
-			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-			&lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
-		&lt;/dependency&gt;
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+&lt;/dependency&gt;
 </code></pre>
 <p>配置</p>
 <pre><code class="language-yaml">spring:
@@ -155,8 +178,9 @@
     host: 127.0.0.1
     port: 6379
 </code></pre>
-<h1 id="常见问题"><a class="header" href="#常见问题">常见问题：</a></h1>
-<h2 id="redis-链接不上的一个原因"><a class="header" href="#redis-链接不上的一个原因">redis 链接不上的一个原因：</a></h2>
+<h2 id="常见问题"><a class="header" href="#常见问题">常见问题：</a></h2>
+<h3 id="redis-链接不上的一个原因"><a class="header" href="#redis-链接不上的一个原因">redis 链接不上的一个原因：</a></h3>
+<p>使用缺省的链接库lettuce会有链接不上的情况，出现这种情况时可以改用jedis库，如下：</p>
 <pre><code class="language-xml">&lt;dependency&gt;
     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
     &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
