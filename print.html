@@ -1449,9 +1449,17 @@ public class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
 <pre><code class="language-javascript">/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|[xX])$/
 </code></pre>
 <ul>
-<li>租客身份证和租客姓名不真实</li>
-<li>[计算合同金额精度缺失]</li>
-<li>主要涉及BigDecimal的计算。</li>
+<li>
+<p>租客身份证和租客姓名不真实
+<a href="https://market.aliyun.com/products/57000002/cmapi025518.html#sku=yuncode1951800000">api服务入口</a></p>
+<p><a href="./other/https.rar">utils安装</a></p>
+</li>
+<li>
+<p>[计算合同金额精度缺失]</p>
+</li>
+<li>
+<p>主要涉及BigDecimal的计算。</p>
+</li>
 </ul>
 <pre><code class="language-java">        BigDecimal first = BigDecimal.valueOf(10.22);
         BigDecimal second = BigDecimal.valueOf(8);
@@ -1504,27 +1512,38 @@ public class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
 <pre><code class="language-xml">&lt;dependency&gt;
    &lt;groupId&gt;io.minio&lt;/groupId&gt;
    &lt;artifactId&gt;minio&lt;/artifactId&gt;
-   &lt;version&gt;7.0.2&lt;/version&gt;
+   &lt;version&gt;8.5.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+   &lt;groupId&gt;com.squareup.okhttp3&lt;/groupId&gt;
+   &lt;artifactId&gt;okhttp&lt;/artifactId&gt;
+   &lt;version&gt;4.8.1&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
 <h2 id="上传示例代码"><a class="header" href="#上传示例代码">上传示例代码</a></h2>
-<pre><code class="language-java">public static FileType getFileType(String type, MultipartFile file) throws InvalidEndpointException, InvalidPortException, ErrorResponseException, InsufficientDataException, InternalException, InvalidBucketNameException, InvalidKeyException, InvalidResponseException, IOException, NoSuchAlgorithmException, XmlParserException {
-   //改写名字，但是不能改写类型；
-   String name = file.getOriginalFilename(); // a.jpg;
+<p><a href="https://min.io/docs/minio/linux/developers/java/API.html">MiniO文档</a></p>
+<pre><code class="language-java">@RestController
+public class UploadController {
 
-   name = name.substring(name.indexOf(&quot;.&quot;)); //.jpg
-   name = IdUtil.getSnowflakeNextIdStr()+name;// 随机数 + .jpg
+    public static final String MINIO_SERVER = &quot;http://localhost:9000&quot;;
+    public static final String BUCKET_NAME = &quot;2010a&quot;;
 
-   MinioClient minioClient = new MinioClient(&quot;http://localhost:9000&quot;, &quot;GPFi8qPrjA41fskp&quot;, &quot;YjnyuCDJHp20qbjIrfRsjicJWsVsNAsC&quot;);
+    @RequestMapping(&quot;/upload&quot;)
+    public Result&lt;String&gt; upload(MultipartFile file) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        MinioClient minioClient = MinioClient.builder()
+                .endpoint(MINIO_SERVER)
+                .credentials(&quot;EAdOTExLswkEUrSr&quot;,&quot;LwXDM1Dv7ECZ7Qh4z9b7J8vzu0Kbu4xU&quot;)
+                .build();
+        String postfix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(&quot;.&quot;));
+        String fileName = IdUtil.getSnowflakeNextIdStr()+ postfix;
+        minioClient.putObject(
+                PutObjectArgs.builder().bucket(BUCKET_NAME).object(fileName).stream(
+                                file.getInputStream(), file.getSize(), -1)
+                        .contentType(file.getContentType())
+                        .build());
 
-   PutObjectOptions options = new PutObjectOptions(file.getSize(), 10485760);
-   options.setContentType(file.getContentType());
-
-   minioClient.putObject(BUCKET_NAME, name, file.getInputStream(), options);
-   FileType fileType = new FileType();
-   fileType.setType(type);
-   fileType.setUrl(&quot;http://localhost:9000/&quot;+BUCKET_NAME+&quot;/&quot;+name);
-   return fileType;
+        return Result.ok(MINIO_SERVER+&quot;/&quot;+BUCKET_NAME+&quot;/&quot;+fileName);
+    }
 }
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="环境介绍"><a class="header" href="#环境介绍">环境介绍</a></h1>
@@ -2224,7 +2243,7 @@ D:\workspaces\rocketmq-4.9.3\data\as
 D:\workspaces\rocketmq-4.9.3\data\b
 D:\workspaces\rocketmq-4.9.3\data\bs
 </code></pre>
-<p>创建配置文件</p>
+<p>修改broker配置文件</p>
 <pre><code class="language-properties"># 集群名称
 brokerClusterName=DefaultCluster
 # broker名称，Master和Slaver要保持统一
@@ -2251,6 +2270,12 @@ storePathRootDir=D:/workspaces/rocketmq-4.9.3/data/a
 # 名称服务器地址
 namesrvAddr=127.0.0.1:9876;127.0.0.1:9870
 
+</code></pre>
+<p>新建namesrv配置文件 namesrv-1.properties</p>
+<pre><code class="language-shell">listenPort=9870
+</code></pre>
+<p>和 namesrv-2.properties。</p>
+<pre><code class="language-shell">listenPort=9876
 </code></pre>
 <p>启动集群：</p>
 <pre><code class="language-shell">start bin\mqnamesrv.cmd -c conf\2m-2s-sync\namesrv-1.properties

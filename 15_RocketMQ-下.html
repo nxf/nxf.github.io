@@ -151,7 +151,7 @@ D:\workspaces\rocketmq-4.9.3\data\as
 D:\workspaces\rocketmq-4.9.3\data\b
 D:\workspaces\rocketmq-4.9.3\data\bs
 </code></pre>
-<p>创建配置文件</p>
+<p>修改broker配置文件</p>
 <pre><code class="language-properties"># 集群名称
 brokerClusterName=DefaultCluster
 # broker名称，Master和Slaver要保持统一
@@ -178,6 +178,12 @@ storePathRootDir=D:/workspaces/rocketmq-4.9.3/data/a
 # 名称服务器地址
 namesrvAddr=127.0.0.1:9876;127.0.0.1:9870
 
+</code></pre>
+<p>新建namesrv配置文件 namesrv-1.properties</p>
+<pre><code class="language-shell">listenPort=9870
+</code></pre>
+<p>和 namesrv-2.properties。</p>
+<pre><code class="language-shell">listenPort=9876
 </code></pre>
 <p>启动集群：</p>
 <pre><code class="language-shell">start bin\mqnamesrv.cmd -c conf\2m-2s-sync\namesrv-1.properties
