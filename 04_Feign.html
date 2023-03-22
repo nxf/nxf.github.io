@@ -173,16 +173,34 @@
       defaultZone: http://localhost:8761/eureka/
 </code></pre>
 <h2 id="代码"><a class="header" href="#代码">代码</a></h2>
-<pre><code class="language-java">@FeignClient(name=&quot;order&quot;, path=&quot;/api&quot;)
-public interface OrderServiceFeign {
+<pre><code class="language-java">//调用方接口定义
+//这里的name=&quot;house&quot;表示被调用方的服务名称
+@FeignClient(name=&quot;house&quot;, path = &quot;house&quot;, fallback = HouseFeignServiceFallback.class)
+public interface HouseFeignService {
 
-    @GetMapping(&quot;/user/{id}/orders&quot;)
-    public List&lt;Order&gt; getOrdersByOwnerId(@PathVariable(&quot;id&quot;) Long id); // 注意！！！！ 参数中的注解不能少，特别是 @RequestParam
+    @GetMapping(&quot;/{id}&quot;)
+    public House getHouse(@PathVariable int id);
+
+}
+
+</code></pre>
+<pre><code class="language-java">//被调用放代码
+@RestController
+@RequestMapping(&quot;/house&quot;)
+public class HouseWithReqMappingController {
+
+    @GetMapping(&quot;/{id}&quot;)
+    public House getHouse(@PathVariable int id) {
+        System.out.println(&quot;======================&quot;);
+        House house = new House();
+        house.setId(1);
+        house.setName(&quot;房屋with_mapping&quot;);
+        return house;
+    }
 }
 </code></pre>
-<p>以上面的代码为例，在使用OrderServiceFeign的getOrdersByOwnerId(12)方法时，FeignClient中的name属性“order”会被转化为以order为名的服务器地址，然后在后面添加上path的值（这里是/api），最后再追加上具体方法上注解@GetMapping中的路径(这里是/user/12/orders)。
-我们假设&quot;order&quot;对应的服务器地址为 &quot;http://localhost:8088&quot;， 则调用上面方法getOrdersByOwnerId(12)时，相当于对
-http://localhost:8088/api/user/12/orders服务发起了远程http调用。</p>
+<p>两者之间的对应关系如下图中红色标识：
+<img src="./imgs/feign.png" alt="调用和被调用放配置关系" /></p>
 <h2 id="负载均衡"><a class="header" href="#负载均衡">负载均衡</a></h2>
 <p>负载均衡使用ribbon来实现，所以修改负载均衡和上一节ribbon的修改方法一样。</p>
 <pre><code class="language-java">//注意，需要放在被@Configuration修饰的类中
@@ -224,8 +242,7 @@ public class OrderServiceCallback implements OrderServiceFeign{
 </code></pre>
 <h1 id="日志"><a class="header" href="#日志">日志</a></h1>
 <h2 id="打开feign调用日志方便查找问题"><a class="header" href="#打开feign调用日志方便查找问题">打开Feign调用日志，方便查找问题。</a></h2>
-<pre><code class="language-java">import org.springframework.context.annotation.Bean;
-
+<pre><code class="language-java">//注意，需要放在被@Configuration修饰的类中
 @Bean
 Logger.Level feignLogLevel() {
     return Logger.Level.FULL;
