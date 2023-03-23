@@ -684,6 +684,9 @@ Logger.Level feignLogLevel() {
             - Path=/services/**  # 如果访问路径以services开头，则执行本路由规则
 
 eureka: # 顶格：另外记得入口类添加@EnableEurekaClient
+  instance:
+    ip-address: 127.0.0.1
+    prefer-ip-address: true
   client:
     fetch-registry: true
     register-with-eureka: true
