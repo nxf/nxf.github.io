@@ -1097,6 +1097,16 @@ public class ConfigController {
       discovery: # 启用自动寻址
         enabled: true # 打开为TRUE
         service-id: config  # config的服务ID--即eureka的注册名
+eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+  #    instance-id: user
+  client:
+    register-with-eureka: true # 注册到eureka
+    fetch_registry: true #从服务器获取注册信息
+    service-url:
+      defaultZone: http://localhost:8761/eureka/ # 注册中心地址        
 </code></pre>
 <h1 id="spring-cloud-bus"><a class="header" href="#spring-cloud-bus">Spring Cloud Bus</a></h1>
 <p>Spring Cloud Bus需要使用RabbitMQ帮助。 参见 <a href="./06_Config_Rabbit_install.html">Rabbit安装</a></p>
