@@ -173,6 +173,21 @@ rabbitMQ下载： https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.7.
 <p>安装完成后访问： http://localhost:15672/
 <img src="./imgs/rabbit/rabbit_login.png" alt="rabbit console" />
 用户名和密码： guest/guest</p>
+<h2 id="问题解决"><a class="header" href="#问题解决">问题解决</a></h2>
+<p>再次确认安装路径中没有空格，中文字符。
+再次确认当前用户名不是中文。 确认后进行以下操作。</p>
+<ol>
+<li>以上操作都按照步骤执行了，还是不能访问。
+打开系统服务，找到RabbitMQ，重新启动。</li>
+<li>还是不行。
+执行</li>
+</ol>
+<pre><code class="language-shell">rabbitmq-plugins list
+</code></pre>
+<p>查看rabbitmq_management 确实安装了。如果确实安装了
+在执行
+rabbitmq-service stop
+rabbitmq-service start</p>
 
                     </main>
 

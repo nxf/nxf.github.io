@@ -165,39 +165,32 @@
 <pre><code class="language-xml">&lt;dependency&gt;
    &lt;groupId&gt;io.minio&lt;/groupId&gt;
    &lt;artifactId&gt;minio&lt;/artifactId&gt;
-   &lt;version&gt;8.5.2&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-   &lt;groupId&gt;com.squareup.okhttp3&lt;/groupId&gt;
-   &lt;artifactId&gt;okhttp&lt;/artifactId&gt;
-   &lt;version&gt;4.8.1&lt;/version&gt;
+   &lt;version&gt;7.0.2&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
 <h2 id="上传示例代码"><a class="header" href="#上传示例代码">上传示例代码</a></h2>
 <p><a href="https://min.io/docs/minio/linux/developers/java/API.html">MiniO文档</a></p>
-<pre><code class="language-java">@RestController
-public class UploadController {
+<pre><code class="language-java">    private final String BUCKET_NAME = &quot;2010a&quot;;
 
-    public static final String MINIO_SERVER = &quot;http://localhost:9000&quot;;
-    public static final String BUCKET_NAME = &quot;2010a&quot;;
+    @PostMapping(&quot;/upload&quot;)
+    public Result&lt;String&gt; upload(MultipartFile file) throws InvalidPortException, InvalidEndpointException, IOException, InvalidBucketNameException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        //改写名字，但是不能改写类型；
+        String name = file.getOriginalFilename(); // a.jpg;
+        name = name.substring(name.indexOf(&quot;.&quot;)); //.jpg
+        name = IdUtil.getSnowflakeNextIdStr()+name;// 随机数 + .jpg
+         //修改为自己服务器上的key和secret。
+        MinioClient minioClient = new MinioClient(&quot;http://localhost:9000&quot;, &quot;ExgAQimtkr6sKLWW&quot;, &quot;OyWuId4T1SqzMjJpZ9u8AQX2YL0Rm8Nq&quot;);
 
-    @RequestMapping(&quot;/upload&quot;)
-    public Result&lt;String&gt; upload(MultipartFile file) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        MinioClient minioClient = MinioClient.builder()
-                .endpoint(MINIO_SERVER)
-                .credentials(&quot;EAdOTExLswkEUrSr&quot;,&quot;LwXDM1Dv7ECZ7Qh4z9b7J8vzu0Kbu4xU&quot;)
-                .build();
-        String postfix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(&quot;.&quot;));
-        String fileName = IdUtil.getSnowflakeNextIdStr()+ postfix;
-        minioClient.putObject(
-                PutObjectArgs.builder().bucket(BUCKET_NAME).object(fileName).stream(
-                                file.getInputStream(), file.getSize(), -1)
-                        .contentType(file.getContentType())
-                        .build());
+        PutObjectOptions options = new PutObjectOptions(file.getSize(), 11111111);
+        options.setContentType(file.getContentType());
 
-        return Result.ok(MINIO_SERVER+&quot;/&quot;+BUCKET_NAME+&quot;/&quot;+fileName);
+        minioClient.putObject(BUCKET_NAME, name, file.getInputStream(), options);
+
+
+        String url = &quot;http://localhost:9000/&quot;+BUCKET_NAME+&quot;/&quot;+name;
+
+        return Result.ok(url);
     }
-}
 </code></pre>
 
                     </main>
