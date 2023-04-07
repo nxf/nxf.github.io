@@ -180,7 +180,7 @@ appendfsync everysec
 </code></pre>
 <h3 id="配置redis序列化方式"><a class="header" href="#配置redis序列化方式">配置redis序列化方式</a></h3>
 <pre><code class="language-java">@Bean
-public RedisTemplate&lt;String, Object&gt; redisTemplate() {
+public RedisTemplate&lt;String, Object&gt; redisTemplate(RedisConnectionFactory connectionFactory) {
     RedisTemplate&lt;String,Object&gt; template = new RedisTemplate&lt;&gt;();
     template.setConnectionFactory(connectionFactory);
     template.setKeySerializer(RedisSerializer.string());
@@ -222,6 +222,23 @@ public RedisTemplate&lt;String, Object&gt; redisTemplate() {
 <li>基于redis或zookeeper实现互斥锁</li>
 <li>将热点数据设置为永不过期</li>
 </ul>
+<pre><code class="language-java">public String get(key) {
+    String value = redis.get(key);
+    if (value == null) { //代表缓存值过期
+        //设置3min的超时，防止del操作失败的时候，下次缓存过期一直不能load db
+        if (redis.setnx(key_mutex, 1, 3 * 60) == 1) {  //代表设置成功
+            value = db.get(key);
+            redis.set(key, value, expire_secs);
+            redis.del(key_mutex);
+        } else {  //这个时候代表同时候的其他线程已经load db并回设到缓存了，这时候重试获取缓存值即可
+            sleep(50);
+            get(key);  //重试
+        }
+    else {
+        return value;      
+    }
+}
+</code></pre>
 <h2 id="雪崩"><a class="header" href="#雪崩">雪崩</a></h2>
 <h3 id="定义-2"><a class="header" href="#定义-2">定义</a></h3>
 <p>雪崩在不同的语境里有不同的内涵，在redis这里的雪崩就是大量热点数据过期，导致大部分缓存数据
