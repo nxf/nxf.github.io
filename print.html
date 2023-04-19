@@ -262,7 +262,7 @@ T --压力&amp;&amp;性能--&gt; JMeter
 <h1 id="参考资料"><a class="header" href="#参考资料">参考资料：</a></h1>
 <p><a href="https://www.macrozheng.com/cloud/cloud_catalog.html#%E7%AE%80%E4%BB%8B">SpringCloud参考</a></p>
 <h1 id="时间"><a class="header" href="#时间">时间</a></h1>
-<p><img src="./imgs/2010A.jpg" alt="本月" />
+<p><img src="./imgs/2011A.jpg" alt="本月" />
 <img src="./imgs/day.jpg" alt="每天" /></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="eureka"><a class="header" href="#eureka">Eureka</a></h1>
 <p>注册服务中心</p>
@@ -718,6 +718,13 @@ public class GatewayConfig {
 <p>断言就是判断，用来决定某个请求是不是应该由当前配置中的服务器来处理。我们最常用的就是Path断言，它是根据请求路径进行判断的。</p>
 <h4 id="过滤器"><a class="header" href="#过滤器">过滤器</a></h4>
 <p>过滤器是对将要交给后端服务的请求进行进一步处理的地方。常用的是StripPrefix，一般和Path断言配合使用，用来将为了路由请求添加的路径去掉。</p>
+<h3 id="24-负载均衡"><a class="header" href="#24-负载均衡">2.4 负载均衡</a></h3>
+<p>可以使用ribbon对路由进行负载均衡算法的自定义：</p>
+<pre><code class="language-yaml">message:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+
+</code></pre>
 <h2 id="3-实例讲解"><a class="header" href="#3-实例讲解">3. 实例讲解</a></h2>
 <p>假设我们有order服务，有如下配置和代码：</p>
 <pre><code class="language-yml">server:
@@ -3076,7 +3083,7 @@ instance.interceptors.request.use(function (config){
 Vue.prototype.axios = instance;
 </code></pre>
 <p>普通实现：</p>
-<pre><code class="language-javascript">
+<pre><code class="language-javascript">//在刚登录时的第一次跳转会有问题
 axios.defaults.headers[&quot;token&quot;] = &quot;这里放入需要的token&quot;;
 
 Vue.prototype.axios = axios;

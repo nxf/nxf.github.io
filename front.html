@@ -176,7 +176,7 @@ instance.interceptors.request.use(function (config){
 Vue.prototype.axios = instance;
 </code></pre>
 <p>普通实现：</p>
-<pre><code class="language-javascript">
+<pre><code class="language-javascript">//在刚登录时的第一次跳转会有问题
 axios.defaults.headers[&quot;token&quot;] = &quot;这里放入需要的token&quot;;
 
 Vue.prototype.axios = axios;
