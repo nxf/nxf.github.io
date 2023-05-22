@@ -650,7 +650,24 @@ Logger.Level feignLogLevel() {
     request:
       enabled: true
       min-request-size: 2048  # 超过2M则进行压缩
+</code></pre>
+<h2 id="超时配置"><a class="header" href="#超时配置">超时配置</a></h2>
+<p>在Feign配置超时时，真正的超时降级受两个地方的配置约束：</p>
+<pre><code class="language-yaml">feign:
+  client:
+    config:
+      default:
+        read-timeout: 30000   # feign配置的读超时配置
+  hystrix:
+    enabled: true
 
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000   #hystrix配置的超时配置
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="gateway-简介"><a class="header" href="#gateway-简介">gateway 简介</a></h1>
 <p>如果没有gateway，网页需要分别访问 house contract服务。
