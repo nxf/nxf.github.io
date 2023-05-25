@@ -156,6 +156,7 @@
 <li></li>
 </ul>
 <h1 id="一-admin-server"><a class="header" href="#一-admin-server">一 admin-server</a></h1>
+<p>新建admin项目，按照以下步骤添加依赖和配置。</p>
 <h2 id="1添加依赖"><a class="header" href="#1添加依赖">1.添加依赖</a></h2>
 <pre><code class="language-xml">&lt;dependency&gt;
     &lt;groupId&gt;de.codecentric&lt;/groupId&gt;
@@ -173,8 +174,10 @@ spring:
   application:
     name: admin-server
 </code></pre>
+<p>访问http://localhost:9301查看效果</p>
 <h1 id="二-admin-client"><a class="header" href="#二-admin-client">二 admin-client</a></h1>
-<h2 id="引依赖"><a class="header" href="#引依赖">引依赖</a></h2>
+<p>选择（或新建）项目，作为admin client接入admin服务。</p>
+<h2 id="1-引依赖"><a class="header" href="#1-引依赖">1. 引依赖</a></h2>
 <pre><code class="language-xml">&lt;!--admin客户端--&gt;
 &lt;dependency&gt;
     &lt;groupId&gt;de.codecentric&lt;/groupId&gt;
@@ -187,7 +190,7 @@ spring:
     &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
 &lt;/dependency&gt;
 </code></pre>
-<h2 id="配置"><a class="header" href="#配置">配置</a></h2>
+<h2 id="2-配置"><a class="header" href="#2-配置">2. 配置</a></h2>
 <p>spring.boot.admin.client.url 告诉admin server地址
 management 开启查询端口</p>
 <pre><code class="language-yaml">spring:
@@ -208,6 +211,7 @@ logging:
     name: admin-client.log
 
 </code></pre>
+<p>启动后，再次查看admin服务，可以观察到接入服务的相关信息。</p>
 <h1 id="三-演示"><a class="header" href="#三-演示">三 演示</a></h1>
 <ul>
 <li>1 访问监控地址
