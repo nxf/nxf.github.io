@@ -155,16 +155,27 @@
 <pre><code class="language-javascript">/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|[xX])$/
 </code></pre>
 <ul>
-<li>
-<p>租客身份证和租客姓名不真实
-<a href="https://market.aliyun.com/products/57000002/cmapi025518.html#sku=yuncode1951800000">api服务入口</a></p>
-</li>
-<li>
-<p>[计算合同金额精度缺失]</p>
-</li>
-<li>
-<p>主要涉及BigDecimal的计算。</p>
-</li>
+<li>租客身份证和租客姓名不真实
+<a href="https://market.aliyun.com/products/57000002/cmapi025518.html#sku=yuncode1951800000">api服务入口</a></li>
+</ul>
+<pre><code class="language-java">    @PostMapping(&quot;/verify&quot;)
+    public Result&lt;Boolean&gt; verify(@RequestBody Contract contract) {
+        Map&lt;String,Object&gt; map = new HashMap&lt;&gt;();
+        map.put(&quot;idNo&quot;, contract.getIdNo());
+        map.put(&quot;name&quot;, contract.getName());
+        String body = HttpRequest.post(&quot;https://idenauthen.market.alicloudapi.com/idenAuthentication&quot;)
+                .header(&quot;Authorization&quot;, &quot;APPCODE b30006ab97e44f33b9398fd90094e676&quot;)
+                .form(map)
+                .execute()
+                .body();
+        System.out.println(body);
+        int index = body.indexOf(&quot;身份证信息匹配&quot;);
+        return Result.ok(index&gt;0);
+    }
+</code></pre>
+<ul>
+<li>[计算合同金额精度缺失]</li>
+<li>主要涉及BigDecimal的计算。</li>
 </ul>
 <pre><code class="language-java">        BigDecimal first = BigDecimal.valueOf(10.22);
         BigDecimal second = BigDecimal.valueOf(8);
