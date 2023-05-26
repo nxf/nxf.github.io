@@ -3136,7 +3136,28 @@ Vue.prototype.axios = axios;
 <h2 id="前端安装唯一id工具"><a class="header" href="#前端安装唯一id工具">前端安装唯一ID工具</a></h2>
 <pre><code class="language-javascript">npm install nanoid
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="rocketmq-console"><a class="header" href="#rocketmq-console">rocketmq-console</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="全局异常处理"><a class="header" href="#全局异常处理">全局异常处理</a></h1>
+<p>全局异常处理使用两个注解来实现，@ControllerAdvice 和 @ExceptionHandler，如下：</p>
+<pre><code class="language-java">@RestController
+@RequestMapping(&quot;/&quot;)
+public class TestController {
+
+    @GetMapping(&quot;/test&quot;)
+    public Result&lt;String&gt; test() {
+        return Result.ok(&quot;ok&quot;);
+    }
+
+    @GetMapping(&quot;/exce&quot;)
+    public Result&lt;String&gt; createException() {
+        int a = 1/0;
+        return Result.ok(&quot;never happend&quot;);
+    }
+}
+
+
+</code></pre>
+<h2 id="-1"><a class="header" href="#-1"></a></h2>
+<h1 id="rocketmq-console"><a class="header" href="#rocketmq-console">rocketmq-console</a></h1>
 <p>启动报 java.xml 异常</p>
 <pre><code class="language-xml">&lt;dependency&gt;
         &lt;groupId&gt;javax.xml.bind&lt;/groupId&gt;
