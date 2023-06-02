@@ -2212,6 +2212,19 @@ vi ./bin/runbroker.sh
     });
 }
 </code></pre>
+<h3 id="延迟发送"><a class="header" href="#延迟发送">延迟发送</a></h3>
+<pre><code class="language-java">// 1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h
+    @PostMapping(&quot;/delay_send&quot;)
+    public Map&lt;String,String&gt; send(@RequestParam String msg) {
+        Message&lt;String&gt; message = MessageBuilder.withPayload(msg).build();
+        SendResult result = rocketMQTemplate.syncSend(topic,message,500,5);
+        if(SendStatus.SEND_OK.equals(result.getSendStatus())) {
+           return this.of(&quot;status&quot;, &quot;ok&quot;);
+        }else {
+           return this.of(&quot;status&quot;, &quot;error&quot;);
+        }
+    }
+</code></pre>
 <h3 id="消息的接收"><a class="header" href="#消息的接收">消息的接收</a></h3>
 <pre><code class="language-java">@Service
 @RocketMQMessageListener(nameServer = &quot;${rocketmq.name-server}&quot;, topic=&quot;${rocketmq.producer.topic}&quot;, consumerGroup = &quot;${rocketmq.consumer.group}&quot;)
@@ -2309,6 +2322,9 @@ public class AcknowledgeListener implements MessageListenerOrderly {
 }
 </code></pre>
 <h3 id="启动不起来"><a class="header" href="#启动不起来">启动不起来</a></h3>
+<ol>
+<li>CLASS_PATH 设置不正确。</li>
+</ol>
 <h3 id="服务端配置"><a class="header" href="#服务端配置">服务端配置</a></h3>
 <ol>
 <li>集群配置</li>
