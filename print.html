@@ -3061,6 +3061,44 @@ canal 读取binlog再同步到redis。
     return JSON.parse(decodeURIComponent(window.atob(token.split(&quot;.&quot;)[1])))
 }
 </code></pre>
+<p>网关jwt统一检查</p>
+<pre><code class="language-java">
+@Component
+public class JWTFilter implements GlobalFilter, Ordered {
+
+    public static final String JWT_KEY = &quot;asdf&quot;;//JWT_KEY是我们在生成jwt token时用的key
+
+    @Override
+    public Mono&lt;Void&gt; filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        String value = exchange.getRequest().getPath().value();
+        if(!&quot;/user/user/login&quot;.equals(value)) {
+            if(exchange.getRequest().getCookies() != null){
+                String token = exchange.getRequest().getCookies().get(&quot;token&quot;).get(0).getValue();
+                try{
+
+                    boolean verify = JWTUtil.verify(token, JWT_KEY.getBytes());
+                    if(!verify) {
+                        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                        return exchange.getResponse().setComplete();
+                    }
+                }catch (Exception e) {
+                    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                    return exchange.getResponse().setComplete();
+                }
+
+            }
+        }
+        return chain.filter(exchange);
+    }
+
+    //定义过滤器排序，越小越靠前执行。
+    @Override
+    public int getOrder() {
+        return 0;
+    }
+}
+
+</code></pre>
 <h1 id="spring-security"><a class="header" href="#spring-security">Spring Security</a></h1>
 <h2 id="基础表结构"><a class="header" href="#基础表结构">基础表结构</a></h2>
 <pre><code class="language-mysql">create table users(
@@ -3154,23 +3192,38 @@ Vue.prototype.axios = axios;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="全局异常处理"><a class="header" href="#全局异常处理">全局异常处理</a></h1>
 <p>全局异常处理使用两个注解来实现，@ControllerAdvice 和 @ExceptionHandler，如下：</p>
-<pre><code class="language-java">@RestController
-@RequestMapping(&quot;/&quot;)
-public class TestController {
+<pre><code class="language-java">//全局异常处理
+@RestControllerAdvice
+public class ExceptionProcessor {
 
-    @GetMapping(&quot;/test&quot;)
-    public Result&lt;String&gt; test() {
-        return Result.ok(&quot;ok&quot;);
+
+    @ExceptionHandler({Exception.class})
+    public Result&lt;Exception&gt; handleException(Exception e) {
+        return Result.ok(e, -1, &quot;通用异常&quot;);
     }
 
-    @GetMapping(&quot;/exce&quot;)
-    public Result&lt;String&gt; createException() {
-        int a = 1/0;
-        return Result.ok(&quot;never happend&quot;);
+    @ExceptionHandler({BizException.class})
+    public Result&lt;BizException&gt; handleException(BizException e) {
+        return Result.ok(e,e.getState(),e.getMessage());
     }
 }
 
+```java
+//自定义异常类，带状态码和错误信息，其中错误信息复用父类的message字段
+public class BizException extends  RuntimeException{
+    private int state;    
+    public int getState() {
+        return state;
+    }
 
+    public void setState(int state) {
+        this.state = state;
+    }
+    public BizException(int state, String message) {
+        super(message);
+        this.state = state;
+    }
+}
 </code></pre>
 <h2 id="-1"><a class="header" href="#-1"></a></h2>
 <h1 id="rocketmq-console"><a class="header" href="#rocketmq-console">rocketmq-console</a></h1>

@@ -143,23 +143,38 @@
                     <main>
                         <h1 id="全局异常处理"><a class="header" href="#全局异常处理">全局异常处理</a></h1>
 <p>全局异常处理使用两个注解来实现，@ControllerAdvice 和 @ExceptionHandler，如下：</p>
-<pre><code class="language-java">@RestController
-@RequestMapping(&quot;/&quot;)
-public class TestController {
+<pre><code class="language-java">//全局异常处理
+@RestControllerAdvice
+public class ExceptionProcessor {
 
-    @GetMapping(&quot;/test&quot;)
-    public Result&lt;String&gt; test() {
-        return Result.ok(&quot;ok&quot;);
+
+    @ExceptionHandler({Exception.class})
+    public Result&lt;Exception&gt; handleException(Exception e) {
+        return Result.ok(e, -1, &quot;通用异常&quot;);
     }
 
-    @GetMapping(&quot;/exce&quot;)
-    public Result&lt;String&gt; createException() {
-        int a = 1/0;
-        return Result.ok(&quot;never happend&quot;);
+    @ExceptionHandler({BizException.class})
+    public Result&lt;BizException&gt; handleException(BizException e) {
+        return Result.ok(e,e.getState(),e.getMessage());
     }
 }
 
+```java
+//自定义异常类，带状态码和错误信息，其中错误信息复用父类的message字段
+public class BizException extends  RuntimeException{
+    private int state;    
+    public int getState() {
+        return state;
+    }
 
+    public void setState(int state) {
+        this.state = state;
+    }
+    public BizException(int state, String message) {
+        super(message);
+        this.state = state;
+    }
+}
 </code></pre>
 <h2 id=""><a class="header" href="#"></a></h2>
 <h1 id="rocketmq-console"><a class="header" href="#rocketmq-console">rocketmq-console</a></h1>

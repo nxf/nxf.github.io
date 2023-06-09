@@ -207,6 +207,44 @@
     return JSON.parse(decodeURIComponent(window.atob(token.split(&quot;.&quot;)[1])))
 }
 </code></pre>
+<p>网关jwt统一检查</p>
+<pre><code class="language-java">
+@Component
+public class JWTFilter implements GlobalFilter, Ordered {
+
+    public static final String JWT_KEY = &quot;asdf&quot;;//JWT_KEY是我们在生成jwt token时用的key
+
+    @Override
+    public Mono&lt;Void&gt; filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        String value = exchange.getRequest().getPath().value();
+        if(!&quot;/user/user/login&quot;.equals(value)) {
+            if(exchange.getRequest().getCookies() != null){
+                String token = exchange.getRequest().getCookies().get(&quot;token&quot;).get(0).getValue();
+                try{
+
+                    boolean verify = JWTUtil.verify(token, JWT_KEY.getBytes());
+                    if(!verify) {
+                        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                        return exchange.getResponse().setComplete();
+                    }
+                }catch (Exception e) {
+                    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                    return exchange.getResponse().setComplete();
+                }
+
+            }
+        }
+        return chain.filter(exchange);
+    }
+
+    //定义过滤器排序，越小越靠前执行。
+    @Override
+    public int getOrder() {
+        return 0;
+    }
+}
+
+</code></pre>
 <h1 id="spring-security"><a class="header" href="#spring-security">Spring Security</a></h1>
 <h2 id="基础表结构"><a class="header" href="#基础表结构">基础表结构</a></h2>
 <pre><code class="language-mysql">create table users(
