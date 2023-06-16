@@ -434,6 +434,35 @@ AllType allType =  restTemplate.getForObject(&quot;http://localhost:8081/type/&q
 </code></pre>
 <p>其他的post，put，delete都类似。
 <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html">restTemplate api参考</a></p>
+<h2 id="举个例子"><a class="header" href="#举个例子">举个例子：</a></h2>
+<p>首先定义一个被调用服务入口，这里是 http://localhost:8081/getName/2</p>
+<pre><code class="language-java">@RestController
+@RequestMapping(&quot;/&quot;)
+public class HouseController {
+
+    
+    @GetMapping(&quot;/getName/{id}&quot;)
+    public String getName(@PathVariable int id) {
+        System.out.println(&quot;====================&quot;);
+        return &quot;房屋id=&quot;+id;
+    }
+}
+</code></pre>
+<p>然后在定义了RestTemplate的项目中定义对被调用服务的访问：</p>
+<pre><code class="language-java">@RestController
+@RequestMapping(&quot;/contract&quot;)
+public class ContractController {
+
+    @Autowired
+    RestTemplate restTemplate;
+    //http://ip:port/conteact/test-rest?id=1
+    @RequestMapping(&quot;test-rest&quot;)
+    public String tesRest(int id) {
+        String forObject = restTemplate.getForObject(&quot;http://localhost:8081/getName/&quot; + id, String.class);
+        return forObject;
+    }
+}
+</code></pre>
 <h1 id="ribbon"><a class="header" href="#ribbon">Ribbon</a></h1>
 <p>微服务架构中会有服务实例间的互相调用，实例之间的远程调用可能需要使用RestTemplate来进行。当被调用的服务部署多个实例后，请求需要公平的发送到这些实例（负载均衡），这时
 就需要Ribbon来帮助RestTemplate来实现。</p>
@@ -455,12 +484,12 @@ AllType allType =  restTemplate.getForObject(&quot;http://localhost:8081/type/&q
 <li>com.netflix.loadbalancer.ZoneAwareLoadBalancer //考虑到区域相同</li>
 </ul>
 <h2 id="实践"><a class="header" href="#实践">实践：</a></h2>
-<h3 id="增加order服务实例"><a class="header" href="#增加order服务实例">增加order服务实例</a></h3>
+<h3 id="增加被调用服务的实例"><a class="header" href="#增加被调用服务的实例">增加被调用服务的实例</a></h3>
 <p>上节课学过。</p>
 <ul>
 <li>增加配置文件,例如：application-02.yml</li>
 <li>添加运行入口，右上角 Edit Configuration</li>
-<li>运行入口中指定使用的配置文件， --spring.profiles.active=xxx</li>
+<li>运行入口中指定使用的配置文件 Active Profiles</li>
 </ul>
 <h3 id="使用负载均衡"><a class="header" href="#使用负载均衡">使用负载均衡</a></h3>
 <pre><code class="language-java">@Configuration
