@@ -174,12 +174,18 @@ instance.interceptors.request.use(function (config){
   return Promise.reject(error)
 });
 Vue.prototype.axios = instance;
-</code></pre>
-<p>普通实现：</p>
-<pre><code class="language-javascript">//在刚登录时的第一次跳转会有问题
-axios.defaults.headers[&quot;token&quot;] = &quot;这里放入需要的token&quot;;
 
-Vue.prototype.axios = axios;
+</code></pre>
+<h2 id="统一处理axios返回内容"><a class="header" href="#统一处理axios返回内容">统一处理axios返回内容</a></h2>
+<pre><code class="language-javascript">//响应拦截器
+axios.interceptors.response.use(function (resp){
+  return resp;
+},function (err){
+  console.log(err.request.status);
+  if(&quot;401&quot; == err.request.status) {
+    router.push(&quot;/login&quot;)
+  }
+})
 </code></pre>
 <h2 id="传递参数"><a class="header" href="#传递参数">传递参数</a></h2>
 <p>以列表页打开详情页为例，打开详情页时需要传递当前列表的id到详情页。做法如下：</p>
@@ -188,6 +194,7 @@ Vue.prototype.axios = axios;
       this.$router.push({path:&quot;/contract&quot;, query:{id:contract.id}})
     }
 </code></pre>
+<p>获取传递的参数</p>
 <pre><code class="language-javascript">  mounted() {
     console.log(&quot;合同ID=&quot;+this.$route.query.id);
   }

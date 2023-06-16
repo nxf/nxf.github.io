@@ -262,7 +262,7 @@ T --压力&amp;&amp;性能--&gt; JMeter
 <h1 id="参考资料"><a class="header" href="#参考资料">参考资料：</a></h1>
 <p><a href="https://www.macrozheng.com/cloud/cloud_catalog.html#%E7%AE%80%E4%BB%8B">SpringCloud参考</a></p>
 <h1 id="时间"><a class="header" href="#时间">时间</a></h1>
-<p><img src="./imgs/2012A.jpg" alt="本月" />
+<p><img src="./imgs/2101A.jpg" alt="本月" />
 <img src="./imgs/time-summer.jpg" alt="每天" /></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="eureka"><a class="header" href="#eureka">Eureka</a></h1>
 <p>注册服务中心</p>
@@ -2995,68 +2995,16 @@ canal 读取binlog再同步到redis。
 </code></pre>
 <h1 id="参考-1"><a class="header" href="#参考-1">参考：</a></h1>
 <pre><code>[canal：]( https://zhuanlan.zhihu.com/p/177001630)</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="普通登录"><a class="header" href="#普通登录">普通登录</a></h1>
-<h2 id="jwt"><a class="header" href="#jwt">JWT</a></h2>
-<pre><code class="language-xml">	&lt;!-- jwt  --&gt;
-	&lt;dependency&gt;
-		&lt;groupId&gt;com.auth0&lt;/groupId&gt;
-		&lt;artifactId&gt;java-jwt&lt;/artifactId&gt;
-		&lt;version&gt;3.10.3&lt;/version&gt;
-	&lt;/dependency&gt;
-</code></pre>
-<pre><code class="language-java">public class JWTUtils {
-    public static final String USER_LOGIN_KEY = &quot;jwt&quot;;
-    private String secret;
-    private String issure;
-
-    public JWTUtils(String secret, String issure) {
-        this.secret = secret;
-        this.issure = issure;
-    }
-
-    public String creatToken( String uid, String actor, String name) {
-        Algorithm algorithm = Algorithm.HMAC256(this.secret);
-        Calendar calendar = Calendar.getInstance();
-        Date issuedAt = calendar.getTime();
-        calendar.add(Calendar.HOUR, 2);
-        Date expired = calendar.getTime();
-        String token = JWT.create().withIssuer(issure)
-                .withIssuedAt(issuedAt)
-                .withExpiresAt(expired)
-                .withClaim(&quot;uid&quot;, uid)
-                .withClaim(&quot;actor&quot;, actor)
-				.withClaim(&quot;name&quot;, name)
-                .sign(algorithm);
-        return token;
-    }
-
-    public DecodedJWT verify(String token) {
-        Algorithm algorithm = Algorithm.HMAC256(this.secret);
-        JWTVerifier verifier = JWT.require(algorithm)
-                .withIssuer(this.issure)
-                .build();
-        return verifier.verify(token);
-    }
-
-    public Long getId(String token) {
-        DecodedJWT jwt = this.verify(token);
-        Claim claim = jwt.getClaim(&quot;uid&quot;);
-        return claim.asLong();
-    }
-    public String getActor(String token) {
-        DecodedJWT jwt = this.verify(token);
-        Claim claim = jwt.getClaim(&quot;actor&quot;);
-        return claim.asString();
-    }
-    public String getName(String token) {
-        DecodedJWT jwt = this.verify(token);
-        Claim claim = jwt.getClaim(&quot;name&quot;);
-        return claim.asString();
-    }
+<div style="break-before: page; page-break-before: always;"></div><h1 id="登录与认证"><a class="header" href="#登录与认证">登录与认证</a></h1>
+<h2 id="-1"><a class="header" href="#-1"></a></h2>
+<pre><code class="language-java">private String createToken(User dbUser) {
+    Map&lt;String,Object&gt; map = new HashMap&lt;&gt;();
+    map.put(&quot;uid&quot;,dbUser.getId());
+    map.put(&quot;name&quot;, dbUser.getName());
+    return JWTUtil.createToken(map,&quot;1234&quot;.getBytes());
 }
-
 </code></pre>
-<p>前端jwt：</p>
+<h2 id="前端解析jwt"><a class="header" href="#前端解析jwt">前端解析jwt：</a></h2>
 <pre><code class="language-javascript">decodeJWT(jwt) {
     return JSON.parse(decodeURIComponent(window.atob(token.split(&quot;.&quot;)[1])))
 }
@@ -3065,33 +3013,34 @@ canal 读取binlog再同步到redis。
 <pre><code class="language-java">
 @Component
 public class JWTFilter implements GlobalFilter, Ordered {
-
-    public static final String JWT_KEY = &quot;asdf&quot;;//JWT_KEY是我们在生成jwt token时用的key
-
     @Override
     public Mono&lt;Void&gt; filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        String value = exchange.getRequest().getPath().value();
-        if(!&quot;/user/user/login&quot;.equals(value)) {
-            if(exchange.getRequest().getCookies() != null){
-                String token = exchange.getRequest().getCookies().get(&quot;token&quot;).get(0).getValue();
-                try{
-
-                    boolean verify = JWTUtil.verify(token, JWT_KEY.getBytes());
-                    if(!verify) {
-                        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                        return exchange.getResponse().setComplete();
-                    }
-                }catch (Exception e) {
-                    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                    return exchange.getResponse().setComplete();
+        //1. 哪些url需要进行安全检查
+        String currentUrl = exchange.getRequest().getPath().value();
+        if(!&quot;/user/user/login&quot;.equals(currentUrl)) {
+            MultiValueMap&lt;String, HttpCookie&gt; cookies = exchange.getRequest().getCookies();
+            if(cookies != null &amp;&amp; cookies.getFirst(&quot;token&quot;) != null) {
+                HttpCookie token = cookies.getFirst(&quot;token&quot;);
+                String jwt =  token.getValue();
+                boolean verify = JWTUtil.verify(jwt, &quot;1234&quot;.getBytes());
+                if(!verify) {
+                    return needLogin(exchange);
                 }
 
+            }else {
+                return needLogin(exchange);
             }
         }
+        //2, 对于需要安全检查的url进行检验。
+        //3,合法通过，不合法拒绝。
         return chain.filter(exchange);
     }
 
-    //定义过滤器排序，越小越靠前执行。
+    private Mono&lt;Void&gt; needLogin(ServerWebExchange exchange) {
+        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+        return exchange.getResponse().setComplete();
+    }
+
     @Override
     public int getOrder() {
         return 0;
@@ -3121,20 +3070,6 @@ create table persistent_logins (
 	last_used timestamp not null
 );
 
-</code></pre>
-<h1 id="安全"><a class="header" href="#安全">安全</a></h1>
-<p>依赖</p>
-<pre><code class="language-xml">    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
-    &lt;/dependency&gt;
-</code></pre>
-<p>如果不使用spring-security的话需要添加</p>
-<pre><code class="language-java">@SpringBootApplication(exclude = {SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class})
-</code></pre>
-<p>验证加盐加密的代码</p>
-<pre><code class="language-java">    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    return encoder.matches(password, user.getPassword());
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="前端"><a class="header" href="#前端">前端</a></h1>
 <h2 id="工程创建"><a class="header" href="#工程创建">工程创建</a></h2>
@@ -3169,12 +3104,18 @@ instance.interceptors.request.use(function (config){
   return Promise.reject(error)
 });
 Vue.prototype.axios = instance;
-</code></pre>
-<p>普通实现：</p>
-<pre><code class="language-javascript">//在刚登录时的第一次跳转会有问题
-axios.defaults.headers[&quot;token&quot;] = &quot;这里放入需要的token&quot;;
 
-Vue.prototype.axios = axios;
+</code></pre>
+<h2 id="统一处理axios返回内容"><a class="header" href="#统一处理axios返回内容">统一处理axios返回内容</a></h2>
+<pre><code class="language-javascript">//响应拦截器
+axios.interceptors.response.use(function (resp){
+  return resp;
+},function (err){
+  console.log(err.request.status);
+  if(&quot;401&quot; == err.request.status) {
+    router.push(&quot;/login&quot;)
+  }
+})
 </code></pre>
 <h2 id="传递参数"><a class="header" href="#传递参数">传递参数</a></h2>
 <p>以列表页打开详情页为例，打开详情页时需要传递当前列表的id到详情页。做法如下：</p>
@@ -3183,6 +3124,7 @@ Vue.prototype.axios = axios;
       this.$router.push({path:&quot;/contract&quot;, query:{id:contract.id}})
     }
 </code></pre>
+<p>获取传递的参数</p>
 <pre><code class="language-javascript">  mounted() {
     console.log(&quot;合同ID=&quot;+this.$route.query.id);
   }
@@ -3225,7 +3167,7 @@ public class BizException extends  RuntimeException{
     }
 }
 </code></pre>
-<h2 id="-1"><a class="header" href="#-1"></a></h2>
+<h2 id="-2"><a class="header" href="#-2"></a></h2>
 <h1 id="rocketmq-console"><a class="header" href="#rocketmq-console">rocketmq-console</a></h1>
 <p>启动报 java.xml 异常</p>
 <pre><code class="language-xml">&lt;dependency&gt;
