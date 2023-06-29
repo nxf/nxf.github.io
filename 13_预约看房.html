@@ -185,6 +185,26 @@ zzy:
   secret: 6a987156-398b-4c3c-9d84-ce6b3921bd18
 
 </code></pre>
+<h3 id="代码示例"><a class="header" href="#代码示例">代码示例</a></h3>
+<p>简单的发送短信：</p>
+<pre><code class="language-java">@GetMapping(&quot;/send_sms&quot;)
+public Boolean sendSMS(String phone) throws Exception {
+    ZhenziSmsClient client = new ZhenziSmsClient(&quot;https://sms_developer.zhenzikj.com&quot;, &quot;112605&quot;, &quot;6a987156-398b-4c3c-9d84-ce6b3921bd18&quot;);
+    Map&lt;String, Object&gt; params = new HashMap&lt;String, Object&gt;();
+    params.put(&quot;number&quot;, phone);
+    params.put(&quot;templateId&quot;, &quot;10759&quot;);
+    String[] templateParams = new String[2];
+    templateParams[0] = &quot;3421&quot;;
+    templateParams[1] = &quot;5&quot;;
+    params.put(&quot;templateParams&quot;, templateParams);
+    String result = client.send(params);
+    System.out.println(&quot;sms.result = &quot; + result);
+    JSON json = JSONUtil.parse(result);
+    Integer code = (Integer) json.getByPath(&quot;code&quot;);
+    return code==0;
+}
+
+</code></pre>
 <h2 id="短信发送失败如何处理"><a class="header" href="#短信发送失败如何处理">短信发送失败如何处理</a></h2>
 <ol>
 <li>
@@ -205,7 +225,41 @@ zzy:
 </ol>
 <h2 id="短信接口异常如何处理"><a class="header" href="#短信接口异常如何处理">短信接口异常如何处理</a></h2>
 <p>可以针对特定异常或异常吗进行重试
-记录日志，后期和运营商沟通</p>
+记录日志，后期和运营商沟通.</p>
+<p>发送短信失败重试，如果三次后仍不成功则打印日志代码示例：</p>
+<pre><code class="language-java">@GetMapping(&quot;/send_sms_retry&quot;)
+public Result&lt;Boolean&gt; sendSms(String phone) throws Exception {
+    Boolean success = retrySend(phone,4);
+    return Result.ok(success);
+}
+private Boolean retrySend(String phone, int num) {
+    if(num &lt;=0 ){
+        log.error(&quot;发送短信失败，重试后仍旧失败！&quot; + phone);
+        return false;
+    }
+    ZhenziSmsClient client = new ZhenziSmsClient(&quot;https://sms_developer.zhenzikj.com&quot;, &quot;112605&quot;, &quot;6a987156-398b-4c3c-9d84-ce6b3921bd18&quot;);
+    Map&lt;String, Object&gt; params = new HashMap&lt;String, Object&gt;();
+    params.put(&quot;number&quot;, phone);
+    params.put(&quot;templateId&quot;, &quot;10759&quot;);
+    String[] templateParams = new String[2];
+    templateParams[0] = &quot;3421&quot;;
+    templateParams[1] = &quot;5&quot;;
+    params.put(&quot;templateParams&quot;, templateParams);
+    String result = null;
+    try {
+        result = client.send(params);
+    } catch (Exception e) {
+        this.retrySend(phone, num-1);
+    }
+    System.out.println(&quot;sms.result = &quot; + result);
+    JSON json = JSONUtil.parse(result);
+    Integer code = (Integer) json.getByPath(&quot;code&quot;);
+    if(code != 0){
+        this.retrySend(phone, num-1);
+    }
+    return code==0;
+}
+</code></pre>
 
                     </main>
 

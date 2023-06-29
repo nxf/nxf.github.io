@@ -458,6 +458,19 @@ public class LogGlobalFilter implements GlobalFilter, Ordered {
             allowCredentials: true
             maxAge: 360000
 </code></pre>
+<h1 id="六常见错误"><a class="header" href="#六常见错误">六，常见错误</a></h1>
+<ol>
+<li>在gateway的pom文件或父pom文件中引入web依赖：</li>
+</ol>
+<pre><code class="language-xml">&lt;!--gateway中不能引入！--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<ol start="2">
+<li></li>
+</ol>
 
                     </main>
 
