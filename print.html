@@ -2928,18 +2928,69 @@ nohup bin/mqbroker -c /home/nixinfeng/workspace/rocketmq-4.9.3/conf/2m-2s-sync/b
 </ol>
 <h1 id="外卖抢单"><a class="header" href="#外卖抢单">外卖抢单</a></h1>
 <h2 id="线程池的使用"><a class="header" href="#线程池的使用">线程池的使用</a></h2>
-<pre><code class="language-java">
-</code></pre>
 <ol>
 <li>40.1 通过合理的线程池参数配置，控制线程数量，避免资源耗尽和性能下降</li>
 <li>39.1 利用线程池来管理和调度线程，确保系统能够高效处理大量请求</li>
-<li>38.1 使用Java多线程技术处理外卖抢单模块的并发请求</li>
 <li>37.4 <strong>分析测试结果，优化系统性能，例如通过调整线程池大小、数据库连接池参数等来提升系统的处理能力</strong></li>
+</ol>
+<pre><code class="language-java">//初始化线程池 
+@Configuration
+public class ThreadPoolConfig {
+
+    @Bean
+    public ThreadPoolTaskExecutor executor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setMaxPoolSize(2);//线程池最多有2个线程
+        executor.setCorePoolSize(1);//核心线程数为1
+        executor.setThreadNamePrefix(&quot;*_*&quot;);//线程名称前缀
+        executor.setQueueCapacity(100);//线程池等候队列
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());//拒绝策略
+        executor.initialize();//初始化
+        return executor;
+    }
+}
+</code></pre>
+<ol>
+<li>38.1 使用Java多线程技术处理外卖抢单模块的并发请求</li>
 <li>35.1 基于Spring Boot框架构建外卖抢单模块，使用Java多线程技术处理并发请求</li>
+</ol>
+<pre><code class="language-java">@RequestMapping(&quot;/process&quot;)
+public Result&lt;Boolean&gt; createOrder(Book book) {
+    executor.execute(() -&gt; {//使用多线程处理创建订单请求
+        Order order = createOrder(book, 1,1);
+        orderService.save(order);
+    });
+    return Result.ok(true);
+}
+</code></pre>
+<ol>
 <li>34.2 创建多个线程，并在每个线程中生成多个外卖订单</li>
 <li>33.3 模拟用户产生大量订单 使用java多线程技术实现模拟</li>
 <li>31.2 创建多个线程，并在每个线程中生成多个外卖订单</li>
 </ol>
+<pre><code class="language-java">    @RequestMapping(&quot;/creat_order&quot;)
+    public Result&lt;Boolean&gt; creatOrder() {
+        Book book = new Book();
+        book.setId(1);
+        book.setPrice(BigDecimal.TEN);
+        for( int i=0;i&lt;3; i++) {
+            executor.execute(() -&gt; {
+                while(true) {
+                    Order order = createOrder(book,1, 1);
+                    orderService.save(order);
+                    System.out.println(&quot;create order: &quot; + order.toString());
+                    try {
+                        Thread.sleep(RandomUtil.randomInt(100,2000));
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+            });
+        }
+        return Result.ok(true);
+    }
+</code></pre>
 <h2 id="限流"><a class="header" href="#限流">限流</a></h2>
 <pre><code class="language-yaml">
 </code></pre>
