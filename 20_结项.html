@@ -185,6 +185,31 @@
 <li>07.3 实现服务管理中的列表页，包括列表展示、搜索、分页等功能(完成根据服务类型（精确查询）和服务名称（模糊查询）的查询)</li>
 <li>08.2 用户可以输入房屋名称进行搜索，后端根据名称过滤查询数据库中的房屋数据，并返回给前端。(缓存搜索列表首页数据，提高页面的响应能力)</li>
 <li>10.2 2. 在后端实现分页功能，通过接口参数传递页码和每页显示的数量，后端根据这些参数查询数据库，返回相应的结果给前端。(使用Redis缓存第一页的数据，提升系统性能)</li>
+</ol>
+<pre><code class="language-java">@GetMapping(&quot;/page/{page}/{size}&quot;)
+public Result&lt;IPage&lt;Orders&gt;&gt; page(@PathVariable int page, @PathVariable int size) {
+    IPage&lt;Orders&gt; ipage = new Page(page, size);
+    if(page == 1) {
+        System.out.println(&quot;=========第一页&quot;);
+        String key = key(page, size);
+        IPage&lt;Orders&gt; orders = (IPage&lt;Orders&gt;)redisTemplate.opsForValue().get(key);
+        if(orders == null) {
+            System.out.println(&quot;第一页走数据库&quot;);
+            ordersService.page(ipage); //从数据库中分页读取数据
+            redisTemplate.opsForValue().set(key,ipage,30, TimeUnit.MINUTES);
+            return Result.ok(ipage);
+        }else {
+            System.out.println(&quot;第一页走缓存&quot;);
+            return Result.ok(orders);
+        }
+    }else {
+        System.out.println(&quot;其他页走数据库&quot;);
+        ordersService.page(ipage);
+        return Result.ok(ipage);
+    }
+}
+</code></pre>
+<ol start="11">
 <li>09.2 提供一个房屋列表页面，前端可以通过API接口获取所有房屋的数据，并实现分页功能。(确保大数量的情况下，分页性能不受影响)</li>
 </ol>
 <h2 id="格式验证"><a class="header" href="#格式验证">格式验证：</a></h2>
@@ -304,13 +329,48 @@ public Result&lt;List&lt;Cart&gt;&gt; list(@CookieValue String token){
     }
   }
 </code></pre>
+<pre><code class="language-java">//后端判断年龄
+@PostMapping(&quot;/testAge&quot;)
+public Result&lt;Boolean&gt; testAge(@RequestBody Contract contract) {
+    int age = IdcardUtil.getAgeByIdCard(contract.getIdcard());
+    if(age&gt;=1 &amp;&amp; age&lt;=120) {
+        return Result.ok(true);
+    }else {
+        return Result.ok(false);
+    }
+}
+</code></pre>
 <ol start="4">
 <li>03.7 企业添加功能-校验功能（手机号进行格式校验；数据字典表中的数据要求采用redis缓存；企业logo只能上传图片功能）</li>
+</ol>
+<pre><code class="language-javascript">&lt;el-upload
+    class=&quot;avatar-uploader&quot;
+    action=&quot;https://jsonplaceholder.typicode.com/posts/&quot;
+    :show-file-list=&quot;false&quot;
+    :on-success=&quot;handleAvatarSuccess&quot;
+    :before-upload=&quot;beforeAvatarUpload&quot;&gt; //在上传之前做一些处理
+  &lt;img v-if=&quot;imageUrl&quot; :src=&quot;imageUrl&quot; class=&quot;avatar&quot;&gt;
+  &lt;i v-else class=&quot;el-icon-plus avatar-uploader-icon&quot;&gt;&lt;/i&gt;
+&lt;/el-upload&gt;
+
+methods: {
+  beforeAvatarUpload(file) {
+    let type = file.type;
+    let canUpload =  type === &quot;image/jpeg&quot; || type === &quot;image/png&quot;;
+    if(!canUpload) {//如果不是图片则提醒用户
+      this.$message.error(&quot;只能上传图片&quot;);
+    }
+    return canUpload;
+  }
+}
+
+</code></pre>
+<ol start="5">
 <li>04.7 合同录入 -完成页面原型前端校验(租约开始日期小于结束日期;租约信息进行非空校验;提交合同录入后端要对用户是否登录进行校验，如果未登录不准录入合同)</li>
 </ol>
 <pre><code class="language-javascript">// 参见 01.7 解决方案
 </code></pre>
-<ol start="6">
+<ol>
 <li>09.2 完成房屋列表，实现分页和根据名称查找功能</li>
 </ol>
 <h2 id="用户登录"><a class="header" href="#用户登录">用户登录：</a></h2>
@@ -320,8 +380,8 @@ public Result&lt;List&lt;Cart&gt;&gt; list(@CookieValue String token){
 <pre><code class="language-java"> @PostMapping(&quot;/login&quot;)
 public Result&lt;String&gt; login(@RequestBody User user, HttpServletResponse response) {
     //因为要判断某用户某分钟输错了几次，所以key要包含用户名称（这里是邮箱）和分钟数
-    String minute = user.getMail()+DateUtil.minute(new Date());
-    Object obj = redisTemplate.opsForValue().get(minute);
+    String key = user.getMail();
+    Object obj = redisTemplate.opsForValue().get(key);
     if(obj != null) {
         int times = (int)obj;//检查某用户在这一分钟错误尝试了几次
         if(times &gt;= 3) {// 如果大于三次，则报错
@@ -342,11 +402,10 @@ public Result&lt;String&gt; login(@RequestBody User user, HttpServletResponse re
         return Result.ok(token);
     }else {
         // 密码错误，增加一次
-        long result = redisTemplate.opsForValue().increment(minute);
+        long result = redisTemplate.opsForValue().increment(key);
         if(result == 1){// 第一次尝试时设置缓存的生命周期为1分钟。
-            redisTemplate.expire(minute, 1,TimeUnit.MINUTES);
+            redisTemplate.expire(key, 1,TimeUnit.MINUTES);
         }
-        System.out.println(minute+&quot;=======&quot; + result);
         return Result.err(-2, &quot;密码不正确&quot;);
     }
 }
