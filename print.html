@@ -2962,6 +2962,47 @@ public Result&lt;String&gt; no() {
 <ol>
 <li>02.8 患者添加功能（性别,学历,职业统一来自数据字典表，且采用redis缓存；患者添加功能要考虑防止表单重复提交功能；每个患者要求生成一个唯一的患者编号）</li>
 <li>03.8 企业添加功能（添加功能要考虑防止表单重复提交功能；每个企业要求生成一个唯一的患者编号；添加功能考虑用户是否登录进行校验(可以采用网关过滤器实现)）</li>
+</ol>
+<pre><code class="language-java">@Component
+public class JWTFilter implements GlobalFilter, Ordered {
+    @Override
+    public Mono&lt;Void&gt; filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        //1. 哪些url需要进行安全检查
+        String currentUrl = exchange.getRequest().getPath().value();
+        if(!&quot;/user/user/login&quot;.equals(currentUrl)) {
+            MultiValueMap&lt;String, HttpCookie&gt; cookies = exchange.getRequest().getCookies();
+            if(cookies != null &amp;&amp; cookies.getFirst(&quot;token&quot;) != null) {
+                HttpCookie token = cookies.getFirst(&quot;token&quot;);
+                String jwt =  token.getValue();
+                boolean verify = JWTUtil.verify(jwt, &quot;1234&quot;.getBytes());
+                if(!verify) {
+                    return needLogin(exchange);
+                }
+
+            }else {
+                return needLogin(exchange);
+            }
+        }
+        //2, 对于需要安全检查的url进行检验。
+        //3,合法通过，不合法拒绝。
+        return chain.filter(exchange);
+    }
+
+    private Mono&lt;Void&gt; needLogin(ServerWebExchange exchange) {
+        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+        return exchange.getResponse().setComplete();
+    }
+
+    @Override
+    public int getOrder() {
+        return 0;
+    }
+}
+
+
+
+</code></pre>
+<ol start="3">
 <li>04.8 合同录入 -完成页面原型后端业务功能(解决合同编号重复问题;要考虑表单重复提交的解决方案;合同录入成功合同录入人员为当前登陆用户;确保金额精度，使用BigDecimal数据类型)</li>
 <li>05.2 费用管理 - 添加费用（输入客户名称、生成日期、合同金额等字段，选择费用类型信息，并进行表单验证；
 点击添加按钮后，将费用信息提交到后端服务保存，并刷新费用列表页
@@ -2971,7 +3012,7 @@ public Result&lt;String&gt; no() {
 </ol>
 <pre><code class="language-javascript">/(?=.*\d)(?=.*[a-zA-Z]).{6,}/
 </code></pre>
-<ol start="7">
+<ol>
 <li>06.2 添加商品功能- 要求用户可以输入商品的名称、价格、单位、库存等信息，并能够上传商品图片（确保价格金额精度，使用BigDecimal数据类型；防止保存失败，数据不完整，配置事务；添加商品编号，防止商品编号重复）</li>
 <li>06.3 用户服务 - 实现一个简单的用户注册页面，要求用户可以输入用户名、密码等信息，并能够进行表单校验（前后端分离cookie跨域，页面跨域，登录成功，把认证标识写入cookie中）</li>
 <li>06.8 创建商品时要防止表单重复提交</li>
@@ -3008,7 +3049,20 @@ public Result&lt;String&gt; no() {
 <li>09.5 前端发送请求到后端API接口，传递身份证和姓名等参数</li>
 <li>10.5 在创建租赁订单页面中，前端通过表单输入租赁人的身份证和名称等信息</li>
 </ol>
-<pre><code class="language-java">
+<pre><code class="language-java">@PostMapping(&quot;/verify&quot;)
+public Result&lt;String&gt; verify(@RequestBody Contract contract) {
+    Map&lt;String,Object&gt; map = new HashMap&lt;&gt;();
+    map.put(&quot;idNo&quot;, contract.getOwnerNo());
+    map.put(&quot;name&quot;, contract.getOwnerName());
+    String body = HttpRequest.post(&quot;https://idenauthen.market.alicloudapi.com/idenAuthentication&quot;)
+            .header(&quot;Authorization&quot;, &quot;APPCODE 你的appcode&quot;)
+            .form(map)
+            .execute()
+            .body();
+    System.out.println(body);
+
+    return Result.ok(body);
+}
 </code></pre>
 <h2 id="admin"><a class="header" href="#admin">Admin</a></h2>
 <ol>
@@ -3101,7 +3155,7 @@ public Result&lt;String&gt; no() {
 </ol>
 <h2 id="消息消费"><a class="header" href="#消息消费">消息消费</a></h2>
 <ol>
-<li>30.2 2.	配置RocketMQ的消费者，订阅&quot;payment_topic&quot;主题，并实现相应的业务逻辑来处理支付相关消息</li>
+<li>30.2 配置RocketMQ的消费者，订阅&quot;payment_topic&quot;主题，并实现相应的业务逻辑来处理支付相关消息</li>
 <li>29.2 配置RocketMQ的消费者，订阅&quot;payment_topic&quot;主题，确保消费者能够接收到支付消息，并实现负载均衡和消费者组管理以提高系统的容错性和扩展性  ？？</li>
 <li>28.4 将消息的处理过程异步化，并利用RocketMQ的特性实现并行处理，以提高系统的消息处理速度和吞吐量，优化系统性能和资源利用率  ？？？ </li>
 <li>22.2 消息消费者从RocketMQ中异步获取消息，并进行处理，例如发送短信、邮件等通知操作。 ？？？</li>
@@ -3109,27 +3163,88 @@ public Result&lt;String&gt; no() {
 </ol>
 <h2 id="消息发送"><a class="header" href="#消息发送">消息发送</a></h2>
 <ol>
-<li>30.3 3.	使用RocketMQ的异步发送方式，将支付消息以消息对象的形式发送到&quot;payment_topic&quot;主题，提高系统的并发能力和响应速度</li>
+<li>30.3 使用RocketMQ的异步发送方式，将支付消息以消息对象的形式发送到&quot;payment_topic&quot;主题，提高系统的并发能力和响应速度</li>
 <li>29.1 配置RocketMQ的生产者，设置主题为&quot;payment_topic&quot;，确保消息的可靠传递，并采用可靠性保证机制增加重试次数和错误处理机制</li>
-<li>29.4 4.	将用户下单成功、支付成功或取消订单等事件封装成消息对象，并通过异步发送消息的方式减轻直接同步发送短信或邮件对系统性能的影响，提升系统的稳定性和并发能力</li>
+</ol>
+<pre><code class="language-yml">rocketmq:
+  name-server: 127.0.0.1:9876 # rocketMQ 名称服务器
+  producer:
+    group: test # 发送组
+    topic: test-topic  # topic 相当于一个地址
+    retry-times-when-send-failed: 5  # 同步发送失败要重试几次
+    retry-times-when-send-async-failed: 3 # 异步发送失败要重试几次
+</code></pre>
+<ol start="3">
+<li>29.4 将用户下单成功、支付成功或取消订单等事件封装成消息对象，并通过异步发送消息的方式减轻直接同步发送短信或邮件对系统性能的影响，提升系统的稳定性和并发能力</li>
 <li>28.1 配置系统以确保用户下单成功、支付成功或取消订单等事件能够触发相应的短信或邮件通知，提升用户体验和服务效果 ？？？？</li>
 <li>27.1 通过将相关信息封装成消息对象，并利用RocketMQ的生产者将消息发送到指定的消息主题，实现消息的可靠传递和分发</li>
 <li>26.1 确保支付模块中用户下单成功、支付成功或取消订单等事件能够触发消息发送，并在消息消费者端正确处理 ？？ 都要发送这些消息吗？</li>
 <li>25.1 当用户下单成功、支付成功或取消订单时，调用RocketMQ的生产者发送相应的支付消息到&quot;payment_topic&quot;</li>
 <li>25.4 使用RocketMQ的异步发送方式，将消息发送到&quot;payment_topic&quot;主题</li>
 <li>24.1 在用户下单或支付时，将通知信息封装成消息并通过RocketMQ发送至中间件</li>
-<li>23.1 用户完成购物行为后，将通知信息封装成消息并通过RocketMQ发送至中间件。。</li>
+<li>23.1 用户完成购物行为后，将通知信息封装成消息并通过RocketMQ发送至中间件。</li>
 <li>21.1 使用RocketMQ中间件实现业务解耦，发送短信和邮件通知</li>
 <li>30.5 添加消息推送的异常处理机制，如消息发送失败时的错误重试机制和错误日志记录，以保证消息的可靠性和系统稳定性</li>
 </ol>
 <h3 id="消息发送配置"><a class="header" href="#消息发送配置">消息发送配置：</a></h3>
 <ol>
 <li>22.1 使用RocketMQ进行同步发送消息，并设置合适的重试次数和超时时间，避免网络波动导致消息重复发送</li>
-<li></li>
 </ol>
 <h2 id="防止重复消费"><a class="header" href="#防止重复消费">防止重复消费</a></h2>
 <ol>
 <li>30.4 为避免重复消费，使用Redis或其他缓存工具记录已经处理过的消息的唯一标识符，以实现幂等性，确保数据处理的准确性和一致性</li>
+</ol>
+<pre><code class="language-java">@Data
+public class PaySuccessMsg {
+    private String phone;
+    private BigDecimal price;
+    private int orderId;
+}
+
+@Service
+@RocketMQMessageListener(topic=&quot;pay_succes_0704&quot;, consumerGroup = &quot;pay_succes_0704_group&quot;)
+@Slf4j
+public class PaySuccessConsumer implements RocketMQListener&lt;PaySuccessMsg&gt; {
+    @Autowired
+    RedisTemplate redisTemplate;
+    @Override
+    public void onMessage(PaySuccessMsg paySuccessMsg) {
+        //做法一，在进来的时候设置。这种方法更简单
+        //做法二，进来时不做判断，发送成功以后再做设置。
+        String key = key(paySuccessMsg);
+        if(redisTemplate.opsForValue().setIfAbsent(key,&quot;1&quot;,30, TimeUnit.MINUTES)) {
+            System.out.println(&quot;我收到了消息：&quot; + paySuccessMsg.toString());
+            ZhenziSmsClient client = new ZhenziSmsClient(&quot;https://sms_developer.zhenzikj.com&quot;, &quot;112605&quot;, &quot;6a987156-398b-4c3c-9d84-ce6b3921bd18&quot;);
+            sendMsg(paySuccessMsg, client);
+        }else {
+            System.out.println(&quot;处理消息重复&quot;);
+        }
+
+
+    }
+
+    private static void sendMsg(PaySuccessMsg paySuccessMsg, ZhenziSmsClient client) {
+        Map&lt;String, Object&gt; params = new HashMap&lt;String, Object&gt;();
+        params.put(&quot;number&quot;, paySuccessMsg.getPhone());
+        params.put(&quot;templateId&quot;, &quot;10759&quot;);
+        String[] templateParams = new String[2];
+        templateParams[0] = &quot;&quot;+ paySuccessMsg.getPrice().floatValue();
+        templateParams[1] = &quot;5分钟&quot;;
+        params.put(&quot;templateParams&quot;, templateParams);
+        try {
+            String result = client.send(params);
+            System.out.println(result);
+        } catch (Exception e) {
+            log.error(&quot;发送短信出现异常&quot;, e);
+        }
+    }
+
+    private String key(PaySuccessMsg paySuccessMsg) {
+        return DigestUtil.md5Hex(paySuccessMsg.toString());
+    }
+}
+</code></pre>
+<ol start="2">
 <li>29.3 为避免重复消费，消息体中添加唯一标识符如订单号或支付流水号，并在消费端进行去重处理，同时使用幂等性机制确保数据处理的准确性和一致性</li>
 <li>28.3 利用RocketMQ内置的消息去重机制和消费者端的幂等性处理功能，避免同一条消息被重复消费，确保数据处理的准确性和一致性  ？？内置消息去重</li>
 <li>27.3 在消费者处理消息之前，通过检查消息的唯一标识符或状态，确保同一条消息不会被重复消费，保证数据的一致性和正确性。</li>
@@ -3148,29 +3263,66 @@ public Result&lt;String&gt; no() {
 <ol>
 <li>27.4 将短信发送或邮件发送的动作解耦至异步线程中，将发送操作与主线程分离，提高系统的响应速度和并发能力，优化用户体验和系统性能  ？？</li>
 <li>26.4 利用RocketMQ的异步发送特性，将短信发送或邮件发送的动作从主线程中解耦，提高系统的响应速度和并发能力，优化用户体验和系统性能</li>
+<li>24.2 消息接收的设计。 消息消费者从RocketMQ中获取消息，将消息异步处理，例如发送短信、邮件通知用户</li>
+<li>23.2 消息消费者从RocketMQ中异步获取消息，并进行相应的处理，如发送短信、邮件通知用户。???</li>
 </ol>
 <h2 id="消息堆积"><a class="header" href="#消息堆积">消息堆积</a></h2>
 <ol>
 <li>24.3 消息堆积解决。 增加消息消费线程数：通过增加消息消费线程数，可以提高消息消费速度，减少消息堆积的可能性</li>
+</ol>
+<pre><code class="language-java">@RocketMQMessageListener(consumeThreadMax = 128,topic=&quot;pay_succes_0704&quot;, consumerGroup = &quot;pay_succes_0704_group&quot;)
+</code></pre>
+<ol>
 <li>22.3 增加消费者数量以提高消息消费速度，降低消息堆积的潜在风险</li>
 <li>21.3 通过启用多个消息消费者实例进行并行处理，解决消息积压问题</li>
 </ol>
 <h2 id="消息补偿"><a class="header" href="#消息补偿">消息补偿</a></h2>
 <ol>
 <li>24.4 消息补偿。：在消息消费过程中，对于处理失败的消息，进行一定次数的重试操作，并记录错误日志。</li>
+</ol>
+<pre><code class="language-java">    private void sendSMS(ZhenziSmsClient client, String phone, String orderId, int num) {
+        if(num &lt;= 0){
+            log.error(&quot;发送短信重试仍旧失败。&quot;);
+            return;
+        }
+        Map&lt;String, Object&gt; params = new HashMap&lt;String, Object&gt;();
+        params.put(&quot;number&quot;, phone);
+        params.put(&quot;templateId&quot;, &quot;10759&quot;);
+        String[] templateParams = new String[2];
+        templateParams[0] = orderId;
+        templateParams[1] = &quot;5分钟&quot;;
+        params.put(&quot;templateParams&quot;, templateParams);
+        try {
+            String result = client.send(params);
+            System.out.println(result);
+            if(!(result.indexOf(&quot;发送成功&quot;) &gt; -1)){
+                sendSMS(client, phone, orderId, num-1);
+            }
+        } catch (Exception e) {
+            log.error(&quot;发送短信失败&quot;,e);
+            sendSMS(client,phone, orderId,num-1);
+        }
+    }
+</code></pre>
+<ol start="2">
 <li>23.4 实现消息消费补偿机制，用于在消息消费过程中出现异常时进行重试操作，确保消息的可靠性</li>
 <li>21.4 在消息消费过程中出现异常时，通过重试机制保证业务正确性</li>
-</ol>
-<h2 id="异步2"><a class="header" href="#异步2">异步2</a></h2>
-<ol>
-<li>24.2 消息接收的设计。 消息消费者从RocketMQ中获取消息，将消息异步处理，例如发送短信、邮件通知用户</li>
-<li>23.2 消息消费者从RocketMQ中异步获取消息，并进行相应的处理，如发送短信、邮件通知用户。???</li>
 </ol>
 <h2 id="消费者集群"><a class="header" href="#消费者集群">消费者集群</a></h2>
 <ol>
 <li>25.2 将RocketMQ的消费者消费模式设置为集群模式，确保多个消费者能够同时消费消息，提高可靠性  ??</li>
 </ol>
+<pre><code class="language-java">@RocketMQMessageListener(messageModel = MessageModel.BROADCASTING,topic=&quot;pay_succes_0704&quot;, consumerGroup = &quot;pay_succes_0704_group&quot;)
+</code></pre>
 <h2 id="其他-1"><a class="header" href="#其他-1">其他</a></h2>
+<pre><code>消息持久化：
+重试策略：
+故障恢复机制
+监控手段
+顺序消息
+报警机制
+消费者均衡消费
+</code></pre>
 <ol>
 <li>21.5 消息推送系统可靠性设计（4分）：包括消息持久化、重试策略和故障恢复机制，确保系统的可靠性  ？？？</li>
 <li>22.5	消息可靠性保障（3分）：使用持久化机制存储消息，结合监控手段和故障恢复机制，保证消息推送系统的可靠性</li>
@@ -3261,6 +3413,8 @@ public Result&lt;Boolean&gt; createOrder(Book book) {
 <li>31.4 针对高峰时期流量过大可能引起的系统瘫痪问题实现相应解决方案</li>
 </ol>
 <h2 id="超卖"><a class="header" href="#超卖">超卖</a></h2>
+<pre><code class="language-java">
+</code></pre>
 <ol>
 <li>40.3 根据订单状态和库存信息，使用Redis防止商品超卖 (请根据订单状态和库存信息，使用Redis等缓存技术，实现商品超卖的防止机制，确保每个订单都有足够的库存进行抢购) </li>
 <li>39.3 使用Redis的原子操作，实现防止超卖问题的解决方案 (探索并实施基于Redis的原子操作，确保每个订单的抢单过程中不会出现超卖的情况)</li>
