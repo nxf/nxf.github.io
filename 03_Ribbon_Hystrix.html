@@ -279,6 +279,18 @@ public String fallback(@PathVariable int id) {
     return &quot;降级方法id=&quot;+id;
 }
 </code></pre>
+<h4 id="超时配置"><a class="header" href="#超时配置">超时配置</a></h4>
+<p>hystrix可以配置是否启用超时，以及超多多久时间视为超时。</p>
+<pre><code class="language-yaml">hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 500
+        timeout:
+          enabled: true
+</code></pre>
 <h3 id="扩展--熔断状态"><a class="header" href="#扩展--熔断状态">扩展--熔断状态</a></h3>
 <pre class="mermaid">graph LR;
 N[关闭状态]--有异常--&gt;V{验证}
