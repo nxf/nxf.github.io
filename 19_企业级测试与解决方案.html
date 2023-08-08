@@ -172,6 +172,16 @@
 <h2 id="结果树"><a class="header" href="#结果树">结果树</a></h2>
 <p>查看单个情况
 <img src="./imgs/jmeter/jmeter_report_resultTree.png" alt="resultTree" /></p>
+<h2 id="命令行测试"><a class="header" href="#命令行测试">命令行测试</a></h2>
+<pre><code class="language-shell">bin\jmeter -n -t github.jmx -l testplan\result.txt -e -o testplan\webreport
+
+-n 在命令行模式运行
+-t 测试计划文件名称
+-l 将结果记录到那个文件
+-e 生成仪表板
+-o 报告测试地址
+
+</code></pre>
 
                     </main>
 

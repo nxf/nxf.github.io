@@ -152,14 +152,17 @@
 <pre><code class="language-shell">  /xxl-job/doc/db/tables_xxl_job.sql
 </code></pre>
 <ul>
-<li>修改配置文件
-进入到xxl-job-admin项目中，修改配置文件(application.properties)中的端口号； 数据库用户名及密码；</li>
-<li>编译运行xxl-job-admin</li>
+<li>修改配置文件<br />
+进入到xxl-job-admin项目中，修改配置文件application.properties（在文件夹xxl-job-admin\src\main\resources下）中的端口号， 数据库用户名及密码也改成本地的用户名和密码；</li>
+<li>编译运行xxl-job-admin<br />
+在xxl-job-admin目录中运行下面的命令：</li>
 </ul>
 <pre><code class="language-shell">  mvn spring-boot:run
 </code></pre>
 <ul>
-<li>xxl-job-admin的缺省密码</li>
+<li>登录xxl-job-admin
+地址 http://localhost:9999/xxl-job-admin/
+的缺省密码</li>
 </ul>
 <pre><code>  admin/123456
 </code></pre>
@@ -198,8 +201,7 @@
 <p>在这里使用上面的配合信息，构建一个执行器实例。</p>
 <pre><code class="language-java">    @Value(&quot;${xxl.job.admin.addresses}&quot;)
     private String adminAddress;
-    @Value(&quot;${xxl.job.accessToken}&quot;)
-    private String accessToken;
+
     @Value(&quot;${xxl.job.executor.appName}&quot;)
     private String appName;
     @Value(&quot;${xxl.job.executor.logpath}&quot;)

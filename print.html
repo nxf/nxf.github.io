@@ -1712,6 +1712,14 @@ public class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
         return Result.ok(url);
     }
 </code></pre>
+<h2 id="配置servlet支持大文件"><a class="header" href="#配置servlet支持大文件">配置servlet支持大文件</a></h2>
+<pre><code class="language-yml">spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 500MB
+      max-request-size: 2048MB
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="环境介绍"><a class="header" href="#环境介绍">环境介绍</a></h1>
 <h2 id="沙箱环境"><a class="header" href="#沙箱环境">沙箱环境</a></h2>
 <p>在我们的学习，考试中主要使用这个环境的信息，包含appId，支付网关地址，签名等信息。
@@ -2572,14 +2580,17 @@ nohup bin/mqbroker -c /home/nixinfeng/workspace/rocketmq-4.9.3/conf/2m-2s-sync/b
 <pre><code class="language-shell">  /xxl-job/doc/db/tables_xxl_job.sql
 </code></pre>
 <ul>
-<li>修改配置文件
-进入到xxl-job-admin项目中，修改配置文件(application.properties)中的端口号； 数据库用户名及密码；</li>
-<li>编译运行xxl-job-admin</li>
+<li>修改配置文件<br />
+进入到xxl-job-admin项目中，修改配置文件application.properties（在文件夹xxl-job-admin\src\main\resources下）中的端口号， 数据库用户名及密码也改成本地的用户名和密码；</li>
+<li>编译运行xxl-job-admin<br />
+在xxl-job-admin目录中运行下面的命令：</li>
 </ul>
 <pre><code class="language-shell">  mvn spring-boot:run
 </code></pre>
 <ul>
-<li>xxl-job-admin的缺省密码</li>
+<li>登录xxl-job-admin
+地址 http://localhost:9999/xxl-job-admin/
+的缺省密码</li>
 </ul>
 <pre><code>  admin/123456
 </code></pre>
@@ -2618,8 +2629,7 @@ nohup bin/mqbroker -c /home/nixinfeng/workspace/rocketmq-4.9.3/conf/2m-2s-sync/b
 <p>在这里使用上面的配合信息，构建一个执行器实例。</p>
 <pre><code class="language-java">    @Value(&quot;${xxl.job.admin.addresses}&quot;)
     private String adminAddress;
-    @Value(&quot;${xxl.job.accessToken}&quot;)
-    private String accessToken;
+
     @Value(&quot;${xxl.job.executor.appName}&quot;)
     private String appName;
     @Value(&quot;${xxl.job.executor.logpath}&quot;)
@@ -2661,7 +2671,24 @@ nohup bin/mqbroker -c /home/nixinfeng/workspace/rocketmq-4.9.3/conf/2m-2s-sync/b
     }
 
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="thread的使用"><a class="header" href="#thread的使用">Thread的使用</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="threadpool的使用"><a class="header" href="#threadpool的使用">ThreadPool的使用</a></h1>
+<pre><code class="language-java">//初始化线程池 
+@Configuration
+public class ThreadPoolConfig {
+
+    @Bean
+    public ThreadPoolTaskExecutor executor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setMaxPoolSize(2);//线程池最多有2个线程
+        executor.setCorePoolSize(1);//核心线程数为1
+        executor.setThreadNamePrefix(&quot;*_*&quot;);//线程名称前缀
+        executor.setQueueCapacity(100);//线程池等候队列
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());//拒绝策略
+        executor.initialize();//初始化
+        return executor;
+    }
+}
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><h1 id="测试jmeter"><a class="header" href="#测试jmeter">测试JMeter</a></h1>
 <h2 id="安装-2"><a class="header" href="#安装-2">安装</a></h2>
 <p>下载地址：
@@ -2693,6 +2720,16 @@ nohup bin/mqbroker -c /home/nixinfeng/workspace/rocketmq-4.9.3/conf/2m-2s-sync/b
 <h2 id="结果树"><a class="header" href="#结果树">结果树</a></h2>
 <p>查看单个情况
 <img src="./imgs/jmeter/jmeter_report_resultTree.png" alt="resultTree" /></p>
+<h2 id="命令行测试"><a class="header" href="#命令行测试">命令行测试</a></h2>
+<pre><code class="language-shell">bin\jmeter -n -t github.jmx -l testplan\result.txt -e -o testplan\webreport
+
+-n 在命令行模式运行
+-t 测试计划文件名称
+-l 将结果记录到那个文件
+-e 生成仪表板
+-o 报告测试地址
+
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="合同录入-1"><a class="header" href="#合同录入-1">合同录入</a></h1>
 <h2 id="设计表结构"><a class="header" href="#设计表结构">设计表结构</a></h2>
 <ol>
@@ -2827,60 +2864,13 @@ export  default {
 
 </code></pre>
 <ol start="2">
-<li>01.7 合同录入 -完成页面原型后端业务功能（解决合同编号重复问题；合同业务类型来自redis数据缓存；要考虑表单重复提交的解决方案）</li>
+<li>
+<p>01.7 合同录入 -完成页面原型后端业务功能（解决合同编号重复问题；合同业务类型来自redis数据缓存；要考虑表单重复提交的解决方案）</p>
+</li>
+<li>
+<p>02.7 患者添加功能（手机号和证件号码(身份证)进行格式校验；年龄必须在1-120岁区间）</p>
+</li>
 </ol>
-<pre><code class="language-java">//1， 从缓存中读取数据
-//2, 从cookie中获取用户ID，实现读取当前用户的购物车的逻辑。
-@GetMapping(&quot;/list&quot;)
-public Result&lt;List&lt;Cart&gt;&gt; list(@CookieValue String token){
-    int uid = this.getUidFromToken(token);//从token中获取用户ID
-    String key = &quot;&quot;+uid;
-    List&lt;Cart&gt; carts = (List&lt;Cart&gt;)redisTemplate.opsForValue().get(key);
-    if(carts == null) {//缓存中没有数据，
-        System.out.println(&quot;走数据库&quot;);
-        carts = cartService.findByUserId(uid);//从数据库中读取
-        //将读取的数据放置到redis中，下次请求就可以从redis中读到了。
-        redisTemplate.opsForValue().set(key,carts,30, TimeUnit.MINUTES);
-    }
-    return Result.ok(carts);
-}
-</code></pre>
-<ol start="3">
-<li>02.7 患者添加功能（手机号和证件号码(身份证)进行格式校验；年龄必须在1-120岁区间）</li>
-</ol>
-<pre><code class="language-javascript"> data() {
-    let age = (rule,v, callback) =&gt; {
-      //使用正则表达式判断是否是合法的身份证
-      if(/(^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$)|(^\d{6}(18|19|20)\d{2}(0\d|10|11|12)([0-2]\d|30|31)\d{3}(\d|X|x)$)/.test(v)) {
-        //获取身份证上的年份
-        let year = v.substr(6,4);
-        //获取当前的年份
-        let thisYear = new Date().getFullYear();
-        //获取年龄
-        let gap = thisYear - year;
-        if(gap &gt;= 1 &amp;&amp; gap &lt;= 120) { //判断年龄在1岁和120岁之间
-          callback();
-        }else {
-          callback(new Error(&quot;年龄必须在1岁和120岁之间&quot;));
-        }
-      }else {
-        callback(new Error(&quot;身份证格式不正确&quot;));
-      }
-    };
-    return {
-      rules: {
-        birth: [
-          {validator: age, trigger: 'blur'}
-        ]
-      },
-      user: {
-        mail: &quot;abc@163.com&quot;,
-        password: &quot;Aa123456&quot;,
-        birth: &quot;510108197911281535&quot;
-      }
-    }
-  }
-</code></pre>
 <pre><code class="language-java">//后端判断年龄
 @PostMapping(&quot;/testAge&quot;)
 public Result&lt;Boolean&gt; testAge(@RequestBody Contract contract) {
@@ -2892,7 +2882,7 @@ public Result&lt;Boolean&gt; testAge(@RequestBody Contract contract) {
     }
 }
 </code></pre>
-<ol start="4">
+<ol>
 <li>03.7 企业添加功能-校验功能（手机号进行格式校验；数据字典表中的数据要求采用redis缓存；企业logo只能上传图片功能）</li>
 </ol>
 <pre><code class="language-javascript">&lt;el-upload
@@ -2986,6 +2976,13 @@ axios.defaults.withCredentials=true;
 <li>07.2 用户登录功能实现，登录成功写入Cookie(前后端分离cookie跨域，登录成功，把用户信息写入cookie中;将用户信息放入redis中，供后面验证用户是否登录)</li>
 <li>08.1 用户登录（前后端分离cookie跨域，页面跨域，登录成功后把必要信息写入cookie中）</li>
 <li>09.1 用户登录，后端在登录成功后，将必要的用户信息（如用户ID）写入cookie中，并设置有效期。(设置Cookie跨域，携带Cookie信息到后台)</li>
+</ol>
+<pre><code class="language-javascript">    let now = new Date();
+    now.setMinutes(now.getMinutes()+ 30);
+    document.cookie = &quot;token=&quot;+res.data.data+&quot;;expires=&quot;+now.toUTCString();
+
+</code></pre>
+<ol start="8">
 <li>10.1 用户登录在前后端分离的架构中，使用 JWT（JSON Web Token）实现用户认证和授权。用户登录成功后，后端生成一个 JWT 并返回给前端，前端将 JWT 存储在 Cookie 中(保证JWT和Cookie的过期时间一致，Cookie信息携带到后台进行校验)</li>
 </ol>
 <h2 id="合同添加"><a class="header" href="#合同添加">合同添加：</a></h2>
@@ -3555,7 +3552,7 @@ public Result&lt;Boolean&gt; qiangOrder(int pid, int uid) {
 <ol>
 <li>33.4 使用Postman实现创建订单，对订单创建请求进行安全验证 检验是否携带正确的token，只有带有正确token的请求才能创建成功</li>
 </ol>
-<h2 id="什么鬼"><a class="header" href="#什么鬼">什么鬼？</a></h2>
+<h2 id="说明"><a class="header" href="#说明">说明</a></h2>
 <ol>
 <li>33.5 在使用支付宝接口进行订单处理时，为了确保数据的完整性和安全性，需要进行验签操作。请说明验证签名的步骤，并确保只有通过验签的请求才能被认为是有效的   ？？？说明</li>
 <li>34.5 在使用支付宝接口进行订单处理时，为了确保数据的完整性和安全性，需要进行验签操作。请说明验证签名的步骤，并确保只有通过验签的请求才能被认为是有效的</li>

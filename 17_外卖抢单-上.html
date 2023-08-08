@@ -141,7 +141,24 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="thread的使用"><a class="header" href="#thread的使用">Thread的使用</a></h1>
+                        <h1 id="threadpool的使用"><a class="header" href="#threadpool的使用">ThreadPool的使用</a></h1>
+<pre><code class="language-java">//初始化线程池 
+@Configuration
+public class ThreadPoolConfig {
+
+    @Bean
+    public ThreadPoolTaskExecutor executor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setMaxPoolSize(2);//线程池最多有2个线程
+        executor.setCorePoolSize(1);//核心线程数为1
+        executor.setThreadNamePrefix(&quot;*_*&quot;);//线程名称前缀
+        executor.setQueueCapacity(100);//线程池等候队列
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());//拒绝策略
+        executor.initialize();//初始化
+        return executor;
+    }
+}
+</code></pre>
 
                     </main>
 
