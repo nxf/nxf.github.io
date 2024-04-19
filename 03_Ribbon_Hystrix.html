@@ -237,7 +237,72 @@ IRule myRule() {
 </code></pre>
 <p>上述代码需要放在 @Configuration修饰的类中。</p>
 <h1 id="三hystrix---熔断与降级"><a class="header" href="#三hystrix---熔断与降级">三，Hystrix - 熔断与降级</a></h1>
-<p>负责服务的熔断与降级,考虑如下的服务调用：</p>
+<p><a href="https://c.biancheng.net/springcloud/hystrix.html">hystrix介绍</a>
+Hystrix的作用：</p>
+<ul>
+<li>保护线程资源</li>
+</ul>
+<pre><code>//信号量限流
+@HystrixCommand(
+ commandProperties= {
+   @HystrixProperty(name=&quot;execution.isolation.strategy&quot;, value=&quot;SEMAPHORE&quot;),
+   @HystrixProperty(name=&quot;execution.isolation.semaphore.maxConcurrentRequests&quot;, value=&quot;20&quot;)
+ },
+ fallbackMethod = &quot;errMethod&quot;
+)
+//线程池限流
+@HystrixCommand(
+    commandProperties = {
+            @HystrixProperty(name = &quot;execution.isolation.strategy&quot;, value = &quot;THREAD&quot;)
+    },
+    threadPoolKey = &quot;createOrderThreadPool&quot;,
+    threadPoolProperties = {
+            @HystrixProperty(name = &quot;coreSize&quot;, value = &quot;20&quot;),
+   @HystrixProperty(name = &quot;maxQueueSize&quot;, value = &quot;100&quot;),
+            @HystrixProperty(name = &quot;maximumSize&quot;, value = &quot;30&quot;),
+            @HystrixProperty(name = &quot;queueSizeRejectionThreshold&quot;, value = &quot;120&quot;)
+    },
+    fallbackMethod = &quot;errMethod&quot;
+)
+</code></pre>
+<ul>
+<li>
+<p>快速失败机制</p>
+</li>
+<li>
+<p>提供降级方案</p>
+</li>
+</ul>
+<pre><code>//在被调用方的方法上放置
+@HystrixCommand(fallbackMethod=&quot;耗时方法&quot;, commandProperties = 
+{
+    {@HystrixProperty(name=&quot;execution.isolation.thread.timeoutInMilliseconds&quot;, value=&quot;5000&quot;)}
+})
+//客户端配置
+feign:
+  hystrix:
+    enabled: true
+
+######################配置请求超时时间##########################
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 7000
+####################配置具体方法超时时间 为 3 秒########################
+    DeptHystrixService#deptInfo_Timeout(Integer):
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+</code></pre>
+<ul>
+<li>防止故障扩散</li>
+<li>监控功能
+负责服务的熔断与降级,考虑如下的服务调用：</li>
+</ul>
 <p><img src="./imgs/hystrix.png" alt="服务调用" /></p>
 <h2 id="引入依赖"><a class="header" href="#引入依赖">引入依赖</a></h2>
 <pre><code class="language-xml">&lt;dependency&gt;
