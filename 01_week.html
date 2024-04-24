@@ -177,6 +177,22 @@ public class BizException extends  RuntimeException{
     }
 }
 </code></pre>
+<h2 id="日期处理"><a class="header" href="#日期处理">日期处理</a></h2>
+<p>后端日期处理样例：</p>
+<pre><code class="language-java">public class Contract {
+
+    @DateFormat(&quot;yyyy-MM-dd&quot;)
+    @JsonFormat(pattern = &quot;yyyy-MM-dd&quot;, timezone = &quot;GMT+8&quot;)
+    private Date start;
+}
+</code></pre>
+<p>前端vue日期格式, format控制前端显示格式，value-format控制向后端传送的格式(值的格式)</p>
+<pre><code class="language-javascript">&lt;el-data-picker v-model=&quot;start&quot; 
+    type=&quot;date&quot; 
+    value-format=&quot;yyyy-MM-dd&quot; 
+    format=&quot;yyyy-MM-dd&quot; 
+    placeholder=&quot;选择日期&quot; &gt;&lt;/el-data-picker&gt;
+</code></pre>
 
                     </main>
 
