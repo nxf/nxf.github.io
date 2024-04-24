@@ -193,6 +193,13 @@ public class BizException extends  RuntimeException{
     format=&quot;yyyy-MM-dd&quot; 
     placeholder=&quot;选择日期&quot; &gt;&lt;/el-data-picker&gt;
 </code></pre>
+<h2 id="写入cookie数据"><a class="header" href="#写入cookie数据">写入cookie数据</a></h2>
+<pre><code class="language-java">    Cookie cookie = new Cookie(&quot;token&quot;, token);
+    cookie.setPath(&quot;/&quot;);
+    response.addCookie(cookie);
+</code></pre>
+<pre><code class="language-javascript"> document.cookie = &quot;token=&quot;+res.data.data;
+</code></pre>
 
                     </main>
 
