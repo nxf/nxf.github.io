@@ -142,6 +142,29 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="二周目难点"><a class="header" href="#二周目难点">二周目难点</a></h1>
+<h2 id="邮箱验证"><a class="header" href="#邮箱验证">邮箱验证</a></h2>
+<pre><code class="language-javascript">\w+@\w(.\w)*
+</code></pre>
+<h2 id="唯一id号"><a class="header" href="#唯一id号">唯一ID号</a></h2>
+<p>服务端：</p>
+<pre><code class="language-java">Snowflake snowflake = IdUtil.getSnowflake();
+String id = &quot;HT&quot;+snowlake.nextId();
+</code></pre>
+<p>浏览器端：</p>
+<pre><code class="language-shell"># install
+npm install uuid -S
+</code></pre>
+<pre><code class="language-javacript">import { v1 } from 'uuid';
+let uid = v1()
+</code></pre>
+<h2 id="输入最大值"><a class="header" href="#输入最大值">输入最大值</a></h2>
+<pre><code class="language-javascript">  &lt;el-input-number v-model=&quot;num&quot; :precision=&quot;0&quot; :step=&quot;1&quot; :max=&quot;99&quot;&gt;&lt;/el-input-number&gt;
+</code></pre>
+<h2 id="保持数据库和缓存一致"><a class="header" href="#保持数据库和缓存一致">保持数据库和缓存一致</a></h2>
+<pre><code class="language-java"># clear cache  清除缓存
+# update database  更新数据库
+# clear cache again 等会儿再清除一次缓存
+</code></pre>
 
                     </main>
 
