@@ -1713,9 +1713,38 @@ public class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
         boolean less = second.compareTo(first) &lt; 0;
 </code></pre>
 <ul>
-<li>[签合同期间房屋被租出去]</li>
+<li>[reddssion 分布式锁]<br />
+引入依赖：</li>
 </ul>
-<pre><code class="language-java">//TODO 
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.redisson&lt;/groupId&gt;
+    &lt;artifactId&gt;redisson-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;3.15.5&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>添加配置：</p>
+<pre><code class="language-yaml">spring:
+  redis:
+    redisson:
+      singleServerConfig:
+        password: 123456
+        address: &quot;/redis:127.0.0.1:6379&quot;
+</code></pre>
+<p>使用代码:</p>
+<pre><code class="language-java">@GetMapping(&quot;/lock/test&quot;)
+public boolean lock(int id) {
+    RLock lock = redissonClient.getLock(&quot;test-lock-reddison&quot; + id);
+    try {
+        lock.lock(1, TimeUnit.SECONDS);
+        Thread.sleep(10000);
+        return true;
+    }catch (InterruptedException e) {
+
+    }finally {
+        lock.unlock();
+    }
+    return false;
+}
 </code></pre>
 <h2 id="收房合同录入功能"><a class="header" href="#收房合同录入功能">收房合同录入功能</a></h2>
 <ul>
@@ -3863,6 +3892,14 @@ let uid = v1()
 # clear cache again 等会儿再清除一次缓存
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="三周目难点"><a class="header" href="#三周目难点">三周目难点</a></h1>
+<h2 id="手机号正则匹配"><a class="header" href="#手机号正则匹配">手机号正则匹配</a></h2>
+<pre><code class="language-javascript">// 以1开头，后面接10位数字
+let reg = /^1\d{10}$/
+</code></pre>
+<h2 id="发送消息失败重试3次"><a class="header" href="#发送消息失败重试3次">发送消息失败重试3次</a></h2>
+<h2 id="防止消息重复消费"><a class="header" href="#防止消息重复消费">防止消息重复消费</a></h2>
+<h2 id="从token中获取用户id"><a class="header" href="#从token中获取用户id">从Token中获取用户ID</a></h2>
+<h2 id="发送短信失败重试三次"><a class="header" href="#发送短信失败重试三次">发送短信失败重试三次</a></h2>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="redis"><a class="header" href="#redis">Redis</a></h1>
 <h2 id="配置-2"><a class="header" href="#配置-2">配置：</a></h2>
 <p>两种持久化机制：</p>

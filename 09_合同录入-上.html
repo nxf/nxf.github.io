@@ -191,9 +191,38 @@
         boolean less = second.compareTo(first) &lt; 0;
 </code></pre>
 <ul>
-<li>[签合同期间房屋被租出去]</li>
+<li>[reddssion 分布式锁]<br />
+引入依赖：</li>
 </ul>
-<pre><code class="language-java">//TODO 
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.redisson&lt;/groupId&gt;
+    &lt;artifactId&gt;redisson-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;3.15.5&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>添加配置：</p>
+<pre><code class="language-yaml">spring:
+  redis:
+    redisson:
+      singleServerConfig:
+        password: 123456
+        address: &quot;/redis:127.0.0.1:6379&quot;
+</code></pre>
+<p>使用代码:</p>
+<pre><code class="language-java">@GetMapping(&quot;/lock/test&quot;)
+public boolean lock(int id) {
+    RLock lock = redissonClient.getLock(&quot;test-lock-reddison&quot; + id);
+    try {
+        lock.lock(1, TimeUnit.SECONDS);
+        Thread.sleep(10000);
+        return true;
+    }catch (InterruptedException e) {
+
+    }finally {
+        lock.unlock();
+    }
+    return false;
+}
 </code></pre>
 <h2 id="收房合同录入功能"><a class="header" href="#收房合同录入功能">收房合同录入功能</a></h2>
 <ul>
