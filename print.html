@@ -2480,6 +2480,17 @@ public class MQListener implements RocketMQListener&lt;String&gt; {
 }
 </code></pre>
 <h2 id="确保消息不丢失"><a class="header" href="#确保消息不丢失">确保消息不丢失</a></h2>
+<h3 id="0失败重试"><a class="header" href="#0失败重试">0.失败重试</a></h3>
+<pre><code class="language-yml">rocketmq:
+  name-server: 127.0.0.1:9876 # rocketMQ 名称服务器
+  producer:
+    group: test # 发送组
+    topic: test-topic  # topic 相当于一个地址
+    retry-times-when-send-failed: 5  # 错了以后重试几次
+  consumer:
+    group: test-consumer  #消费者组
+    topic: test-topic   # 消费topic
+</code></pre>
 <h3 id="1发送事务消息"><a class="header" href="#1发送事务消息">1.发送事务消息</a></h3>
 <pre><code class="language-java">    public void sendTransactional(String msg) {
         Message message = MessageBuilder.withPayload(msg).build();
