@@ -1,260 +1,444 @@
-<!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
-    <head>
-        <!-- Book generated using mdBook -->
-        <meta charset="UTF-8">
-        <title>简介 - Spring cloud</title>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nxf · 技术栈</title>
+<meta name="description" content="个人技术栈：传统 Java 开发、机器学习、大模型应用、智能体开发">
+<style>
+  :root {
+    --bg: #0b0f1c;
+    --bg-soft: #101627;
+    --card: rgba(255, 255, 255, 0.03);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text: #e8ecf4;
+    --text-dim: #9aa5b8;
+    --accent-1: #6366f1;
+    --accent-2: #22d3ee;
+    --gradient: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    --radius: 16px;
+  }
 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        <!-- Custom HTML head -->
-        
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+  html { scroll-behavior: smooth; }
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+  ::selection { background: rgba(99, 102, 241, 0.4); }
 
-        <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+  /* ---------- 背景光晕 ---------- */
+  .glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.22;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-1 { width: 480px; height: 480px; background: var(--accent-1); top: -160px; right: -120px; }
+  .glow-2 { width: 420px; height: 420px; background: var(--accent-2); bottom: -180px; left: -140px; opacity: 0.12; }
 
-        <!-- Custom theme stylesheets -->
+  /* ---------- 导航 ---------- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 10;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    background: rgba(11, 15, 28, 0.7);
+    border-bottom: 1px solid var(--card-border);
+  }
+  .nav-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
 
-    </head>
-    <body>
-        <!-- Provide site root to javascript -->
-        <script>
-            var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
-        </script>
+  /* ---------- 布局 ---------- */
+  main { position: relative; z-index: 1; }
+  section { max-width: 1080px; margin: 0 auto; padding: 96px 24px 0; }
 
-        <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script>
-            try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+  /* ---------- Hero ---------- */
+  .hero {
+    min-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .hero-badge {
+    display: inline-block;
+    font-size: 13px;
+    color: var(--accent-2);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    background: rgba(34, 211, 238, 0.06);
+    padding: 5px 14px;
+    border-radius: 999px;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+  .hero h1 {
+    font-size: clamp(38px, 6vw, 64px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1px;
+  }
+  .hero h1 .grad {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero p {
+    margin-top: 20px;
+    max-width: 560px;
+    color: var(--text-dim);
+    font-size: 17px;
+  }
+  .hero-actions { margin-top: 36px; display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-size: 15px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  .btn-primary {
+    background: var(--gradient);
+    color: #fff;
+    font-weight: 600;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+  }
+  .btn-ghost {
+    color: var(--text);
+    border: 1px solid var(--card-border);
+    background: var(--card);
+  }
+  .btn-ghost:hover { border-color: var(--accent-2); color: var(--accent-2); }
 
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
+  .hero-stats {
+    margin-top: 64px;
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+  .stat .num {
+    font-size: 28px;
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .stat .label { font-size: 13px; color: var(--text-dim); }
 
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
+  /* ---------- 通用标题 ---------- */
+  .section-title { margin-bottom: 40px; }
+  .section-title .kicker {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--accent-2);
+    text-transform: uppercase;
+  }
+  .section-title h2 {
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 700;
+    margin-top: 8px;
+    letter-spacing: -0.5px;
+  }
 
-        <!-- Set the theme before any content is loaded, prevents flash -->
-        <script>
-            var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
-            if (theme === null || theme === undefined) { theme = default_theme; }
-            var html = document.querySelector('html');
-            html.classList.remove('no-js')
-            html.classList.remove('light')
-            html.classList.add(theme);
-            html.classList.add('js');
-        </script>
+  /* ---------- 技术方向卡片 ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    transition: transform 0.25s, border-color 0.25s, background 0.25s;
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(99, 102, 241, 0.45);
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .card .icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    margin-bottom: 20px;
+  }
+  .card .icon svg { width: 24px; height: 24px; stroke: var(--accent-2); }
+  .card h3 { font-size: 19px; font-weight: 700; margin-bottom: 10px; }
+  .card p { font-size: 14px; color: var(--text-dim); margin-bottom: 18px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-size: 12.5px;
+    color: var(--text-dim);
+    border: 1px solid var(--card-border);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 4px 12px;
+    border-radius: 999px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .card:hover .tag { border-color: rgba(255, 255, 255, 0.18); }
+  .card:hover .tag:hover { color: var(--accent-2); border-color: rgba(34, 211, 238, 0.4); }
 
-        <!-- Hide / unhide sidebar before it is displayed -->
-        <script>
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
-            if (document.body.clientWidth >= 1080) {
-                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
-                sidebar = sidebar || 'visible';
-            }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
-        </script>
+  /* ---------- 关于我 ---------- */
+  .about-box {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 32px;
+  }
+  .about-box h3 { font-size: 17px; margin-bottom: 12px; }
+  .about-box p, .about-box li { font-size: 14.5px; color: var(--text-dim); }
+  .about-box ul { list-style: none; }
+  .about-box li { padding-left: 18px; position: relative; margin-bottom: 8px; }
+  .about-box li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 9px;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--gradient);
+  }
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="01_介绍.html" class="active"><strong aria-hidden="true">1.</strong> 简介</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01_作业.html"><strong aria-hidden="true">1.1.</strong> 作业参考</a></li></ol></li><li class="chapter-item expanded "><a href="02_Eureka.html"><strong aria-hidden="true">2.</strong> Eureka</a></li><li class="chapter-item expanded "><a href="03_Ribbon_Hystrix.html"><strong aria-hidden="true">3.</strong> Ribbon&Hystrix</a></li><li class="chapter-item expanded "><a href="04_Feign.html"><strong aria-hidden="true">4.</strong> Feign</a></li><li class="chapter-item expanded "><a href="05_Gateway.html"><strong aria-hidden="true">5.</strong> Gateway</a></li><li class="chapter-item expanded "><a href="06_Config.html"><strong aria-hidden="true">6.</strong> Config</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="06_Config_Rabbit_install.html"><strong aria-hidden="true">6.1.</strong> Rabbit安装</a></li></ol></li><li class="chapter-item expanded "><a href="07_Sleuth.html"><strong aria-hidden="true">7.</strong> Sleuth</a></li><li class="chapter-item expanded "><a href="08_Admin.html"><strong aria-hidden="true">8.</strong> Admin</a></li><li class="chapter-item expanded "><a href="09_合同录入-上.html"><strong aria-hidden="true">9.</strong> 合同录入-上</a></li><li class="chapter-item expanded "><a href="10_合同录入-下.html"><strong aria-hidden="true">10.</strong> 合同录入-下</a></li><li class="chapter-item expanded "><a href="11_支付中心-上.html"><strong aria-hidden="true">11.</strong> 支付中心-上</a></li><li class="chapter-item expanded "><a href="12_支付中心-下.html"><strong aria-hidden="true">12.</strong> 支付中心-下</a></li><li class="chapter-item expanded "><a href="13_预约看房.html"><strong aria-hidden="true">13.</strong> 预约看房</a></li><li class="chapter-item expanded "><a href="14_RocketMQ-上.html"><strong aria-hidden="true">14.</strong> RocketMQ入门</a></li><li class="chapter-item expanded "><a href="15_RocketMQ-下.html"><strong aria-hidden="true">15.</strong> RocketMQ集群</a></li><li class="chapter-item expanded "><a href="16_预约看房消息推送.html"><strong aria-hidden="true">16.</strong> 预约看房消息推送</a></li><li class="chapter-item expanded "><a href="17_外卖抢单-上.html"><strong aria-hidden="true">17.</strong> 外卖抢单-上</a></li><li class="chapter-item expanded "><a href="18_外卖抢单-下.html"><strong aria-hidden="true">18.</strong> 外卖抢单-下</a></li><li class="chapter-item expanded "><a href="19_企业级测试与解决方案.html"><strong aria-hidden="true">19.</strong> 企业级测试与解决方案</a></li><li class="chapter-item expanded "><a href="20_结项.html"><strong aria-hidden="true">20.</strong> 结项</a></li><li class="chapter-item expanded "><a href="01_Parent.html"><strong aria-hidden="true">21.</strong> 项目搭建</a></li><li class="chapter-item expanded "><a href="01_week.html"><strong aria-hidden="true">22.</strong> 一周目难点</a></li><li class="chapter-item expanded "><a href="02_week.html"><strong aria-hidden="true">23.</strong> 二周目难点</a></li><li class="chapter-item expanded "><a href="03_week.html"><strong aria-hidden="true">24.</strong> 三周目难点</a></li><li class="chapter-item expanded "><a href="redis.html"><strong aria-hidden="true">25.</strong> redis</a></li><li class="chapter-item expanded "><a href="security.html"><strong aria-hidden="true">26.</strong> security</a></li><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">27.</strong> 前端</a></li><li class="chapter-item expanded "><a href="mail.html"><strong aria-hidden="true">28.</strong> 邮件</a></li><li class="chapter-item expanded "><a href="other.html"><strong aria-hidden="true">29.</strong> 其他零碎</a></li></ol>
-            </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
-        </nav>
+  /* ---------- 页脚 ---------- */
+  footer {
+    margin-top: 110px;
+    border-top: 1px solid var(--card-border);
+    padding: 32px 24px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 13.5px;
+    position: relative;
+    z-index: 1;
+  }
+  footer a { color: var(--accent-2); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
 
-        <div id="page-wrapper" class="page-wrapper">
+  /* ---------- 滚动进场动画 ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
 
-            <div class="page">
-                                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
-                    <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
-                        </button>
-                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
-                        </button>
-                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                        </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </div>
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .hero { min-height: 76vh; }
+    .hero-stats { gap: 28px; }
+    section { padding-top: 72px; }
+  }
+</style>
+</head>
+<body>
 
-                    <h1 class="menu-title">Spring cloud</h1>
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
 
-                    <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
-                        </a>
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#top">nxf.dev</a>
+    <div class="nav-links">
+      <a href="#stack">技术方向</a>
+      <a href="#about">关于我</a>
+      <a href="https://github.com/nxf" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
 
-                    </div>
-                </div>
+<main id="top">
 
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
-                    </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
-                        </ul>
-                    </div>
-                </div>
+  <!-- Hero -->
+  <section class="hero">
+    <span class="hero-badge">开启合作</span>
+    <h1>从传统后端到<br><span class="grad">AI 智能体开发</span></h1>
+    <p>专注工程实践与 AI 技术融合：扎实的企业级 Java 开发功底，结合机器学习与大模型应用，构建下一代智能系统。</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#stack">探索技术栈</a>
+      <a class="btn btn-ghost" href="https://github.com/nxf" target="_blank" rel="noopener">GitHub &rarr;</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="num">4+</div><div class="label">核心技术方向</div></div>
+      <div class="stat"><div class="num">Java / Python</div><div class="label">主力开发语言</div></div>
+      <div class="stat"><div class="num">LLM</div><div class="label">持续深耕领域</div></div>
+    </div>
+  </section>
 
-                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script>
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
-                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
-                    });
-                </script>
+  <!-- 技术方向 -->
+  <section id="stack">
+    <div class="section-title reveal">
+      <div class="kicker">Tech Stack</div>
+      <h2>技术方向</h2>
+    </div>
+    <div class="grid">
 
-                <div id="content" class="content">
-                    <main>
-                        <h1 id="课程简介"><a class="header" href="#课程简介">课程简介</a></h1>
-<h2 id="总体内容"><a class="header" href="#总体内容">总体内容</a></h2>
-<pre class="mermaid">graph LR
-专高四 --&gt; C[Spring Cloud微服务架构*]
-专高四 --&gt; T[其它技术]
-专高四 --&gt; W[维数公寓]
-专高四 --&gt; M[外卖抢单]
-专高四 --&gt; Q[企业级测试与解决方案]
-</pre>
-<h2 id="spring-cloud"><a class="header" href="#spring-cloud">Spring Cloud</a></h2>
-<pre class="mermaid">graph LR
-C[spring_cloud微服务架构] --注册中心--&gt; Eureka
-
-C --负载均衡--&gt; Ribbon
-C --服务容错--&gt; Hystrix
-C --声明式远程服务调用--&gt; OpenFeign
-C --网关--&gt; Gateway
-C --配置服务--&gt; Config
-C --消息总线--&gt; Bus
-C --请求链接追踪--&gt; Sleuth
-C --状态监控--&gt; Admin
-C --网关安全--&gt; Security
-</pre>
-<h2 id="其它技术"><a class="header" href="#其它技术">其它技术</a></h2>
-<pre class="mermaid">graph LR
-T[其它技术]
-T --消息队列--&gt; RocketMQ
-T --消息队列--&gt; RabbitMQ
-T --缓存--&gt; Redis
-T --分布式任务平台--&gt; XXL-Job
-T --接口测试与调试工具--&gt; PostMan
-T --压力&amp;&amp;性能--&gt; JMeter
-</pre>
-<h2 id="维数公寓"><a class="header" href="#维数公寓">维数公寓</a></h2>
-<pre class="mermaid">graph LR
-
-维数公寓 --&gt; 合同录入
-维数公寓 --&gt; 预约看房
-维数公寓 --&gt; 支付中心
-
-外卖服务 --&gt; 外卖抢单
-</pre>
-<h1 id="作业"><a class="header" href="#作业">作业：</a></h1>
-<p>上传作业内容和效果视频（3分钟左右）；</p>
-<p>作业检查表：</p>
-<pre class="mermaid">graph LR
-组长 --&gt; 组员
-讲师 -- 抽检 --&gt; 学员
-</pre>
-<h1 id="参考资料"><a class="header" href="#参考资料">参考资料：</a></h1>
-<p><a href="https://www.macrozheng.com/cloud/cloud_catalog.html#%E7%AE%80%E4%BB%8B">SpringCloud参考</a></p>
-<h1 id="时间"><a class="header" href="#时间">时间</a></h1>
-<p><img src="./imgs/2111A.jpg" alt="本月" />
-<img src="./imgs/time-summer.jpg" alt="每天" /></p>
-
-                    </main>
-
-                    <nav class="nav-wrapper" aria-label="Page navigation">
-                        <!-- Mobile navigation buttons -->
-
-                            <a rel="next" href="01_作业.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-
-                        <div style="clear: both"></div>
-                    </nav>
-                </div>
-            </div>
-
-            <nav class="nav-wide-wrapper" aria-label="Page navigation">
-
-                    <a rel="next" href="01_作业.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
-            </nav>
-
+      <div class="card reveal">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+          </svg>
         </div>
+        <h3>传统 Java 开发</h3>
+        <p>企业级后端架构与微服务实践：高并发、分布式系统设计，稳定支撑业务规模化增长。</p>
+        <div class="tags">
+          <span class="tag">Spring Boot</span><span class="tag">Spring Cloud</span>
+          <span class="tag">MyBatis</span><span class="tag">MySQL</span>
+          <span class="tag">Redis</span><span class="tag">RabbitMQ / RocketMQ</span>
+          <span class="tag">微服务架构</span><span class="tag">JVM 调优</span>
+          <span class="tag">并发编程</span>
+        </div>
+      </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
+      <div class="card reveal">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a4 4 0 0 1 4 4c0 1.1-.45 2.1-1.17 2.83A4 4 0 0 1 18 12a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4c0-1.51.83-2.82 2.07-3.5A4 4 0 0 1 12 2z"/>
+            <path d="M12 16v6"/><path d="M8 22h8"/>
+          </svg>
+        </div>
+        <h3>机器学习</h3>
+        <p>从数据到模型的全流程能力：特征工程、模型训练与评估，让数据真正驱动业务决策。</p>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">PyTorch</span>
+          <span class="tag">scikit-learn</span><span class="tag">Pandas / NumPy</span>
+          <span class="tag">特征工程</span><span class="tag">深度学习</span>
+          <span class="tag">模型训练与调优</span><span class="tag">推荐系统</span>
+        </div>
+      </div>
 
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
+      <div class="card reveal">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            <path d="M8 9h8"/><path d="M8 13h5"/>
+          </svg>
+        </div>
+        <h3>大模型应用</h3>
+        <p>让大模型落地为可靠产品：检索增强、提示工程与模型微调，兼顾效果、成本与可控性。</p>
+        <div class="tags">
+          <span class="tag">Prompt Engineering</span><span class="tag">RAG</span>
+          <span class="tag">LangChain / LlamaIndex</span><span class="tag">向量数据库</span>
+          <span class="tag">Embedding</span><span class="tag">Function Calling</span>
+          <span class="tag">LoRA 微调</span><span class="tag">语义检索</span>
+        </div>
+      </div>
 
+      <div class="card reveal">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="4" width="16" height="16" rx="2"/>
+            <circle cx="9" cy="9" r="1.2"/><circle cx="15" cy="9" r="1.2"/>
+            <circle cx="9" cy="15" r="1.2"/><circle cx="15" cy="15" r="1.2"/>
+          </svg>
+        </div>
+        <h3>智能体开发</h3>
+        <p>构建会思考、能行动的 Agent：任务规划、工具调用与多智能体协作，打通大模型到生产力的最后一公里。</p>
+        <div class="tags">
+          <span class="tag">ReAct</span><span class="tag">LangGraph</span>
+          <span class="tag">MCP</span><span class="tag">Tool Use</span>
+          <span class="tag">Multi-Agent 协作</span><span class="tag">任务规划与反思</span>
+          <span class="tag">记忆管理</span><span class="tag">工作流编排</span>
+        </div>
+      </div>
 
+    </div>
+  </section>
 
-        <script>
-            window.playground_copyable = true;
-        </script>
+  <!-- 关于我 -->
+  <section id="about">
+    <div class="section-title reveal">
+      <div class="kicker">About</div>
+      <h2>关于我</h2>
+    </div>
+    <div class="about-box reveal">
+      <div>
+        <h3>技术理念</h3>
+        <p>好的系统诞生于扎实的工程功底与对新技术的开放心态。我习惯以业务价值为导向，用简洁可靠的架构解决真实问题，而不是追逐概念。</p>
+      </div>
+      <div>
+        <h3>正在探索</h3>
+        <ul>
+          <li>基于 LLM 的企业知识库与智能问答系统</li>
+          <li>多智能体协作框架与工作流编排</li>
+          <li>传统微服务架构与 AI 基础设施的融合</li>
+        </ul>
+      </div>
+      <div>
+        <h3>联系方式</h3>
+        <ul>
+          <li>GitHub：github.com/nxf</li>
+          <li>邮箱：findnxf@163.com</li>
+          <li>博客：nxf.github.io</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
+</main>
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+<footer>
+  <p>Designed &amp; built by <a href="https://github.com/nxf" target="_blank" rel="noopener">nxf</a> · Hosted on GitHub Pages</p>
+</footer>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
 
-        <!-- Custom JS scripts -->
-        <script src="mermaid.min.js"></script>
-        <script src="mermaid-init.js"></script>
+  document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+</script>
 
-
-    </body>
+</body>
 </html>

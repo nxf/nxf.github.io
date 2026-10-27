@@ -1,0 +1,260 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>简介 - Spring cloud</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="01_介绍.html" class="active"><strong aria-hidden="true">1.</strong> 简介</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01_作业.html"><strong aria-hidden="true">1.1.</strong> 作业参考</a></li></ol></li><li class="chapter-item expanded "><a href="02_Eureka.html"><strong aria-hidden="true">2.</strong> Eureka</a></li><li class="chapter-item expanded "><a href="03_Ribbon_Hystrix.html"><strong aria-hidden="true">3.</strong> Ribbon&Hystrix</a></li><li class="chapter-item expanded "><a href="04_Feign.html"><strong aria-hidden="true">4.</strong> Feign</a></li><li class="chapter-item expanded "><a href="05_Gateway.html"><strong aria-hidden="true">5.</strong> Gateway</a></li><li class="chapter-item expanded "><a href="06_Config.html"><strong aria-hidden="true">6.</strong> Config</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="06_Config_Rabbit_install.html"><strong aria-hidden="true">6.1.</strong> Rabbit安装</a></li></ol></li><li class="chapter-item expanded "><a href="07_Sleuth.html"><strong aria-hidden="true">7.</strong> Sleuth</a></li><li class="chapter-item expanded "><a href="08_Admin.html"><strong aria-hidden="true">8.</strong> Admin</a></li><li class="chapter-item expanded "><a href="09_合同录入-上.html"><strong aria-hidden="true">9.</strong> 合同录入-上</a></li><li class="chapter-item expanded "><a href="10_合同录入-下.html"><strong aria-hidden="true">10.</strong> 合同录入-下</a></li><li class="chapter-item expanded "><a href="11_支付中心-上.html"><strong aria-hidden="true">11.</strong> 支付中心-上</a></li><li class="chapter-item expanded "><a href="12_支付中心-下.html"><strong aria-hidden="true">12.</strong> 支付中心-下</a></li><li class="chapter-item expanded "><a href="13_预约看房.html"><strong aria-hidden="true">13.</strong> 预约看房</a></li><li class="chapter-item expanded "><a href="14_RocketMQ-上.html"><strong aria-hidden="true">14.</strong> RocketMQ入门</a></li><li class="chapter-item expanded "><a href="15_RocketMQ-下.html"><strong aria-hidden="true">15.</strong> RocketMQ集群</a></li><li class="chapter-item expanded "><a href="16_预约看房消息推送.html"><strong aria-hidden="true">16.</strong> 预约看房消息推送</a></li><li class="chapter-item expanded "><a href="17_外卖抢单-上.html"><strong aria-hidden="true">17.</strong> 外卖抢单-上</a></li><li class="chapter-item expanded "><a href="18_外卖抢单-下.html"><strong aria-hidden="true">18.</strong> 外卖抢单-下</a></li><li class="chapter-item expanded "><a href="19_企业级测试与解决方案.html"><strong aria-hidden="true">19.</strong> 企业级测试与解决方案</a></li><li class="chapter-item expanded "><a href="20_结项.html"><strong aria-hidden="true">20.</strong> 结项</a></li><li class="chapter-item expanded "><a href="01_Parent.html"><strong aria-hidden="true">21.</strong> 项目搭建</a></li><li class="chapter-item expanded "><a href="01_week.html"><strong aria-hidden="true">22.</strong> 一周目难点</a></li><li class="chapter-item expanded "><a href="02_week.html"><strong aria-hidden="true">23.</strong> 二周目难点</a></li><li class="chapter-item expanded "><a href="03_week.html"><strong aria-hidden="true">24.</strong> 三周目难点</a></li><li class="chapter-item expanded "><a href="redis.html"><strong aria-hidden="true">25.</strong> redis</a></li><li class="chapter-item expanded "><a href="security.html"><strong aria-hidden="true">26.</strong> security</a></li><li class="chapter-item expanded "><a href="front.html"><strong aria-hidden="true">27.</strong> 前端</a></li><li class="chapter-item expanded "><a href="mail.html"><strong aria-hidden="true">28.</strong> 邮件</a></li><li class="chapter-item expanded "><a href="other.html"><strong aria-hidden="true">29.</strong> 其他零碎</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Spring cloud</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="课程简介"><a class="header" href="#课程简介">课程简介</a></h1>
+<h2 id="总体内容"><a class="header" href="#总体内容">总体内容</a></h2>
+<pre class="mermaid">graph LR
+专高四 --&gt; C[Spring Cloud微服务架构*]
+专高四 --&gt; T[其它技术]
+专高四 --&gt; W[维数公寓]
+专高四 --&gt; M[外卖抢单]
+专高四 --&gt; Q[企业级测试与解决方案]
+</pre>
+<h2 id="spring-cloud"><a class="header" href="#spring-cloud">Spring Cloud</a></h2>
+<pre class="mermaid">graph LR
+C[spring_cloud微服务架构] --注册中心--&gt; Eureka
+
+C --负载均衡--&gt; Ribbon
+C --服务容错--&gt; Hystrix
+C --声明式远程服务调用--&gt; OpenFeign
+C --网关--&gt; Gateway
+C --配置服务--&gt; Config
+C --消息总线--&gt; Bus
+C --请求链接追踪--&gt; Sleuth
+C --状态监控--&gt; Admin
+C --网关安全--&gt; Security
+</pre>
+<h2 id="其它技术"><a class="header" href="#其它技术">其它技术</a></h2>
+<pre class="mermaid">graph LR
+T[其它技术]
+T --消息队列--&gt; RocketMQ
+T --消息队列--&gt; RabbitMQ
+T --缓存--&gt; Redis
+T --分布式任务平台--&gt; XXL-Job
+T --接口测试与调试工具--&gt; PostMan
+T --压力&amp;&amp;性能--&gt; JMeter
+</pre>
+<h2 id="维数公寓"><a class="header" href="#维数公寓">维数公寓</a></h2>
+<pre class="mermaid">graph LR
+
+维数公寓 --&gt; 合同录入
+维数公寓 --&gt; 预约看房
+维数公寓 --&gt; 支付中心
+
+外卖服务 --&gt; 外卖抢单
+</pre>
+<h1 id="作业"><a class="header" href="#作业">作业：</a></h1>
+<p>上传作业内容和效果视频（3分钟左右）；</p>
+<p>作业检查表：</p>
+<pre class="mermaid">graph LR
+组长 --&gt; 组员
+讲师 -- 抽检 --&gt; 学员
+</pre>
+<h1 id="参考资料"><a class="header" href="#参考资料">参考资料：</a></h1>
+<p><a href="https://www.macrozheng.com/cloud/cloud_catalog.html#%E7%AE%80%E4%BB%8B">SpringCloud参考</a></p>
+<h1 id="时间"><a class="header" href="#时间">时间</a></h1>
+<p><img src="./imgs/2111A.jpg" alt="本月" />
+<img src="./imgs/time-summer.jpg" alt="每天" /></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+                            <a rel="next" href="01_作业.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+                    <a rel="next" href="01_作业.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </body>
+</html>
